@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "860071452060",
+    "firebase_url": "https://levananh-14236.firebaseio.com",
+    "project_id": "levananh-14236",
+    "storage_bucket": "levananh-14236.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860071452060:android:5b9832dacf270f951b7c59",
+        "android_client_info": {
+          "package_name": "com.lva.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "860071452060-shsmpn6ai3at0cl2ifjqqvanbct27js8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lva.shop",
+            "certificate_hash": "290d0c2368172839698c845cf232a924d29ec377"
+          }
+        },
+        {
+          "client_id": "860071452060-9kpdak9300oeh7oim6jcar2uu4s7henr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCSPZTDUS2_0CfiYx1cnvzPQvqlKm-S3-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "860071452060-9kpdak9300oeh7oim6jcar2uu4s7henr.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "860071452060-oics61vo5o1nkfgeb368s52n9p04d7of.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.huyquang.LeVanAnhIOSApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

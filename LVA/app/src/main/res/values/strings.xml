@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">LVA</string>
+    <string name="something_when_wrong">Có lỗi xảy ra, vui lòng thử lại sau.</string>
+
+    <!--play store-->
+    <string name="app_google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
+    <string name="app_market_link">"market://details?id="</string>
+    <string name="facebook_app_id">261992641164850</string>
+    <string name="fb_login_protocol_scheme">fb261992641164850</string>
+</resources>
