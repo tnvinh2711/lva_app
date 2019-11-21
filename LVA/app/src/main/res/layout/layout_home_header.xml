@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/d10"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/d10"
+    android:paddingBottom="@dimen/d10"
+    android:weightSum="3">
+
+    <LinearLayout
+        android:id="@+id/ll_history"
+        android:layout_width="@dimen/d60"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_history"
+            android:layout_width="@dimen/d50"
+            android:layout_height="@dimen/d50"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_history" />
+
+        <TextView
+            android:id="@+id/tv_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d10"
+            android:gravity="center"
+            android:text="@string/history"
+            android:textColor="@color/color_text"
+            android:textSize="@dimen/s14" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_order"
+        android:layout_width="@dimen/d60"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_order"
+            android:layout_width="@dimen/d50"
+            android:layout_height="@dimen/d50"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_order" />
+
+        <TextView
+            android:id="@+id/tv_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d10"
+            android:gravity="center"
+            android:text="@string/order"
+            android:textColor="@color/color_text"
+            android:textSize="@dimen/s14" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_facebook"
+        android:layout_width="@dimen/d60"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/iv_facebook"
+            android:layout_width="@dimen/d50"
+            android:layout_height="@dimen/d50"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_facebook" />
+
+        <TextView
+            android:id="@+id/tv_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d10"
+            android:gravity="center"
+            android:text="@string/fanpage"
+            android:textColor="@color/color_text"
+            android:textSize="@dimen/s14" />
+    </LinearLayout>
+</LinearLayout>

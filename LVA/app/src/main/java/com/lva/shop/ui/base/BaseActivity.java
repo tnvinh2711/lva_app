@@ -29,16 +29,17 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.lva.shop.R;
 import com.lva.shop.utils.CommonUtils;
 import com.lva.shop.utils.NetworkUtils;
+import com.lva.shop.utils.NoConnectException;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity implements ActivityInterface, BaseFragment.Callback {
 
-    private ProgressDialog mProgressDialog;
+    private SweetAlertDialog mProgressDialog;
 
     private Unbinder mUnBinder;
 
@@ -78,25 +79,24 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    private void showSnackBar(String message) {
-        Snackbar snackbar = Snackbar.make(findViewById(android.R.id.content),
-                message, Snackbar.LENGTH_SHORT);
-        snackbar.setText(message);
-        snackbar.show();
+    private void showDialogError(String message) {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.attention))
+                .setContentText(message)
+                .setCancelText(getString(R.string.skip))
+                .setConfirmText(getString(R.string.retry))
+                .showCancelButton(true)
+                .setCancelClickListener(SweetAlertDialog::cancel)
+                .show();
     }
 
     @Override
-    public void onError(String message) {
-        if (message != null) {
-            showSnackBar(message);
+    public void onError(Throwable e) {
+        if (e instanceof NoConnectException) {
+            showDialogError(getString(R.string.network_error));
         } else {
-            showSnackBar(getString(R.string.something_when_wrong));
+            showDialogError(getString(R.string.something_when_wrong));
         }
-    }
-
-    @Override
-    public void onError(@StringRes int resId) {
-        onError(getString(resId));
     }
 
     @Override
@@ -150,5 +150,4 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         super.onDestroy();
     }
 
-    protected abstract void setUp();
 }

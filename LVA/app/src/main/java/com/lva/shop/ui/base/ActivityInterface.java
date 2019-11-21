@@ -23,9 +23,7 @@ public interface ActivityInterface {
 
     void hideLoading();
 
-    void onError(@StringRes int resId);
-
-    void onError(String message);
+    void onError(Throwable e);
 
     void showMessage(String message);
 

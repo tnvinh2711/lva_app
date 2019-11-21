@@ -16,14 +16,12 @@
 package com.lva.shop.utils;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.provider.Settings;
 
 import com.lva.shop.R;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -41,17 +39,12 @@ public final class CommonUtils {
         // This utility class is not publicly instantiable
     }
 
-    public static ProgressDialog showLoadingDialog(Context context) {
-        ProgressDialog progressDialog = new ProgressDialog(context);
-        progressDialog.show();
-        if (progressDialog.getWindow() != null) {
-            progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        }
-        progressDialog.setContentView(R.layout.progress_dialog);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setCanceledOnTouchOutside(false);
-        return progressDialog;
+    public static SweetAlertDialog showLoadingDialog(Context context) {
+        SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
+        dialog.setTitleText(context.getString(R.string.loading));
+        dialog.setCancelable(false);
+        dialog.show();
+        return dialog;
     }
 
     @SuppressLint("all")

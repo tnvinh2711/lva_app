@@ -1,10 +1,29 @@
 <resources>
     <string name="app_name">LVA</string>
-    <string name="something_when_wrong">Có lỗi xảy ra, vui lòng thử lại sau.</string>
+    <string name="something_when_wrong">Có lỗi xảy ra, xin vui lòng thử lại sau.</string>
 
     <!--play store-->
     <string name="app_google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
     <string name="app_market_link">"market://details?id="</string>
     <string name="facebook_app_id">261992641164850</string>
     <string name="fb_login_protocol_scheme">fb261992641164850</string>
+
+    <string name="title_shop">Shop</string>
+    <string name="title_cart">Cart</string>
+    <string name="title_profile">Profile</string>
+    <string name="title_knowledge">Kiến thức chăm sóc da</string>
+    <string name="order">Đặt hàng</string>
+    <string name="history">Lịch sử</string>
+    <string name="fanpage">FanPage</string>
+    <string name="login">Đăng nhập</string>
+    <string name="news">Tin tức</string>
+    <string name="account">Tài khoản</string>
+    <string name="title_tutorial">Hướng dẫn sử dụng</string>
+    <string name="title_news"><![CDATA[Tin tức & Khuyến mãi]]></string>
+    <string name="order_now">Order ngay</string>
+    <string name="attention">Thông báo</string>
+    <string name="network_error">Lỗi kết nối Internet!! Quý khách vui lòng kiểm tra kết nối Wifi/3G/4G/ GPRS và thử lại.</string>
+    <string name="skip">Bỏ qua</string>
+    <string name="retry">Thử lại</string>
+    <string name="loading">Loading...</string>
 </resources>

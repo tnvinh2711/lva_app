@@ -1,4 +1,4 @@
-package com.lva.shop;
+package com.lva.shop.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,9 +8,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -26,34 +26,36 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseActivity;
 
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity {
     @BindView(R.id.btn_login_fb)
     Button btnLoginFb;
     @BindView(R.id.edtOTP)
     EditText edtOTP;
     @BindView(R.id.btn_login)
     Button btnLogin;
+    @BindView(R.id.btn_send_otp)
+    Button btnSendOtp;
 
     private String OTP;
     private CallbackManager callbackManager;
     private PhoneAuthProvider.ForceResendingToken resendToken;
-    private String TAG = MainActivity.class.getSimpleName();
+    private String TAG = LoginActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         setUnBinder(ButterKnife.bind(this));
-        sendOTP();
         setupFacebook();
 
     }
@@ -64,8 +66,9 @@ public class MainActivity extends BaseActivity {
                 new FacebookCallback<LoginResult>() {
                     @Override
                     public void onSuccess(LoginResult loginResult) {
-                        Log.d(TAG, "LoginManager onSuccess: " + loginResult.toString());
-                        handleFacebookAccessToken(loginResult.getAccessToken());
+                        AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
+                        FirebaseAuth.getInstance().signInWithCredential(credential)
+                                .addOnCompleteListener(LoginActivity.this, mCompleteListener());
                     }
 
                     @Override
@@ -76,28 +79,25 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public void onError(FacebookException exception) {
                         Log.d(TAG, "LoginManager onError: " + exception.toString());
+                        Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
                     }
                 });
-    }
-
-    private void handleFacebookAccessToken(AccessToken token) {
-        Log.d(TAG, "handleFacebookAccessToken:" + token);
-        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this, mCompleteListener());
     }
 
 
     private OnCompleteListener<AuthResult> mCompleteListener() {
         return task -> {
             if (task.isSuccessful()) {
-                FirebaseUser user = task.getResult().getUser();
-                Toast.makeText(this, "Login success: UID-" + user.getUid(), Toast.LENGTH_SHORT).show();
+                try {
+                    FirebaseUser user = task.getResult().getUser();
+                    if (user != null) requestToServer(user.getUid());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
-                // Sign in failed, display a message and update the UI
-                Log.w(TAG, "signInWithCredential:failure", task.getException());
+                Log.e(TAG, "signInWithCredential:failure", task.getException());
                 if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                    // The verification code entered was invalid
+                    Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -106,20 +106,19 @@ public class MainActivity extends BaseActivity {
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mSendOTPCallBack() {
         return new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
-            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
                 FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
-                        .addOnCompleteListener(MainActivity.this, mCompleteListener());
+                        .addOnCompleteListener(LoginActivity.this, mCompleteListener());
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                Log.e(TAG, "onVerificationFailed: " + e.getMessage());
+                Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                Log.e(TAG, "onCodeSent: " + s);
                 OTP = s;
                 resendToken = forceResendingToken;
             }
@@ -144,18 +143,17 @@ public class MainActivity extends BaseActivity {
                 mSendOTPCallBack(), resendToken);
     }
 
+    private void requestToServer(String uid) {
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         FirebaseAuth.getInstance().signOut();
     }
 
-    @Override
-    protected void setUp() {
-
-    }
-
-    @OnClick({R.id.btn_login, R.id.btn_login_fb})
+    @OnClick({R.id.btn_login, R.id.btn_login_fb, R.id.btn_send_otp})
     public void onItemClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_login:
@@ -166,7 +164,10 @@ public class MainActivity extends BaseActivity {
                 }
                 break;
             case R.id.btn_login_fb:
-                LoginManager.getInstance().logInWithReadPermissions(MainActivity.this, Arrays.asList("email"));
+                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("email"));
+                break;
+            case R.id.btn_send_otp:
+                sendOTP();
                 break;
         }
     }

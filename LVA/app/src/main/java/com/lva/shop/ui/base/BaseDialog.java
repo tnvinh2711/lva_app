@@ -65,16 +65,9 @@ public abstract class BaseDialog extends DialogFragment implements ActivityInter
     }
 
     @Override
-    public void onError(String message) {
+    public void onError(Throwable e) {
         if (mActivity != null) {
-            mActivity.onError(message);
-        }
-    }
-
-    @Override
-    public void onError(@StringRes int resId) {
-        if (mActivity != null) {
-            mActivity.onError(resId);
+            mActivity.onError(e);
         }
     }
 

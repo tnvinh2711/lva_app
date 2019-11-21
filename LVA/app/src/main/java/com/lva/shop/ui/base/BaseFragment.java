@@ -24,7 +24,9 @@ import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
+import com.lva.shop.callback.FragmentChangedListener;
 import com.lva.shop.utils.CommonUtils;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import butterknife.Unbinder;
 
@@ -33,8 +35,8 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
 
     private BaseActivity mActivity;
     private Unbinder mUnBinder;
-    private ProgressDialog mProgressDialog;
-
+    private SweetAlertDialog mProgressDialog;
+    private FragmentChangedListener fragmentChangedListener;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,16 +73,9 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
     }
 
     @Override
-    public void onError(String message) {
+    public void onError(Throwable e) {
         if (mActivity != null) {
-            mActivity.onError(message);
-        }
-    }
-
-    @Override
-    public void onError(@StringRes int resId) {
-        if (mActivity != null) {
-            mActivity.onError(resId);
+            mActivity.onError(e);
         }
     }
 
@@ -142,5 +137,13 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         void onFragmentAttached();
 
         void onFragmentDetached(String tag);
+    }
+
+    public void setFragmentChangedListener(FragmentChangedListener fragmentChangedListener) {
+        this.fragmentChangedListener = fragmentChangedListener;
+    }
+
+    public FragmentChangedListener getFragmentChangedListener() {
+        return fragmentChangedListener;
     }
 }
