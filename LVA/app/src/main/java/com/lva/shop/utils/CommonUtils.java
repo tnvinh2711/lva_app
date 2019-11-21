@@ -18,7 +18,11 @@ package com.lva.shop.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.provider.Settings;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 
 import com.lva.shop.R;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;

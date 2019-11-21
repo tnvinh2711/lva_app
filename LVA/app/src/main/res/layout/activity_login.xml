@@ -1,51 +1,117 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.login.LoginActivity">
 
-    <EditText
-        app:layout_constraintTop_toTopOf="parent"
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="@dimen/d200"
+        android:layout_height="@dimen/d200"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/d220"
+        android:padding="@dimen/d10"
+        android:src="@drawable/ic_app" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/d16"
+        android:text="@string/skip"
+        android:id="@+id/tv_skip"
+        android:visibility="gone"
+        android:textColor="@color/blue" />
+
+    <TextView
+        android:id="@+id/tv_logo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/edtOTP" />
+        android:layout_below="@id/iv_logo"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/s16" />
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.55" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginTop="@dimen/d10"
+        android:layout_marginRight="@dimen/d16"
+        android:layout_marginBottom="@dimen/d16"
+        android:visibility="gone">
 
-    <Button
-        android:id="@+id/btn_send_otp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send OTP"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.43" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/ll_login_phone"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <Button
-        android:id="@+id/btn_login_fb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Login Facebook"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.663" />
+            <TextView
+                android:id="@+id/tv_hello"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/hello"
+                android:textColor="@color/black"
+                android:textSize="@dimen/s20" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d5"
+                android:text="@string/text_input_number_to_continous"
+                android:textColor="@color/color_text"
+                android:textSize="@dimen/s16" />
+
+
+            <EditText
+                android:id="@+id/edt_phone"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d50"
+                android:layout_marginTop="@dimen/d16"
+                android:textSize="@dimen/s16"
+                android:background="@drawable/bg_edt_phone"
+                android:hint="@string/phone"
+                android:padding="@dimen/d10"
+                android:maxLength="16"
+                android:maxLines="1"
+                android:inputType="number"
+                android:imeOptions="actionDone" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d50"
+                android:layout_marginTop="@dimen/d16"
+                android:background="@drawable/bg_btn_login"
+                android:text="@string/continous"
+                android:textSize="@dimen/s16"
+                android:gravity="center"
+                android:id="@+id/btn_next"
+                android:textAllCaps="false"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/or"
+            android:gravity="center"
+            android:layout_marginBottom="@dimen/d16"
+            app:layout_constraintBottom_toTopOf="@+id/btn_facebook" />
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/btn_facebook"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/d16"
+            android:paddingBottom="@dimen/d16"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

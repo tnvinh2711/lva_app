@@ -10,4 +10,6 @@
     <color name="color_text">#454545</color>
     <color name="color_text_gray">#ACACAC</color>
     <color name="color_text_root">#FF42A2</color>
+    <color name="black">#000000</color>
+    <color name="blue">#0093E4</color>
 </resources>
