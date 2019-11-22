@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,16 +14,31 @@
         android:padding="@dimen/d10"
         android:src="@drawable/ic_app" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:padding="@dimen/d16"
-        android:text="@string/skip"
-        android:id="@+id/tv_skip"
-        android:visibility="gone"
-        android:textColor="@color/blue" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/d40"
+            android:layout_height="@dimen/d40"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/d6"
+            android:padding="@dimen/d10"
+            android:src="@drawable/ic_back" />
+
+        <TextView
+            android:id="@+id/tv_skip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:padding="@dimen/d16"
+            android:text="@string/skip"
+            android:textColor="@color/blue"
+            android:visibility="gone" />
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tv_logo"
@@ -45,7 +59,10 @@
         android:layout_marginRight="@dimen/d16"
         android:layout_marginBottom="@dimen/d16"
         android:visibility="gone">
-        <include layout="@layout/layout_login"/>
+
+        <include layout="@layout/layout_login" />
+
+        <include layout="@layout/layout_otp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </RelativeLayout>

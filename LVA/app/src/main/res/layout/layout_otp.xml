@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_otp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_text_otp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/input_otp_from_sms"
+        android:textColor="@color/color_text"
+        android:textSize="@dimen/s14" />
+
+    <com.mukesh.OtpView
+        android:id="@+id/otp_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_text_otp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/d16"
+        android:inputType="number"
+        android:itemBackground="@drawable/bg_otp"
+        android:textColor="@color/color_text_root"
+        app:itemCount="6"
+        app:viewType="none" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/resend_otp"
+        android:layout_below="@+id/otp_view"
+        android:layout_marginTop="@dimen/d16"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/s20"
+        android:padding="@dimen/d10"
+        android:id="@+id/tv_resend"
+        android:textColor="@color/color_text_root" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d50"
+        android:layout_marginTop="@dimen/d16"
+        android:background="@drawable/bg_btn_login"
+        android:text="@string/continous"
+        android:textSize="@dimen/s16"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_next_otp"
+        android:textAllCaps="false"
+        android:textColor="@color/white" />
+</RelativeLayout>

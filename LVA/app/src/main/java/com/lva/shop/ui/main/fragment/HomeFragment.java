@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
+import com.lva.shop.ui.login.LoginActivity;
 import com.lva.shop.ui.main.adapter.HomeImageKnowledgeAdapter;
 import com.lva.shop.ui.main.adapter.HomeImageNewsAdapter;
 import com.lva.shop.ui.main.adapter.HomeImageTutorialAdapter;
@@ -24,6 +26,7 @@ import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Tutorial;
 import com.lva.shop.ui.webview.WebActivity;
 import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,6 +52,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rcvContentTutorial;
     @BindView(R.id.rcv_content_news)
     RecyclerView rcvContentNews;
+    @BindView(R.id.tv_login)
+    TextView tvLogin;
 
     private List<News.Data> newsList = new ArrayList<>();
     private List<Tutorial.Data> tutorialList = new ArrayList<>();
@@ -94,6 +99,11 @@ public class HomeFragment extends BaseFragment {
         rcvContentNews.setAdapter(homeImageNewsAdapter);
         homeImageKnowledgeAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
         homeImageNewsAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
+        if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+            tvLogin.setText("Logged in");
+        } else {
+            tvLogin.setText("Login");
+        }
     }
 
     private void goToWebActivity(String newsTitle, String linkDetail) {
@@ -110,16 +120,18 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.appBarLayout, R.id.ll_history, R.id.ll_order, R.id.ll_facebook})
+    @OnClick({R.id.appBarLayout})
     void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.appBarLayout:
-                break;
-            case R.id.ll_history:
-                break;
-            case R.id.ll_order:
-                break;
-            case R.id.ll_facebook:
+                if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                    //TODO go to Profile
+                } else {
+                    Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
+                    intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
+                    startActivity(intentLogin);
+                    getBaseActivity().finish();
+                }
                 break;
         }
     }

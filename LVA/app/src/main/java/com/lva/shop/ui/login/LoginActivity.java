@@ -7,14 +7,17 @@ import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,7 +30,6 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -43,8 +45,13 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.main.MainActivity;
+import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.CommonUtils;
+import com.lva.shop.utils.NetworkUtils;
+import com.lva.shop.utils.Preference;
 import com.lva.shop.utils.ScreenUtils;
 import com.lva.shop.utils.ViewUtils;
+import com.mukesh.OtpView;
 
 import java.util.concurrent.TimeUnit;
 
@@ -53,7 +60,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity {
-    Button btnSendOtp;
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
     @BindView(R.id.tv_logo)
@@ -72,12 +78,28 @@ public class LoginActivity extends BaseActivity {
     LinearLayout llLoginPhone;
     @BindView(R.id.btn_facebook)
     LoginButton btnFacebook;
+    @BindView(R.id.btn_back)
+    ImageView btnBack;
+    @BindView(R.id.layout_login)
+    ConstraintLayout layoutLogin;
+    @BindView(R.id.tv_text_otp)
+    TextView tvTextOtp;
+    @BindView(R.id.otp_view)
+    OtpView otpView;
+    @BindView(R.id.tv_resend)
+    TextView tvResend;
+    @BindView(R.id.btn_next_otp)
+    TextView btnNextOtp;
+    @BindView(R.id.layout_otp)
+    RelativeLayout layoutOtp;
 
+    private String hash;
     private String OTP;
     private CallbackManager callbackManager;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private String TAG = LoginActivity.class.getSimpleName();
     private int DELAY_TIME = 2000;
+    boolean launchApp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,33 +108,84 @@ public class LoginActivity extends BaseActivity {
         setUnBinder(ButterKnife.bind(this));
         setUpView();
         setupFacebook();
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
+        checkLaunchApp();
+    }
+
+    private void checkLaunchApp() {
+        if (getIntent() != null)
+            launchApp = getIntent().getBooleanExtra(AppConstants.LAUNCH_APP, true);
+        DELAY_TIME = launchApp ? 2000 : 0;
+        new Handler().postDelayed(() -> {
+            if (Preference.getString(LoginActivity.this, AppConstants.ACCESS_TOKEN) != null && launchApp) {
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                finish();
+            } else {
                 animationLogo();
             }
         }, DELAY_TIME);
     }
 
     private void setUpView() {
+        hideLayoutOtp();
         tvLogo.setText(Html.fromHtml("Lựa chọn "
                 + "<font color=\"#FF42A2\">" + "trải nghiệm " + "</font>"
                 + "cảm nhận và "
                 + "<font color=\"#FF42A2\">" + "chia sẻ." + "</font>™"));
+        otpView.setOtpCompletionListener(otp -> OTP = otp);
+        edtPhone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.length() <= 0) {
+                    btnNext.setEnabled(false);
+                    btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login_gray));
+                } else {
+                    btnNext.setEnabled(true);
+                    btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void hideLayoutOtp() {
+        layoutOtp.setVisibility(View.GONE);
+        btnBack.setVisibility(View.GONE);
+        YoYo.with(Techniques.FadeIn)
+                .duration(500)
+                .onStart(animator -> layoutLogin.setVisibility(View.VISIBLE))
+                .playOn(layoutLogin);
+    }
+
+    private void showLayoutOtp() {
+        layoutLogin.setVisibility(View.GONE);
+        btnBack.setVisibility(View.VISIBLE);
+        YoYo.with(Techniques.FadeIn)
+                .duration(500)
+                .onStart(animator -> layoutOtp.setVisibility(View.VISIBLE))
+                .playOn(layoutOtp);
     }
 
     private void animationLogo() {
         YoYo.with(Techniques.FadeOut)
-                .duration(500)
+                .duration(launchApp ? 500 : 0)
                 .onEnd(animator -> tvLogo.setVisibility(View.GONE))
                 .playOn(tvLogo);
         ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(ivLogo, "scaleX", 0.7f);
         ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(ivLogo, "scaleY", 0.7f);
-        scaleDownX.setDuration(500);
-        scaleDownY.setDuration(500);
+        scaleDownX.setDuration(launchApp ? 500 : 0);
+        scaleDownY.setDuration(launchApp ? 500 : 0);
 
         ObjectAnimator moveUpY = ObjectAnimator.ofFloat(ivLogo, "translationY", ViewUtils.dpToPx(-170));
-        moveUpY.setDuration(500);
+        moveUpY.setDuration(launchApp ? 500 : 0);
 
         AnimatorSet scaleDown = new AnimatorSet();
         AnimatorSet moveUp = new AnimatorSet();
@@ -131,12 +204,10 @@ public class LoginActivity extends BaseActivity {
                 }
                 ivLogo.setBackground(getResources().getDrawable(R.drawable.bg_logo_splash));
                 tvSkip.setVisibility(View.VISIBLE);
+                clLogin.setVisibility(View.VISIBLE);
                 clLogin.getLayoutParams().height = (ScreenUtils.getScreenHeight(LoginActivity.this) - ViewUtils.dpToPx(220));
                 clLogin.requestLayout();
-                YoYo.with(Techniques.FadeIn)
-                        .duration(500)
-                        .onStart(animator -> clLogin.setVisibility(View.VISIBLE))
-                        .playOn(clLogin);
+                hideLayoutOtp();
             }
         });
     }
@@ -189,43 +260,76 @@ public class LoginActivity extends BaseActivity {
         return new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                hideLoading();
                 FirebaseAuth.getInstance().signInWithCredential(phoneAuthCredential)
                         .addOnCompleteListener(LoginActivity.this, mCompleteListener());
             }
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
+                hideLoading();
+                Log.e(TAG, "onVerificationFailed: "+ e.getMessage() );
                 Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 super.onCodeSent(s, forceResendingToken);
-                OTP = s;
+                hideLoading();
+                hash = s;
                 resendToken = forceResendingToken;
+                showLayoutOtp();
             }
         };
     }
 
     private void sendOTP() {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+84975477088",        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                mSendOTPCallBack());
+        if (NetworkUtils.isNetworkConnected(this)) {
+            showLoading();
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    CommonUtils.getConvertPhone(edtPhone.getText().toString()),        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    this,               // Activity (for callback binding)
+                    mSendOTPCallBack());
+        } else {
+            showDialogError(getString(R.string.network_error));
+        }
     }
 
     private void resendOTP() {
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+84975477088",        // Phone number to verify
-                60,                 // Timeout duration
-                TimeUnit.SECONDS,   // Unit of timeout
-                this,               // Activity (for callback binding)
-                mSendOTPCallBack(), resendToken);
+        Log.e(TAG, "resendOTP: " + CommonUtils.getConvertPhone(edtPhone.getText().toString()));
+        if (NetworkUtils.isNetworkConnected(this)) {
+            PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                    CommonUtils.getConvertPhone(edtPhone.getText().toString()),        // Phone number to verify
+                    60,                 // Timeout duration
+                    TimeUnit.SECONDS,   // Unit of timeout
+                    this,               // Activity (for callback binding)
+                    mSendOTPCallBack(), resendToken);
+        } else {
+            showDialogError(getString(R.string.network_error));
+        }
+    }
+
+    private void setTimer() {
+        new CountDownTimer(60000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                tvResend.setText(getString(R.string.resend_otp) + "(" + millisUntilFinished / 1000 + "s)");
+                tvResend.setTextColor(getResources().getColor(R.color.color_text_gray));
+                tvResend.setEnabled(false);
+            }
+
+            public void onFinish() {
+                tvResend.setText(getString(R.string.resend_otp));
+                tvResend.setTextColor(getResources().getColor(R.color.color_text_root));
+                tvResend.setEnabled(true);
+            }
+
+        }.start();
     }
 
     private void requestToServer(String uid) {
+        Preference.save(this, AppConstants.ACCESS_TOKEN, uid);
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
@@ -233,27 +337,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        FirebaseAuth.getInstance().signOut();
     }
-
-//    @OnClick({R.id.btn_login, R.id.btn_login_fb, R.id.btn_send_otp})
-//    public void onItemClicked(View view) {
-//        switch (view.getId()) {
-//            case R.id.btn_login:
-//                if (OTP != null) {
-//                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(OTP, edtOTP.getText().toString());
-//                    FirebaseAuth.getInstance().signInWithCredential(credential)
-//                            .addOnCompleteListener(this, mCompleteListener());
-//                }
-//                break;
-//            case R.id.btn_login_fb:
-//                LoginManager.getInstance().logInWithReadPermissions(LoginActivity.this, Collections.singletonList("email"));
-//                break;
-//            case R.id.btn_send_otp:
-//                sendOTP();
-//                break;
-//        }
-//    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -261,14 +345,12 @@ public class LoginActivity extends BaseActivity {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    @OnClick(R.id.iv_logo)
-    public void onViewClicked() {
-        Toast.makeText(this, "hello", Toast.LENGTH_SHORT).show();
-    }
-
-    @OnClick({R.id.tv_skip, R.id.btn_next})
+    @OnClick({R.id.btn_back, R.id.tv_skip, R.id.btn_next, R.id.btn_facebook, R.id.tv_resend, R.id.btn_next_otp})
     public void onViewClicked(View view) {
         switch (view.getId()) {
+            case R.id.btn_back:
+                hideLayoutOtp();
+                break;
             case R.id.tv_skip:
                 startActivity(new Intent(this, MainActivity.class));
                 finish();
@@ -276,6 +358,20 @@ public class LoginActivity extends BaseActivity {
             case R.id.btn_next:
                 sendOTP();
                 break;
+            case R.id.tv_resend:
+                resendOTP();
+                setTimer();
+                break;
+            case R.id.btn_next_otp:
+                Log.e(TAG, "onViewClicked: " + OTP + "   " + hash);
+                if (OTP != null && hash != null) {
+                    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(hash, OTP);
+                    FirebaseAuth.getInstance().signInWithCredential(credential)
+                            .addOnCompleteListener(this, mCompleteListener());
+                }
+                break;
         }
     }
+
+
 }

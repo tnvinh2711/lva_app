@@ -6,5 +6,10 @@
         <item name="colorPrimary">@color/color_text_root</item>
         <item name="colorPrimaryDark">@color/color_text_root</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="otpViewStyle">@style/OtpWidget.OtpView</item>
+    </style>
+
+    <style name="ToolbarColoredBackArrow" parent="AppTheme">
+        <item name="android:textColorSecondary">@color/color_text_root</item>
     </style>
 </resources>

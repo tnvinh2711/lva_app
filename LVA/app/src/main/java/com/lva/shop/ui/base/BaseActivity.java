@@ -79,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    private void showDialogError(String message) {
+    public void showDialogError(String message) {
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getString(R.string.attention))
                 .setContentText(message)

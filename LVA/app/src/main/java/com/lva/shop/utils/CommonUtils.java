@@ -85,13 +85,7 @@ public final class CommonUtils {
         return new SimpleDateFormat(AppConstants.TIMESTAMP_FORMAT, Locale.US).format(new Date());
     }
 
-    public static String parseCode(String message) {
-        Pattern pattern = Pattern.compile("\\b\\d{6}\\b");
-        Matcher matcher = pattern.matcher(message);
-        String code = "";
-        while (matcher.find()) {
-            code = matcher.group(0);
-        }
-        return code;
+    public static String getConvertPhone(String phone){
+        return "+84"+ phone.substring(1);
     }
 }

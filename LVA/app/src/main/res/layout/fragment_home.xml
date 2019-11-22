@@ -39,6 +39,7 @@
             android:layout_marginRight="@dimen/d16"
             android:maxLines="1"
             android:text="@string/login"
+            android:id="@+id/tv_login"
             android:textColor="@color/color_text_root"
             android:textSize="@dimen/s20"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"

@@ -33,4 +33,6 @@
     <string name="or">Hoặc</string>
     <string name="ok">Đồng ý</string>
     <string name="do_you_want_quit">Bạn chắc chắn muốn thoát ???</string>
+    <string name="input_otp_from_sms">Nhập mã xác thực được gửi tới số điện thoại của bạn.</string>
+    <string name="resend_otp">Gửi lại</string>
 </resources>
