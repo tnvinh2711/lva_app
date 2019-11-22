@@ -19,4 +19,7 @@
     <dimen name="d132">132dp</dimen>
     <dimen name="d250">250dp</dimen>
     <dimen name="d56">56dp</dimen>
+    <dimen name="d120">120dp</dimen>
+    <dimen name="d70">70dp</dimen>
+    <dimen name="d40">40dp</dimen>
 </resources>

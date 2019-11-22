@@ -90,6 +90,21 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                 .show();
     }
 
+    public void showDialogExit(String message) {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.attention))
+                .setContentText(message)
+                .setCancelText(getString(R.string.skip))
+                .setConfirmText(getString(R.string.ok))
+                .showCancelButton(true)
+                .setCancelClickListener(SweetAlertDialog::cancel)
+                .setConfirmClickListener(sweetAlertDialog -> {
+                    System.exit(0);
+                    System.gc();
+                })
+                .show();
+    }
+
     @Override
     public void onError(Throwable e) {
         if (e instanceof NoConnectException) {
@@ -150,4 +165,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }

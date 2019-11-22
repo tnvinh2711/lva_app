@@ -1,6 +1,8 @@
 package com.lva.shop.ui.main.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +16,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
-import com.lva.shop.ui.main.adapter.HomeImageAdapter;
+import com.lva.shop.ui.main.adapter.HomeImageKnowledgeAdapter;
+import com.lva.shop.ui.main.adapter.HomeImageNewsAdapter;
+import com.lva.shop.ui.main.adapter.HomeImageTutorialAdapter;
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
+import com.lva.shop.ui.main.model.Tutorial;
+import com.lva.shop.ui.webview.WebActivity;
+import com.lva.shop.utils.AppConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +50,12 @@ public class HomeFragment extends BaseFragment {
     @BindView(R.id.rcv_content_news)
     RecyclerView rcvContentNews;
 
-    private List<News.Data> knowledgeList = new ArrayList<>();
-    private HomeImageAdapter homeImageAdapter;
+    private List<News.Data> newsList = new ArrayList<>();
+    private List<Tutorial.Data> tutorialList = new ArrayList<>();
+    private List<Knowledge.Data> knowledgeList = new ArrayList<>();
+    private HomeImageKnowledgeAdapter homeImageKnowledgeAdapter;
+    private HomeImageNewsAdapter homeImageNewsAdapter;
+    private HomeImageTutorialAdapter homeImageTutorialAdapter;
 
 
     public static HomeFragment newInstance() {
@@ -75,10 +86,23 @@ public class HomeFragment extends BaseFragment {
         rcvContentKnowledge.setLayoutManager(layoutManager);
         rcvContentTutorial.setLayoutManager(layoutManager2);
         rcvContentNews.setLayoutManager(layoutManager3);
-        homeImageAdapter = new HomeImageAdapter(getBaseActivity(), knowledgeList);
-        rcvContentKnowledge.setAdapter(homeImageAdapter);
-        rcvContentTutorial.setAdapter(homeImageAdapter);
-        rcvContentNews.setAdapter(homeImageAdapter);
+        homeImageKnowledgeAdapter = new HomeImageKnowledgeAdapter(getBaseActivity(), knowledgeList);
+        homeImageNewsAdapter = new HomeImageNewsAdapter(getBaseActivity(), newsList);
+        homeImageTutorialAdapter = new HomeImageTutorialAdapter(getBaseActivity(), tutorialList);
+        rcvContentKnowledge.setAdapter(homeImageKnowledgeAdapter);
+        rcvContentTutorial.setAdapter(homeImageTutorialAdapter);
+        rcvContentNews.setAdapter(homeImageNewsAdapter);
+        homeImageKnowledgeAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
+        homeImageNewsAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
+    }
+
+    private void goToWebActivity(String newsTitle, String linkDetail) {
+        if (linkDetail != null && !TextUtils.isEmpty(linkDetail)) {
+            Intent intent = new Intent(getBaseActivity(), WebActivity.class);
+            intent.putExtra(AppConstants.TITLE, newsTitle != null ? newsTitle : getString(R.string.news));
+            intent.putExtra(AppConstants.URL, linkDetail);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -87,7 +111,7 @@ public class HomeFragment extends BaseFragment {
     }
 
     @OnClick({R.id.appBarLayout, R.id.ll_history, R.id.ll_order, R.id.ll_facebook})
-    public void onViewClicked(View view) {
+    void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 break;
@@ -102,8 +126,14 @@ public class HomeFragment extends BaseFragment {
 
     public void setData(ZipRequest zipRequest) {
         if (zipRequest != null) {
-            knowledgeList = zipRequest.getResponseNews().getData();
-            if (homeImageAdapter != null) homeImageAdapter.setNews(knowledgeList);
+            knowledgeList = zipRequest.getResponseKnowledge().getData();
+            tutorialList = zipRequest.getResponseTutorial().getData();
+            newsList = zipRequest.getResponseNews().getData();
+            if (homeImageNewsAdapter != null) homeImageNewsAdapter.setNews(newsList);
+            if (homeImageKnowledgeAdapter != null)
+                homeImageKnowledgeAdapter.setKnowledge(knowledgeList);
+            if (homeImageTutorialAdapter != null)
+                homeImageTutorialAdapter.setTutorial(tutorialList);
         }
 
     }

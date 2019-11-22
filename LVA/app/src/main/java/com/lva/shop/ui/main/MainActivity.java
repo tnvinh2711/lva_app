@@ -141,4 +141,9 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             e.printStackTrace();
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        showDialogExit(getString(R.string.do_you_want_quit));
+    }
 }

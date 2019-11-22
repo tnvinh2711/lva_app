@@ -31,4 +31,6 @@
     <string name="phone">Số điện thoại</string>
     <string name="continous">Tiếp tục</string>
     <string name="or">Hoặc</string>
+    <string name="ok">Đồng ý</string>
+    <string name="do_you_want_quit">Bạn chắc chắn muốn thoát ???</string>
 </resources>

@@ -16,7 +16,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true">
+        android:usesCleartextTraffic="true"
+        android:name="com.lva.shop.MyApplication">
         <activity
             android:name="com.lva.shop.ui.login.LoginActivity"
             android:screenOrientation="portrait">
@@ -28,6 +29,10 @@
         </activity>
         <activity
             android:name="com.lva.shop.ui.main.MainActivity"
+            android:screenOrientation="portrait">
+        </activity>
+        <activity
+            android:name="com.lva.shop.ui.webview.WebActivity"
             android:screenOrientation="portrait">
         </activity>
 

@@ -52,15 +52,12 @@ public class Tutorial {
         @SerializedName("news_title")
         @Expose
         private String newsTitle;
-        @SerializedName("news_sortdesc")
-        @Expose
-        private String newsSortdesc;
         @SerializedName("link_image")
         @Expose
         private String linkImage;
-        @SerializedName("link_detail")
+        @SerializedName("link_video")
         @Expose
-        private String linkDetail;
+        private String linkVideo;
         @SerializedName("image_name")
         @Expose
         private String imageName;
@@ -92,14 +89,6 @@ public class Tutorial {
             this.newsTitle = newsTitle;
         }
 
-        public String getNewsSortdesc() {
-            return newsSortdesc;
-        }
-
-        public void setNewsSortdesc(String newsSortdesc) {
-            this.newsSortdesc = newsSortdesc;
-        }
-
         public String getLinkImage() {
             return linkImage;
         }
@@ -108,12 +97,12 @@ public class Tutorial {
             this.linkImage = linkImage;
         }
 
-        public String getLinkDetail() {
-            return linkDetail;
+        public String getLinkVideo() {
+            return linkVideo;
         }
 
-        public void setLinkDetail(String linkDetail) {
-            this.linkDetail = linkDetail;
+        public void setLinkVideo(String linkVideo) {
+            this.linkVideo = linkVideo;
         }
 
         public String getImageName() {

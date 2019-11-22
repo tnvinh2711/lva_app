@@ -10,6 +10,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         compileOptions {
             sourceCompatibility JavaVersion.VERSION_1_8
@@ -59,5 +60,11 @@ dependencies {
 
     implementation 'com.daimajia.easing:library:2.0@aar'
     implementation 'com.daimajia.androidanimations:library:2.3@aar'
+
+    // ExoPlayer
+    implementation "com.google.android.exoplayer:exoplayer:2.9.6"
+
+    implementation 'androidx.multidex:multidex:2.0.0'
+
 
 }

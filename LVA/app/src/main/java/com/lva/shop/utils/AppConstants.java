@@ -20,6 +20,10 @@ public final class AppConstants {
 
     public static final String TIMESTAMP_FORMAT = "yyyyMMdd_HHmmss";
 
+    //web
+    public static final String TITLE = "web_title";
+    public static final String URL = "web_url";
+
     private AppConstants() {
         // This utility class is not publicly instantiable
     }
