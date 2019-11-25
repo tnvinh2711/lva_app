@@ -1,6 +1,7 @@
 package com.lva.shop.ui.main.adapter;
 
 import android.app.Activity;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,12 +72,16 @@ public class SettingAdapter extends RecyclerView.Adapter<SettingAdapter.ViewHold
         }
 
         void bind(final Setting item, int position, final OnItemClickListener listener) {
-            tvTitle.setText(item.getTitle());
-            ivIcon.setImageDrawable(activity.getResources().getDrawable(item.getIcon()));
-            itemView.setOnClickListener(view -> {
-                if (listener != null)
-                    listener.OnItemClick(item, position);
-            });
+            try {
+                tvTitle.setText(item.getTitle());
+                ivIcon.setImageDrawable(activity.getResources().getDrawable(item.getIcon()));
+                itemView.setOnClickListener(view -> {
+                    if (listener != null)
+                        listener.OnItemClick(item, position);
+                });
+            } catch (Resources.NotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 

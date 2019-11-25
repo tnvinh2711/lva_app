@@ -113,48 +113,56 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void checkLaunchApp() {
-        if (getIntent() != null)
-            launchApp = getIntent().getBooleanExtra(AppConstants.LAUNCH_APP, true);
-        DELAY_TIME = launchApp ? 2000 : 0;
-        new Handler().postDelayed(() -> {
-            if (Preference.getString(LoginActivity.this, AppConstants.ACCESS_TOKEN) != null && launchApp) {
-                startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                finish();
-            } else {
-                animationLogo();
-            }
-        }, DELAY_TIME);
+        try {
+            if (getIntent() != null)
+                launchApp = getIntent().getBooleanExtra(AppConstants.LAUNCH_APP, true);
+            DELAY_TIME = launchApp ? 2000 : 0;
+            new Handler().postDelayed(() -> {
+                if (Preference.getString(LoginActivity.this, AppConstants.ACCESS_TOKEN) != null && launchApp) {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    animationLogo();
+                }
+            }, DELAY_TIME);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUpView() {
-        hideLayoutOtp();
-        tvLogo.setText(Html.fromHtml("Lựa chọn "
-                + "<font color=\"#FF42A2\">" + "trải nghiệm " + "</font>"
-                + "cảm nhận và "
-                + "<font color=\"#FF42A2\">" + "chia sẻ." + "</font>™"));
-        otpView.setOtpCompletionListener(otp -> OTP = otp);
-        edtPhone.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        try {
+            hideLayoutOtp();
+            tvLogo.setText(Html.fromHtml("Lựa chọn "
+                    + "<font color=\"#FF42A2\">" + "trải nghiệm " + "</font>"
+                    + "cảm nhận và "
+                    + "<font color=\"#FF42A2\">" + "chia sẻ." + "</font>™"));
+            otpView.setOtpCompletionListener(otp -> OTP = otp);
+            edtPhone.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if (charSequence.length() <= 0) {
-                    btnNext.setEnabled(false);
-                    btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login_gray));
-                } else {
-                    btnNext.setEnabled(true);
-                    btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login));
                 }
-            }
 
-            @Override
-            public void afterTextChanged(Editable editable) {
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.length() <= 0) {
+                        btnNext.setEnabled(false);
+                        btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login_gray));
+                    } else {
+                        btnNext.setEnabled(true);
+                        btnNext.setBackground(getResources().getDrawable(R.drawable.bg_btn_login));
+                    }
+                }
 
-            }
-        });
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void hideLayoutOtp() {
@@ -213,28 +221,32 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void setupFacebook() {
-        callbackManager = CallbackManager.Factory.create();
-        btnFacebook.setPermissions("email", "public_profile");
-        btnFacebook.registerCallback(callbackManager,
-                new FacebookCallback<LoginResult>() {
-                    @Override
-                    public void onSuccess(LoginResult loginResult) {
-                        AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
-                        FirebaseAuth.getInstance().signInWithCredential(credential)
-                                .addOnCompleteListener(LoginActivity.this, mCompleteListener());
-                    }
+        try {
+            callbackManager = CallbackManager.Factory.create();
+            btnFacebook.setPermissions("email", "public_profile");
+            btnFacebook.registerCallback(callbackManager,
+                    new FacebookCallback<LoginResult>() {
+                        @Override
+                        public void onSuccess(LoginResult loginResult) {
+                            AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
+                            FirebaseAuth.getInstance().signInWithCredential(credential)
+                                    .addOnCompleteListener(LoginActivity.this, mCompleteListener());
+                        }
 
-                    @Override
-                    public void onCancel() {
-                        Log.d(TAG, "LoginManager onCancel: ");
-                    }
+                        @Override
+                        public void onCancel() {
+                            Log.d(TAG, "LoginManager onCancel: ");
+                        }
 
-                    @Override
-                    public void onError(FacebookException exception) {
-                        Log.d(TAG, "LoginManager onError: " + exception.toString());
-                        Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
-                    }
-                });
+                        @Override
+                        public void onError(FacebookException exception) {
+                            Log.d(TAG, "LoginManager onError: " + exception.toString());
+                            Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -312,20 +324,24 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void setTimer() {
-        timer = new CountDownTimer(60000, 1000) {
-            public void onTick(long millisUntilFinished) {
-                tvResend.setText(getString(R.string.resend_otp) + "(" + millisUntilFinished / 1000 + "s)");
-                tvResend.setTextColor(getResources().getColor(R.color.color_text_gray));
-                tvResend.setEnabled(false);
-            }
+        try {
+            timer = new CountDownTimer(60000, 1000) {
+                public void onTick(long millisUntilFinished) {
+                    tvResend.setText(getString(R.string.resend_otp) + "(" + millisUntilFinished / 1000 + "s)");
+                    tvResend.setTextColor(getResources().getColor(R.color.color_text_gray));
+                    tvResend.setEnabled(false);
+                }
 
-            public void onFinish() {
-                tvResend.setText(getString(R.string.resend_otp));
-                tvResend.setTextColor(getResources().getColor(R.color.color_text_root));
-                tvResend.setEnabled(true);
-            }
+                public void onFinish() {
+                    tvResend.setText(getString(R.string.resend_otp));
+                    tvResend.setTextColor(getResources().getColor(R.color.color_text_root));
+                    tvResend.setEnabled(true);
+                }
 
-        }.start();
+            }.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void requestToServer(String uid) {

@@ -85,32 +85,36 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void setUp(View view) {
-        swipeRefresh.setOnRefreshListener(() -> {
-            swipeRefresh.setRefreshing(false);
-            getFragmentChangedListener().OnFragmentChangedListener(MainActivity.RELOAD_SCREEN_SHOP);
-        });
-        LinearLayoutManager layoutManager
-                = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManager2
-                = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
-        LinearLayoutManager layoutManager3
-                = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
+        try {
+            swipeRefresh.setOnRefreshListener(() -> {
+                swipeRefresh.setRefreshing(false);
+                getFragmentChangedListener().OnFragmentChangedListener(MainActivity.RELOAD_SCREEN_SHOP);
+            });
+            LinearLayoutManager layoutManager
+                    = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager2
+                    = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
+            LinearLayoutManager layoutManager3
+                    = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
 
-        rcvContentKnowledge.setLayoutManager(layoutManager);
-        rcvContentTutorial.setLayoutManager(layoutManager2);
-        rcvContentNews.setLayoutManager(layoutManager3);
-        homeImageKnowledgeAdapter = new HomeImageKnowledgeAdapter(getBaseActivity(), knowledgeList);
-        homeImageNewsAdapter = new HomeImageNewsAdapter(getBaseActivity(), newsList);
-        homeImageTutorialAdapter = new HomeImageTutorialAdapter(getBaseActivity(), tutorialList);
-        rcvContentKnowledge.setAdapter(homeImageKnowledgeAdapter);
-        rcvContentTutorial.setAdapter(homeImageTutorialAdapter);
-        rcvContentNews.setAdapter(homeImageNewsAdapter);
-        homeImageKnowledgeAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
-        homeImageNewsAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
-        if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-            tvLogin.setText("Logged in");
-        } else {
-            tvLogin.setText("Login");
+            rcvContentKnowledge.setLayoutManager(layoutManager);
+            rcvContentTutorial.setLayoutManager(layoutManager2);
+            rcvContentNews.setLayoutManager(layoutManager3);
+            homeImageKnowledgeAdapter = new HomeImageKnowledgeAdapter(getBaseActivity(), knowledgeList);
+            homeImageNewsAdapter = new HomeImageNewsAdapter(getBaseActivity(), newsList);
+            homeImageTutorialAdapter = new HomeImageTutorialAdapter(getBaseActivity(), tutorialList);
+            rcvContentKnowledge.setAdapter(homeImageKnowledgeAdapter);
+            rcvContentTutorial.setAdapter(homeImageTutorialAdapter);
+            rcvContentNews.setAdapter(homeImageNewsAdapter);
+            homeImageKnowledgeAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
+            homeImageNewsAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
+            if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                tvLogin.setText("Logged in");
+            } else {
+                tvLogin.setText("Login");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -80,25 +80,29 @@ public class HomeImageNewsAdapter extends RecyclerView.Adapter<HomeImageNewsAdap
         }
 
         void bind(final News.Data item, int position, final OnItemClickListener listener) {
-            if (newsList.size() > 0 && position == 0) {
-                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
-                marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);
-                itemView.setLayoutParams(marginLayoutParams);
-            } else {
-                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
-                marginLayoutParams.setMargins(0, 0, ViewUtils.dpToPx(6), 0);
-                itemView.setLayoutParams(marginLayoutParams);
+            try {
+                if (newsList.size() > 0 && position == 0) {
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
+                    marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);
+                    itemView.setLayoutParams(marginLayoutParams);
+                } else {
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
+                    marginLayoutParams.setMargins(0, 0, ViewUtils.dpToPx(6), 0);
+                    itemView.setLayoutParams(marginLayoutParams);
+                }
+                tvTitle.setText(item.getNewsTitle());
+                tvContent.setText(item.getNewsSortdesc());
+                Glide.with(activity)
+                        .load(item.getLinkImage())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .into(ivHeader);
+                llContent.setOnClickListener(view -> {
+                    if (listener != null)
+                        listener.OnItemClick(item, position);
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-            tvTitle.setText(item.getNewsTitle());
-            tvContent.setText(item.getNewsSortdesc());
-            Glide.with(activity)
-                    .load(item.getLinkImage())
-                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(ivHeader);
-            llContent.setOnClickListener(view -> {
-                if (listener != null)
-                    listener.OnItemClick(item, position);
-            });
         }
     }
 

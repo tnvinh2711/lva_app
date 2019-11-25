@@ -45,6 +45,9 @@
         <activity
             android:name=".ui.detail.VideoActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.location.LocationActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

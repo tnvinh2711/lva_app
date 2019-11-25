@@ -67,54 +67,58 @@ public class WebActivity extends BaseActivity {
     }
 
     private void setUpWebview(String url) {
-        webview.clearCache(true);
-        webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+        try {
+            webview.clearCache(true);
+            webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
-        WebSettings webSettings = webview.getSettings();
-        webSettings.setDomStorageEnabled(true);
-        webSettings.setBuiltInZoomControls(false);
+            WebSettings webSettings = webview.getSettings();
+            webSettings.setDomStorageEnabled(true);
+            webSettings.setBuiltInZoomControls(false);
 
-        webSettings.setAllowFileAccess(true);
-        webSettings.setDatabaseEnabled(true);
+            webSettings.setAllowFileAccess(true);
+            webSettings.setDatabaseEnabled(true);
 
-        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
-        webSettings.setLoadWithOverviewMode(true);
-        webSettings.setUseWideViewPort(true);
-        webSettings.setLoadsImagesAutomatically(true);
-        webview.setWebViewClient(new WebViewClient() {
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                view.loadUrl(url);
-                return true;
-            }
+            webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
+            webSettings.setLoadWithOverviewMode(true);
+            webSettings.setUseWideViewPort(true);
+            webSettings.setLoadsImagesAutomatically(true);
+            webview.setWebViewClient(new WebViewClient() {
+                public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                    view.loadUrl(url);
+                    return true;
+                }
 
-            @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
-                super.onPageStarted(view, url, favicon);
-            }
+                @Override
+                public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                    super.onPageStarted(view, url, favicon);
+                }
 
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                super.onPageFinished(view, url);
-                hideLoading();
-            }
+                @Override
+                public void onPageFinished(WebView view, String url) {
+                    super.onPageFinished(view, url);
+                    hideLoading();
+                }
 
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
-                super.onReceivedError(view, request, error);
-            }
+                @Override
+                public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                    super.onReceivedError(view, request, error);
+                }
 
-            @Override
-            public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
-                super.onReceivedHttpError(view, request, errorResponse);
-            }
+                @Override
+                public void onReceivedHttpError(WebView view, WebResourceRequest request, WebResourceResponse errorResponse) {
+                    super.onReceivedHttpError(view, request, errorResponse);
+                }
 
-            @Override
-            public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                super.onReceivedSslError(view, handler, error);
-            }
-        });
-        webview.loadUrl(url);
-        showLoading();
+                @Override
+                public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
+                    super.onReceivedSslError(view, handler, error);
+                }
+            });
+            webview.loadUrl(url);
+            showLoading();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

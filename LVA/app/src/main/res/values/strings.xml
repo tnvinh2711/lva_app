@@ -40,4 +40,7 @@
     <string name="history_ship">Lịch sử giao hàng</string>
     <string name="policy">Chính sách và bảo mật</string>
     <string name="logout_text">Bạn chắc chắn muốn đăng xuất ?</string>
+    <string name="change">Thay đổi</string>
+    <string name="ship_to">Giao hàng đến</string>
+    <string name="none">Chưa có</string>
 </resources>

@@ -35,6 +35,11 @@ public final class AppConstants {
     //video
     public static final String VIDEO_URL = "video_url" ;
 
+    //address
+    public static final int REQUEST_ADDRESS = 11054;
+    public static final String ADDRESS = "address";
+
+
     private AppConstants() {
         // This utility class is not publicly instantiable
     }

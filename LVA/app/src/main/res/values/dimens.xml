@@ -23,4 +23,5 @@
     <dimen name="d70">70dp</dimen>
     <dimen name="d40">40dp</dimen>
     <dimen name="d6">6dp</dimen>
+    <dimen name="s12">12sp</dimen>
 </resources>

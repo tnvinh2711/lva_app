@@ -84,29 +84,33 @@ public class HomeImageTutorialAdapter extends RecyclerView.Adapter<HomeImageTuto
         }
 
         void bind(final Tutorial.Data item, int position, final OnItemClickListener listener) {
-            if (tutorialList.size() > 0 && position == 0) {
-                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
-                marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);
-                itemView.setLayoutParams(marginLayoutParams);
-            } else {
-                ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
-                marginLayoutParams.setMargins(0, 0, ViewUtils.dpToPx(6), 0);
-                itemView.setLayoutParams(marginLayoutParams);
-            }
-            tvTitle.setText(item.getNewsTitle());
-            Glide.with(activity)
-                    .load(item.getLinkImage())
-                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(ivHeader);
-            llContent.setOnClickListener(view -> {
-                if (listener != null)
-                    listener.OnItemClick(item, position);
-                if(item.getLinkVideo()!= null && !TextUtils.isEmpty(item.getLinkVideo())){
-                    Intent intentVideo = new Intent(activity, VideoActivity.class);
-                    intentVideo.putExtra(AppConstants.VIDEO_URL, item.getLinkVideo());
-                    activity.startActivity(intentVideo);
+            try {
+                if (tutorialList.size() > 0 && position == 0) {
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
+                    marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);
+                    itemView.setLayoutParams(marginLayoutParams);
+                } else {
+                    ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
+                    marginLayoutParams.setMargins(0, 0, ViewUtils.dpToPx(6), 0);
+                    itemView.setLayoutParams(marginLayoutParams);
                 }
-            });
+                tvTitle.setText(item.getNewsTitle());
+                Glide.with(activity)
+                        .load(item.getLinkImage())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
+                        .into(ivHeader);
+                llContent.setOnClickListener(view -> {
+                    if (listener != null)
+                        listener.OnItemClick(item, position);
+                    if(item.getLinkVideo()!= null && !TextUtils.isEmpty(item.getLinkVideo())){
+                        Intent intentVideo = new Intent(activity, VideoActivity.class);
+                        intentVideo.putExtra(AppConstants.VIDEO_URL, item.getLinkVideo());
+                        activity.startActivity(intentVideo);
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -65,25 +65,29 @@ public class VideoActivity extends BaseActivity implements Player.EventListener 
     }
 
     private void initializePlayer() {
-        videoFullScreenPlayer.setControllerVisibilityListener(visibility -> {
-            if (visibility == 0) {
-                rlClose.setVisibility(View.VISIBLE);
-            } else {
-                rlClose.setVisibility(View.GONE);
-            }
-        });
-        DefaultTrackSelector trackSelector = new DefaultTrackSelector();
-        DefaultTrackSelector.Parameters defaultTrackParam = trackSelector.buildUponParameters().build();
-        trackSelector.setParameters(defaultTrackParam);
-        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-        DefaultDataSourceFactory fac = new DefaultDataSourceFactory(this,
-                Util.getUserAgent(this, "video"));
-        videoFullScreenPlayer.setPlayer(player);
-        MediaSource videoSource = new ExtractorMediaSource.Factory(fac)
-                .createMediaSource(Uri.parse(url));
-        player.prepare(videoSource);
-        player.setPlayWhenReady(true);
-        player.addListener(this);
+        try {
+            videoFullScreenPlayer.setControllerVisibilityListener(visibility -> {
+                if (visibility == 0) {
+                    rlClose.setVisibility(View.VISIBLE);
+                } else {
+                    rlClose.setVisibility(View.GONE);
+                }
+            });
+            DefaultTrackSelector trackSelector = new DefaultTrackSelector();
+            DefaultTrackSelector.Parameters defaultTrackParam = trackSelector.buildUponParameters().build();
+            trackSelector.setParameters(defaultTrackParam);
+            player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
+            DefaultDataSourceFactory fac = new DefaultDataSourceFactory(this,
+                    Util.getUserAgent(this, "video"));
+            videoFullScreenPlayer.setPlayer(player);
+            MediaSource videoSource = new ExtractorMediaSource.Factory(fac)
+                    .createMediaSource(Uri.parse(url));
+            player.prepare(videoSource);
+            player.setPlayWhenReady(true);
+            player.addListener(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

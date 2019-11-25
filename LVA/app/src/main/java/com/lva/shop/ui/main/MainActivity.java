@@ -103,13 +103,13 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             = item -> {
         switch (item.getItemId()) {
             case R.id.navigation_shop:
-                OnFragmentChangedListener(SCREEN_SHOP);
+                loadFragment(homeFragment);
                 return true;
             case R.id.navigation_order:
-                OnFragmentChangedListener(SCREEN_ORDER);
+                loadFragment(orderFragment);
                 return true;
             case R.id.navigation_profile:
-                OnFragmentChangedListener(SCREEN_PROFILE);
+                loadFragment(settingFragment);
                 return true;
         }
         return false;
@@ -119,16 +119,13 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     public void OnFragmentChangedListener(int tag) {
         switch (tag) {
             case SCREEN_SHOP:
-                loadFragment(homeFragment);
-//                navigationBottomView.setSelectedItemId(R.id.navigation_shop);
+                navigationBottomView.setSelectedItemId(R.id.navigation_shop);
                 break;
             case SCREEN_ORDER:
-                loadFragment(orderFragment);
-//                navigationBottomView.setSelectedItemId(R.id.navigation_order);
+                navigationBottomView.setSelectedItemId(R.id.navigation_order);
                 break;
             case SCREEN_PROFILE:
-                loadFragment(settingFragment);
-//                navigationBottomView.setSelectedItemId(R.id.navigation_profile);
+                navigationBottomView.setSelectedItemId(R.id.navigation_profile);
                 break;
             case RELOAD_SCREEN_SHOP:
                 getData();
