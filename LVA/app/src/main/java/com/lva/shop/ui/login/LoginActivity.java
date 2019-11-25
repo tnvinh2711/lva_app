@@ -183,7 +183,6 @@ public class LoginActivity extends BaseActivity {
         ObjectAnimator scaleDownX = ObjectAnimator.ofFloat(ivLogo, "scaleX", 0.7f);
         ObjectAnimator scaleDownY = ObjectAnimator.ofFloat(ivLogo, "scaleY", 0.7f);
         scaleDownX.setDuration(launchApp ? 500 : 0);
-        scaleDownY.setDuration(launchApp ? 500 : 0);
 
         ObjectAnimator moveUpY = ObjectAnimator.ofFloat(ivLogo, "translationY", ViewUtils.dpToPx(-170));
         moveUpY.setDuration(launchApp ? 500 : 0);
@@ -206,7 +205,7 @@ public class LoginActivity extends BaseActivity {
                 ivLogo.setBackground(getResources().getDrawable(R.drawable.bg_logo_splash));
                 tvSkip.setVisibility(View.VISIBLE);
                 clLogin.setVisibility(View.VISIBLE);
-                clLogin.getLayoutParams().height = (ScreenUtils.getScreenHeight(LoginActivity.this) - ViewUtils.dpToPx(220));
+                clLogin.getLayoutParams().height = (ScreenUtils.getScreenHeight(LoginActivity.this) - ViewUtils.dpToPx(270));
                 clLogin.requestLayout();
                 hideLayoutOtp();
             }
@@ -269,7 +268,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onVerificationFailed(FirebaseException e) {
                 hideLoading();
-                Log.e(TAG, "onVerificationFailed: "+ e.getMessage() );
+                Log.e(TAG, "onVerificationFailed: " + e.getMessage());
                 Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
             }
 
@@ -337,7 +336,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
-        if(timer!= null) timer.cancel();
+        if (timer != null) timer.cancel();
         super.onDestroy();
     }
 

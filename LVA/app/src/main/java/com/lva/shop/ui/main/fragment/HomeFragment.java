@@ -87,7 +87,7 @@ public class HomeFragment extends BaseFragment {
     protected void setUp(View view) {
         swipeRefresh.setOnRefreshListener(() -> {
             swipeRefresh.setRefreshing(false);
-            getFragmentChangedListener().OnFragmentChangedListener(MainActivity.SCREEN_SHOP);
+            getFragmentChangedListener().OnFragmentChangedListener(MainActivity.RELOAD_SCREEN_SHOP);
         });
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
@@ -147,7 +147,7 @@ public class HomeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                    //TODO go to Profile
+                    //TODO go to Setting
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
@@ -158,6 +158,7 @@ public class HomeFragment extends BaseFragment {
             case R.id.ll_history:
                 break;
             case R.id.ll_order:
+                getFragmentChangedListener().OnFragmentChangedListener(MainActivity.SCREEN_ORDER);
                 break;
             case R.id.ll_facebook:
                 break;

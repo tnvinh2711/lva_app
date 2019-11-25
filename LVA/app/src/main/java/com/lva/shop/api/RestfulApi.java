@@ -10,6 +10,7 @@ import com.lva.shop.utils.NoConnectException;
 
 import java.net.CookieManager;
 import java.net.CookiePolicy;
+import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import okhttp3.OkHttpClient;
@@ -73,6 +74,8 @@ public class RestfulApi {
                     return chain.proceed(request);
                 })
                 .addInterceptor(logging)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
                 .build();
     }
 

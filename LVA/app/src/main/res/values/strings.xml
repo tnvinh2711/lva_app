@@ -11,7 +11,7 @@
     <string name="title_shop">Shop</string>
     <string name="title_cart">Cart</string>
     <string name="title_profile">Profile</string>
-    <string name="title_knowledge">Kiến thức chăm sóc da</string>
+    <string name="title_knowledge">Những điều bạn nên biết</string>
     <string name="order">Đặt hàng</string>
     <string name="history">Lịch sử</string>
     <string name="fanpage">FanPage</string>
@@ -35,4 +35,9 @@
     <string name="do_you_want_quit">Bạn chắc chắn muốn thoát ???</string>
     <string name="input_otp_from_sms">Nhập mã xác thực được gửi tới số điện thoại của bạn.</string>
     <string name="resend_otp">Gửi lại</string>
+    <string name="logout">Đăng xuất</string>
+    <string name="account_info">Thông tin tài khoản</string>
+    <string name="history_ship">Lịch sử giao hàng</string>
+    <string name="policy">Chính sách và bảo mật</string>
+    <string name="logout_text">Bạn chắc chắn muốn đăng xuất ?</string>
 </resources>

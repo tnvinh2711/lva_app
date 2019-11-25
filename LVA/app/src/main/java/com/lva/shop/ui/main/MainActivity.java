@@ -18,7 +18,7 @@ import com.lva.shop.callback.FragmentChangedListener;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.main.fragment.HomeFragment;
 import com.lva.shop.ui.main.fragment.OrderFragment;
-import com.lva.shop.ui.main.fragment.ProfileFragment;
+import com.lva.shop.ui.main.fragment.SettingFragment;
 import com.lva.shop.utils.AppConstants;
 
 import butterknife.BindView;
@@ -36,9 +36,10 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     public static final int SCREEN_SHOP = 1;
     public static final int SCREEN_ORDER = 2;
     public static final int SCREEN_PROFILE = 3;
+    public static final int RELOAD_SCREEN_SHOP = 4;
 
     private HomeFragment homeFragment;
-    private ProfileFragment profileFragment;
+    private SettingFragment settingFragment;
     private OrderFragment orderFragment;
 
     @Override
@@ -54,7 +55,9 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
         navigationBottomView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigationBottomView.setItemIconTintList(null);
         initFragments();
+        getData();
         OnFragmentChangedListener(SCREEN_SHOP);
+
     }
 
     private void getData() {
@@ -63,7 +66,6 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             @Override
             public void onGetZipSuccess(ZipRequest zipRequest) {
                 hideLoading();
-                loadFragment(homeFragment);
                 homeFragment.setData(zipRequest);
             }
 
@@ -79,8 +81,8 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
         homeFragment = HomeFragment.newInstance();
         homeFragment.setFragmentChangedListener(this);
 
-        profileFragment = ProfileFragment.newInstance();
-        profileFragment.setFragmentChangedListener(this);
+        settingFragment = SettingFragment.newInstance();
+        settingFragment.setFragmentChangedListener(this);
 
         orderFragment = OrderFragment.newInstance();
         orderFragment.setFragmentChangedListener(this);
@@ -117,13 +119,19 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     public void OnFragmentChangedListener(int tag) {
         switch (tag) {
             case SCREEN_SHOP:
-                getData();
+                loadFragment(homeFragment);
+//                navigationBottomView.setSelectedItemId(R.id.navigation_shop);
                 break;
             case SCREEN_ORDER:
                 loadFragment(orderFragment);
+//                navigationBottomView.setSelectedItemId(R.id.navigation_order);
                 break;
             case SCREEN_PROFILE:
-                loadFragment(profileFragment);
+                loadFragment(settingFragment);
+//                navigationBottomView.setSelectedItemId(R.id.navigation_profile);
+                break;
+            case RELOAD_SCREEN_SHOP:
+                getData();
                 break;
         }
     }

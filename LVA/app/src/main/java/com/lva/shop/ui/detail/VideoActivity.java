@@ -3,17 +3,17 @@ package com.lva.shop.ui.detail;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidanimations.library.YoYo;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.PlaybackParameters;
@@ -25,7 +25,6 @@ import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -45,9 +44,10 @@ public class VideoActivity extends BaseActivity implements Player.EventListener 
     ProgressBar spinnerVideoDetails;
     @BindView(R.id.btn_close)
     ImageView btnClose;
+    @BindView(R.id.rl_close)
+    RelativeLayout rlClose;
     private String TAG = VideoActivity.class.getSimpleName();
     private SimpleExoPlayer player;
-    private PlayerControlView controls;
     private String url;
 
     @Override
@@ -65,13 +65,16 @@ public class VideoActivity extends BaseActivity implements Player.EventListener 
     }
 
     private void initializePlayer() {
-        controls = findViewById(R.id.controls);
-        controls.setPlayer(player);
-        controls.hide();
+        videoFullScreenPlayer.setControllerVisibilityListener(visibility -> {
+            if (visibility == 0) {
+                rlClose.setVisibility(View.VISIBLE);
+            } else {
+                rlClose.setVisibility(View.GONE);
+            }
+        });
         DefaultTrackSelector trackSelector = new DefaultTrackSelector();
         DefaultTrackSelector.Parameters defaultTrackParam = trackSelector.buildUponParameters().build();
         trackSelector.setParameters(defaultTrackParam);
-
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         DefaultDataSourceFactory fac = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "video"));
@@ -98,17 +101,6 @@ public class VideoActivity extends BaseActivity implements Player.EventListener 
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.videoFullScreenPlayer:
-                if (controls.isVisible()) {
-                    YoYo.with(Techniques.FadeOut)
-                            .duration(250)
-                            .onEnd(animator -> controls.hide())
-                            .playOn(controls);
-                } else {
-                    YoYo.with(Techniques.FadeIn)
-                            .duration(250)
-                            .onStart(animator -> controls.show())
-                            .playOn(controls);
-                }
                 break;
             case R.id.btn_close:
                 onBackPressed();
@@ -222,5 +214,9 @@ public class VideoActivity extends BaseActivity implements Player.EventListener 
     @Override
     public void onSeekProcessed() {
 
+    }
+
+    @OnClick(R.id.rl_close)
+    public void onViewClicked() {
     }
 }

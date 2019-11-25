@@ -54,7 +54,7 @@
                     android:ellipsize="end"
                     android:lines="2"
                     android:maxLines="2"
-                    android:textColor="@color/color_text"
+                    android:textColor="@color/color_text_root"
                     android:textSize="@dimen/s14"
                     android:textStyle="bold" />
             </LinearLayout>
