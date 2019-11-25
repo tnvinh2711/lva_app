@@ -16,7 +16,6 @@
 package com.lva.shop.ui.base;
 
 import android.annotation.TargetApi;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -30,6 +29,7 @@ import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.lva.shop.R;
+import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.utils.CommonUtils;
 import com.lva.shop.utils.NetworkUtils;
 import com.lva.shop.utils.NoConnectException;
@@ -42,6 +42,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     private SweetAlertDialog mProgressDialog;
 
     private Unbinder mUnBinder;
+
+    private ButtonAlertDialogListener buttonAlertDialogListener;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,7 +81,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    public void showDialogError(String message) {
+    public void showDialogError(String message, String type) {
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getString(R.string.attention))
                 .setContentText(message)
@@ -87,6 +89,10 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                 .setConfirmText(getString(R.string.retry))
                 .showCancelButton(true)
                 .setCancelClickListener(SweetAlertDialog::cancel)
+                .setConfirmClickListener(sweetAlertDialog -> {
+                    sweetAlertDialog.cancel();
+                    buttonAlertDialogListener.onConfirmClick(type);
+                })
                 .show();
     }
 
@@ -106,11 +112,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(Throwable e, String type) {
         if (e instanceof NoConnectException) {
-            showDialogError(getString(R.string.network_error));
+            showDialogError(getString(R.string.network_error), type);
         } else {
-            showDialogError(getString(R.string.something_when_wrong));
+            showDialogError(getString(R.string.something_when_wrong), type);
         }
     }
 
@@ -168,5 +174,13 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+    }
+
+    public ButtonAlertDialogListener getButtonAlertDialogListener() {
+        return buttonAlertDialogListener;
+    }
+
+    public void setButtonAlertDialogListener(ButtonAlertDialogListener buttonAlertDialogListener) {
+        this.buttonAlertDialogListener = buttonAlertDialogListener;
     }
 }

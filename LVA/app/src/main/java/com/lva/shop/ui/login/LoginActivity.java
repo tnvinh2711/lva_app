@@ -100,6 +100,7 @@ public class LoginActivity extends BaseActivity {
     private String TAG = LoginActivity.class.getSimpleName();
     private int DELAY_TIME = 2000;
     boolean launchApp;
+    private CountDownTimer timer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -293,7 +294,7 @@ public class LoginActivity extends BaseActivity {
                     this,               // Activity (for callback binding)
                     mSendOTPCallBack());
         } else {
-            showDialogError(getString(R.string.network_error));
+            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR);
         }
     }
 
@@ -307,12 +308,12 @@ public class LoginActivity extends BaseActivity {
                     this,               // Activity (for callback binding)
                     mSendOTPCallBack(), resendToken);
         } else {
-            showDialogError(getString(R.string.network_error));
+            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR);
         }
     }
 
     private void setTimer() {
-        new CountDownTimer(60000, 1000) {
+        timer = new CountDownTimer(60000, 1000) {
             public void onTick(long millisUntilFinished) {
                 tvResend.setText(getString(R.string.resend_otp) + "(" + millisUntilFinished / 1000 + "s)");
                 tvResend.setTextColor(getResources().getColor(R.color.color_text_gray));
@@ -336,6 +337,7 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        if(timer!= null) timer.cancel();
         super.onDestroy();
     }
 

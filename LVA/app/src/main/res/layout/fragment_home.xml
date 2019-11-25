@@ -31,6 +31,7 @@
             app:srcCompat="@mipmap/ic_profile_unselected" />
 
         <TextView
+            android:id="@+id/tv_login"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d24"
@@ -39,7 +40,6 @@
             android:layout_marginRight="@dimen/d16"
             android:maxLines="1"
             android:text="@string/login"
-            android:id="@+id/tv_login"
             android:textColor="@color/color_text_root"
             android:textSize="@dimen/s20"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
@@ -49,29 +49,39 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <androidx.core.widget.NestedScrollView
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:descendantFocusability="blocksDescendants"
-        android:scrollbars="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appBarLayout">
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginBottom="@dimen/d16">
+            android:descendantFocusability="blocksDescendants"
+            android:scrollbars="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout">
 
-            <include layout="@layout/layout_home_header" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="@dimen/d16"
+                android:orientation="vertical">
 
-            <include layout="@layout/layout_home_rcv_knowledge" />
+                <include layout="@layout/layout_home_header" />
 
-            <include layout="@layout/layout_home_rcv_tutorial" />
+                <include layout="@layout/layout_home_rcv_knowledge" />
 
-            <include layout="@layout/layout_home_rcv_news" />
-        </LinearLayout>
+                <include layout="@layout/layout_home_rcv_tutorial" />
 
-    </androidx.core.widget.NestedScrollView>
+                <include layout="@layout/layout_home_rcv_news" />
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

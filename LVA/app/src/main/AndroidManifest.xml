@@ -10,14 +10,14 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name="com.lva.shop.MyApplication"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:usesCleartextTraffic="true"
-        android:name="com.lva.shop.MyApplication">
+        android:usesCleartextTraffic="true">
         <activity
             android:name="com.lva.shop.ui.login.LoginActivity"
             android:screenOrientation="portrait">
@@ -29,12 +29,10 @@
         </activity>
         <activity
             android:name="com.lva.shop.ui.main.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
-            android:name="com.lva.shop.ui.webview.WebActivity"
-            android:screenOrientation="portrait">
-        </activity>
+            android:name="com.lva.shop.ui.detail.WebActivity"
+            android:screenOrientation="portrait"></activity>
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
@@ -44,6 +42,9 @@
             android:name="com.facebook.FacebookActivity"
             android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
             android:label="@string/app_name" />
+        <activity
+            android:name=".ui.detail.VideoActivity"
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

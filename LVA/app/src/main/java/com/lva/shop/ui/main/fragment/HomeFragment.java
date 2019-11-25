@@ -13,18 +13,20 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.login.LoginActivity;
+import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.ui.main.adapter.HomeImageKnowledgeAdapter;
 import com.lva.shop.ui.main.adapter.HomeImageNewsAdapter;
 import com.lva.shop.ui.main.adapter.HomeImageTutorialAdapter;
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Tutorial;
-import com.lva.shop.ui.webview.WebActivity;
+import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.Preference;
 
@@ -54,6 +56,8 @@ public class HomeFragment extends BaseFragment {
     RecyclerView rcvContentNews;
     @BindView(R.id.tv_login)
     TextView tvLogin;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
 
     private List<News.Data> newsList = new ArrayList<>();
     private List<Tutorial.Data> tutorialList = new ArrayList<>();
@@ -81,6 +85,10 @@ public class HomeFragment extends BaseFragment {
 
     @Override
     protected void setUp(View view) {
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(false);
+            getFragmentChangedListener().OnFragmentChangedListener(MainActivity.SCREEN_SHOP);
+        });
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(getBaseActivity(), LinearLayoutManager.HORIZONTAL, false);
         LinearLayoutManager layoutManager2
@@ -120,22 +128,6 @@ public class HomeFragment extends BaseFragment {
         super.onDestroyView();
     }
 
-    @OnClick({R.id.appBarLayout})
-    void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.appBarLayout:
-                if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                    //TODO go to Profile
-                } else {
-                    Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
-                    intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivity(intentLogin);
-                    getBaseActivity().finish();
-                }
-                break;
-        }
-    }
-
     public void setData(ZipRequest zipRequest) {
         if (zipRequest != null) {
             knowledgeList = zipRequest.getResponseKnowledge().getData();
@@ -148,5 +140,27 @@ public class HomeFragment extends BaseFragment {
                 homeImageTutorialAdapter.setTutorial(tutorialList);
         }
 
+    }
+
+    @OnClick({R.id.ll_history, R.id.ll_order, R.id.ll_facebook, R.id.appBarLayout})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.appBarLayout:
+                if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                    //TODO go to Profile
+                } else {
+                    Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
+                    intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
+                    startActivity(intentLogin);
+                    getBaseActivity().finish();
+                }
+                break;
+            case R.id.ll_history:
+                break;
+            case R.id.ll_order:
+                break;
+            case R.id.ll_facebook:
+                break;
+        }
     }
 }

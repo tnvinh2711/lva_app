@@ -1,9 +1,8 @@
-package com.lva.shop.ui.webview;
+package com.lva.shop.ui.detail;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -22,8 +21,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.utils.AppConstants;
-
-import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,7 +71,6 @@ public class WebActivity extends BaseActivity {
         webview.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
 
         WebSettings webSettings = webview.getSettings();
-        webSettings.setJavaScriptEnabled(true);
         webSettings.setDomStorageEnabled(true);
         webSettings.setBuiltInZoomControls(false);
 
@@ -94,11 +90,6 @@ public class WebActivity extends BaseActivity {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                try {
-                    showLoading();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override
@@ -123,6 +114,7 @@ public class WebActivity extends BaseActivity {
             }
         });
         webview.loadUrl(url);
+        showLoading();
     }
 
 

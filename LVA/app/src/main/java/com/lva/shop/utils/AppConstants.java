@@ -23,8 +23,17 @@ public final class AppConstants {
     //web
     public static final String TITLE = "web_title";
     public static final String URL = "web_url";
-    public static final String ACCESS_TOKEN = "access_token" ;
+    public static final String ACCESS_TOKEN = "access_token";
     public static final String LAUNCH_APP = "not_launch_app";
+
+
+    //type error
+    public static final String LOAD_DATA_HOME_FAIL = "load data home dail";
+    public static final String NETWORK_ERROR = "network_error";
+
+
+    //video
+    public static final String VIDEO_URL = "video_url" ;
 
     private AppConstants() {
         // This utility class is not publicly instantiable

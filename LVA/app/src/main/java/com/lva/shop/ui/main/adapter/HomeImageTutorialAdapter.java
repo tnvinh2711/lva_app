@@ -1,6 +1,8 @@
 package com.lva.shop.ui.main.adapter;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +16,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lva.shop.R;
+import com.lva.shop.ui.detail.VideoActivity;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Tutorial;
+import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.ViewUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -97,6 +101,11 @@ public class HomeImageTutorialAdapter extends RecyclerView.Adapter<HomeImageTuto
             llContent.setOnClickListener(view -> {
                 if (listener != null)
                     listener.OnItemClick(item, position);
+                if(item.getLinkVideo()!= null && !TextUtils.isEmpty(item.getLinkVideo())){
+                    Intent intentVideo = new Intent(activity, VideoActivity.class);
+                    intentVideo.putExtra(AppConstants.VIDEO_URL, item.getLinkVideo());
+                    activity.startActivity(intentVideo);
+                }
             });
         }
     }

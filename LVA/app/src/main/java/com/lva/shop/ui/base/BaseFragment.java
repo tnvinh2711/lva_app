@@ -73,9 +73,9 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
     }
 
     @Override
-    public void onError(Throwable e) {
+    public void onError(Throwable e, String type) {
         if (mActivity != null) {
-            mActivity.onError(e);
+            mActivity.onError(e, type);
         }
     }
 

@@ -13,17 +13,18 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.lva.shop.R;
 import com.lva.shop.api.RestfulManager;
 import com.lva.shop.api.ZipRequest;
+import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.callback.FragmentChangedListener;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.main.fragment.HomeFragment;
 import com.lva.shop.ui.main.fragment.OrderFragment;
 import com.lva.shop.ui.main.fragment.ProfileFragment;
-import com.lva.shop.utils.NoConnectException;
+import com.lva.shop.utils.AppConstants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements FragmentChangedListener {
+public class MainActivity extends BaseActivity implements FragmentChangedListener, ButtonAlertDialogListener {
     @BindView(R.id.frame_container)
     FrameLayout frameContainer;
     @BindView(R.id.navigation)
@@ -39,7 +40,6 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     private HomeFragment homeFragment;
     private ProfileFragment profileFragment;
     private OrderFragment orderFragment;
-    private ZipRequest zipRequest;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +50,11 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     }
 
     private void setUpView() {
+        setButtonAlertDialogListener(this);
         navigationBottomView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigationBottomView.setItemIconTintList(null);
         initFragments();
         OnFragmentChangedListener(SCREEN_SHOP);
-        getData();
     }
 
     private void getData() {
@@ -62,14 +62,14 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
         RestfulManager.getInstance(MainActivity.this).getHome(new RestfulManager.OnChangeListener() {
             @Override
             public void onGetZipSuccess(ZipRequest zipRequest) {
-                MainActivity.this.zipRequest = zipRequest;
                 hideLoading();
+                loadFragment(homeFragment);
                 homeFragment.setData(zipRequest);
             }
 
             @Override
             public void onError(Throwable e) {
-                MainActivity.this.onError(e);
+                MainActivity.this.onError(e, AppConstants.LOAD_DATA_HOME_FAIL);
                 hideLoading();
             }
         });
@@ -86,6 +86,7 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
         orderFragment.setFragmentChangedListener(this);
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -116,7 +117,7 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     public void OnFragmentChangedListener(int tag) {
         switch (tag) {
             case SCREEN_SHOP:
-                loadFragment(homeFragment);
+                getData();
                 break;
             case SCREEN_ORDER:
                 loadFragment(orderFragment);
@@ -145,5 +146,19 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     @Override
     public void onBackPressed() {
         showDialogExit(getString(R.string.do_you_want_quit));
+    }
+
+    @Override
+    public void onConfirmClick(String type) {
+        switch (type) {
+            case AppConstants.LOAD_DATA_HOME_FAIL:
+                getData();
+                break;
+        }
+    }
+
+    @Override
+    public void onCancelClick(String type) {
+
     }
 }
