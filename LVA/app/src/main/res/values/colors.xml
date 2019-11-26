@@ -8,7 +8,9 @@
     <color name="bg_fragment">#F7f7f7</color>
     <color name="white">#ffffff</color>
     <color name="color_text">#454545</color>
+    <color name="color_text_sub">#3C3C3C</color>
     <color name="color_text_gray">#ACACAC</color>
+    <color name="color_divider">#CCCCCC</color>
     <color name="color_text_root">#FF42A2</color>
     <color name="black">#000000</color>
     <color name="blue">#0093E4</color>

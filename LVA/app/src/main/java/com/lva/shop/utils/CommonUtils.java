@@ -18,13 +18,10 @@ package com.lva.shop.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.provider.Settings;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
 
 import com.lva.shop.R;
+import com.lva.shop.ui.location.model.AddressReqRes;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.io.IOException;
@@ -85,7 +82,11 @@ public final class CommonUtils {
         return new SimpleDateFormat(AppConstants.TIMESTAMP_FORMAT, Locale.US).format(new Date());
     }
 
-    public static String getConvertPhone(String phone){
-        return "+84"+ phone.substring(1);
+    public static String getConvertPhone(String phone) {
+        return "+84" + phone.substring(1);
+    }
+
+    public static String convertAddress(AddressReqRes addressReqRes) {
+        return addressReqRes.getAddress() + ", " + addressReqRes.getWard() + ", " + addressReqRes.getDistrict() + ", " + addressReqRes.getCity();
     }
 }

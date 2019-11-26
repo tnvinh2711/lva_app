@@ -68,5 +68,8 @@ dependencies {
 
     implementation 'com.github.mukeshsolanki:android-otpview-pinview:2.1.0'
 
+    //databases
+    implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
+
 
 }

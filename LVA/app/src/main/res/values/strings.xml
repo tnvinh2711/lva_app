@@ -43,4 +43,19 @@
     <string name="change">Thay đổi</string>
     <string name="ship_to">Giao hàng đến</string>
     <string name="none">Chưa có</string>
+    <string name="address_ship">Địa chỉ mua hàng</string>
+    <string name="tinh">Tỉnh/Thành phố</string>
+    <string name="input_tinh">Điền Tỉnh/Thành phố</string>
+    <string name="huyen">Quận/Huyện</string>
+    <string name="input_huyen">Điền Quận/Huyện</string>
+    <string name="input_xa">Điền Phường/Xã</string>
+    <string name="xa">Phường/Xã</string>
+    <string name="address_specific">Địa chỉ cụ thể</string>
+    <string name="address_specific_text">Số nhà, tên tòa nhà, tên đường, tên khu vực</string>
+    <string name="input_address_specific">Nhập địa chỉ cụ thể</string>
+    <string name="update_address">Cập nhật địa chỉ</string>
+    <string name="please_choose_city">Vui lòng chọn Tỉnh/Thành phố</string>
+    <string name="please_choose_district">Vui lòng nhập Quận/Huyện</string>
+    <string name="please_input_infomation">Vui lòng điền đầy đủ thông tin</string>
+    <string name="message_dialog_update_address">Bạn có chắc chắn muốn sử dụng địa chỉ:\n %s</string>
 </resources>

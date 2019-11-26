@@ -38,6 +38,9 @@ public final class AppConstants {
     //address
     public static final int REQUEST_ADDRESS = 11054;
     public static final String ADDRESS = "address";
+    public static final int CITY = 0;
+    public static final int DISTRICT = 1;
+    public static final int COMMUNE = 2;
 
 
     private AppConstants() {

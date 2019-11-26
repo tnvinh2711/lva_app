@@ -15,13 +15,13 @@
 
 package com.lva.shop.ui.base;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.ActionBar;
 import androidx.fragment.app.Fragment;
 
 import com.lva.shop.callback.FragmentChangedListener;
@@ -36,6 +36,7 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
     private BaseActivity mActivity;
     private Unbinder mUnBinder;
     private SweetAlertDialog mProgressDialog;
+    private String toolbarTitle;
     private FragmentChangedListener fragmentChangedListener;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,6 +66,14 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
         mProgressDialog = CommonUtils.showLoadingDialog(this.getContext());
     }
 
+    public void setUpToolbar() {
+        if (getToolbarTitle() != null) {
+            ActionBar actionBar = getBaseActivity().getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setTitle(getToolbarTitle());
+            }
+        }
+    }
     @Override
     public void hideLoading() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
@@ -130,6 +139,14 @@ public abstract class BaseFragment extends Fragment implements ActivityInterface
             mUnBinder.unbind();
         }
         super.onDestroy();
+    }
+
+    public String getToolbarTitle() {
+        return toolbarTitle;
+    }
+
+    public void setToolbarTitle(String toolbarTitle) {
+        this.toolbarTitle = toolbarTitle;
     }
 
     public interface Callback {
