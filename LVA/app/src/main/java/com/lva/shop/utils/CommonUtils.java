@@ -89,4 +89,13 @@ public final class CommonUtils {
     public static String convertAddress(AddressReqRes addressReqRes) {
         return addressReqRes.getAddress() + ", " + addressReqRes.getWard() + ", " + addressReqRes.getDistrict() + ", " + addressReqRes.getCity();
     }
+
+    public static String convertHtmlToString(String originHtml){
+        originHtml = originHtml.replaceAll("\n",".");
+        originHtml = originHtml.replaceAll("\r","");
+        originHtml = originHtml.replaceAll("\\<.*?\\>", "");
+        originHtml = originHtml.replaceAll("&nbsp;","");
+        originHtml = originHtml.replaceAll("&amp;","");
+        return  originHtml;
+    }
 }

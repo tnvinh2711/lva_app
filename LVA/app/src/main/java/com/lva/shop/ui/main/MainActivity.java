@@ -2,6 +2,7 @@ package com.lva.shop.ui.main;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import androidx.annotation.Nullable;
@@ -19,6 +20,8 @@ import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.main.fragment.HomeFragment;
 import com.lva.shop.ui.main.fragment.OrderFragment;
 import com.lva.shop.ui.main.fragment.SettingFragment;
+import com.lva.shop.ui.main.model.DataProduct;
+import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.utils.AppConstants;
 
 import butterknife.BindView;
@@ -67,6 +70,9 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             public void onGetZipSuccess(ZipRequest zipRequest) {
                 hideLoading();
                 homeFragment.setData(zipRequest);
+                for (DataProduct dataProduct: zipRequest.getResponseProduct().getData().get(0).getData()){
+                    Log.e(TAG, "onGetZipSuccess: "+dataProduct.getProductSortdesc() );
+                }
             }
 
             @Override

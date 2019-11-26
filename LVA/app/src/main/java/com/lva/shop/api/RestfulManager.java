@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
+import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.ui.main.model.Tutorial;
 
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ public class RestfulManager {
 //    }
 
     public void getHome(OnChangeListener onChangeListener) {
-        Observable<ZipRequest> zipObservable = Observable.zip(createListObservable(), objects -> new ZipRequest((Knowledge) objects[0], (Tutorial) objects[1], (News) objects[2]));
+        Observable<ZipRequest> zipObservable = Observable.zip(createListObservable(), objects -> new ZipRequest((Knowledge) objects[0], (Tutorial) objects[1], (News) objects[2], (Product) objects[3]));
         zipObservable.subscribe(new Observer<ZipRequest>() {
 
             @Override
@@ -108,10 +109,16 @@ public class RestfulManager {
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread());
 
+        Observable<Product> productObservable = plfRestService
+                .getProduct()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
+
         List<Observable<?>> result = new ArrayList<>();
         result.add(knowledgeObservable);
         result.add(tutorialObservable);
         result.add(newsObservable);
+        result.add(productObservable);
         return result;
     }
 

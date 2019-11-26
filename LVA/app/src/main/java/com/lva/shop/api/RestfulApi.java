@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
+import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.ui.main.model.Tutorial;
 import com.lva.shop.utils.NetworkUtils;
 import com.lva.shop.utils.NoConnectException;
@@ -74,8 +75,8 @@ public class RestfulApi {
                     return chain.proceed(request);
                 })
                 .addInterceptor(logging)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .connectTimeout(60, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .connectTimeout(30, TimeUnit.SECONDS)
                 .build();
     }
 
@@ -89,6 +90,9 @@ public class RestfulApi {
 
         @GET("new")
         Observable<News> getNews();
+
+        @GET("product")
+        Observable<Product> getProduct();
     }
 
 }
