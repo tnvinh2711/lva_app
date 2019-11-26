@@ -71,5 +71,7 @@ dependencies {
     //databases
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 
+    implementation 'com.github.DanielMartinus:Stepper-Touch:1.0.1'
+
 
 }

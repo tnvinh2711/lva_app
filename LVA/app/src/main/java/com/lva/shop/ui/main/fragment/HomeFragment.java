@@ -143,7 +143,6 @@ public class HomeFragment extends BaseFragment {
             if (homeImageTutorialAdapter != null)
                 homeImageTutorialAdapter.setTutorial(tutorialList);
         }
-
     }
 
     @OnClick({R.id.ll_history, R.id.ll_order, R.id.ll_facebook, R.id.appBarLayout})

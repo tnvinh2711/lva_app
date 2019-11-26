@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_white_border"
+        android:orientation="vertical"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv_img_product"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d120"
+                android:scaleType="centerCrop"
+                app:riv_corner_radius_top_left="10dp"
+                app:riv_corner_radius_top_right="10dp" />
+            <TextView
+                android:id="@+id/tv_title_product"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d56"
+                android:layout_marginLeft="@dimen/d10"
+                android:layout_marginRight="@dimen/d10"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:text="title"
+                android:textColor="@color/color_text"
+                android:textSize="@dimen/s16" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/color_text_gray" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d40">
+
+                <ImageView
+                    android:layout_width="@dimen/d20"
+                    android:layout_height="@dimen/d20"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/d10"
+                    android:src="@drawable/ic_add" />
+
+                <TextView
+                    android:id="@+id/tv_money_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:text="100000đ"
+                    android:textColor="@color/color_text"
+                    android:textSize="@dimen/s16" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

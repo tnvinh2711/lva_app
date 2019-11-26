@@ -70,9 +70,7 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             public void onGetZipSuccess(ZipRequest zipRequest) {
                 hideLoading();
                 homeFragment.setData(zipRequest);
-                for (DataProduct dataProduct: zipRequest.getResponseProduct().getData().get(0).getData()){
-                    Log.e(TAG, "onGetZipSuccess: "+dataProduct.getProductSortdesc() );
-                }
+                orderFragment.setData(zipRequest);
             }
 
             @Override

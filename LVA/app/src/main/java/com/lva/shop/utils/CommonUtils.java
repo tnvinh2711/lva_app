@@ -26,6 +26,8 @@ import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -90,12 +92,30 @@ public final class CommonUtils {
         return addressReqRes.getAddress() + ", " + addressReqRes.getWard() + ", " + addressReqRes.getDistrict() + ", " + addressReqRes.getCity();
     }
 
-    public static String convertHtmlToString(String originHtml){
-        originHtml = originHtml.replaceAll("\n",".");
-        originHtml = originHtml.replaceAll("\r","");
+    public static String convertHtmlToString(String originHtml) {
+        originHtml = originHtml.replaceAll("\n", ".");
+        originHtml = originHtml.replaceAll("\r", "");
         originHtml = originHtml.replaceAll("\\<.*?\\>", "");
-        originHtml = originHtml.replaceAll("&nbsp;","");
-        originHtml = originHtml.replaceAll("&amp;","");
-        return  originHtml;
+        originHtml = originHtml.replaceAll("&nbsp;", "");
+        originHtml = originHtml.replaceAll("&amp;", "");
+        return originHtml;
+    }
+
+    public static String convertMoney(String price) {
+        String currency = "đ";
+        double priceD = Double.parseDouble(price);
+        String formattedString = null;
+        try {
+            DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.GERMAN);
+            otherSymbols.setDecimalSeparator('.');
+            otherSymbols.setGroupingSeparator('.');
+            formatter.setDecimalFormatSymbols(otherSymbols);
+            formattedString = formatter.format((int) priceD);
+            //setting text after format to EditText
+        } catch (NumberFormatException nfe) {
+            nfe.printStackTrace();
+        }
+        return formattedString + currency;
     }
 }

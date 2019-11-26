@@ -24,4 +24,5 @@
     <dimen name="d40">40dp</dimen>
     <dimen name="d6">6dp</dimen>
     <dimen name="s12">12sp</dimen>
+    <dimen name="d8">8dp</dimen>
 </resources>

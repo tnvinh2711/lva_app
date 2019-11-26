@@ -12,4 +12,10 @@
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@color/color_text_root</item>
     </style>
+
+    <style name="TabLayout_Theme" parent="@style/AppTheme">
+        <item name="android:maxLines">1</item>
+        <item name="android:textSize">@dimen/s16</item>
+    </style>
 </resources>
+
