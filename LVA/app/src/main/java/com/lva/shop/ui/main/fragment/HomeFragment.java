@@ -18,6 +18,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
+import com.lva.shop.ui.detail.ProfileActivity;
 import com.lva.shop.ui.login.LoginActivity;
 import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.ui.main.adapter.HomeImageKnowledgeAdapter;
@@ -150,7 +151,9 @@ public class HomeFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                    //TODO go to Setting
+                    //TODO API
+                    Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
+                    startActivity(intentProfile);
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);

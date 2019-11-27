@@ -42,7 +42,7 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
     public static final int SCREEN_GET_COMMUNE = 4;
     public static final int UPDATE_ADDRESS = 5;
 
-    private String mAddress;
+    private String mAddress, mName, mPhone;
     private Address cityObj;
     private Address districtObj;
     private Address communeObj;
@@ -96,8 +96,10 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
     }
 
     @Override
-    public void OnAddressChange(String address) {
+    public void OnAddressChange(String address, String name, String phone) {
         mAddress = address;
+        mName = name;
+        mPhone = phone;
     }
 
     @Override
@@ -149,7 +151,7 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
                 }
                 break;
             case UPDATE_ADDRESS:
-                if (cityObj != null && districtObj != null && communeObj != null && mAddress != null) {
+                if (cityObj != null && districtObj != null && communeObj != null && mAddress != null && mName != null && mPhone != null) {
                    showDialogConfirm();
                 } else {
                     Toast.makeText(this, R.string.please_input_infomation, Toast.LENGTH_SHORT).show();

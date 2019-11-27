@@ -31,6 +31,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseDialog;
+import com.lva.shop.ui.customview.ValueSelector;
 import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.main.model.DataProduct;
 import com.lva.shop.utils.AppConstants;
@@ -40,7 +41,6 @@ import com.makeramen.roundedimageview.RoundedImageView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import nl.dionsegijn.steppertouch.StepperTouch;
 
 
 public class DialogProductFragment extends BaseDialog {
@@ -58,8 +58,10 @@ public class DialogProductFragment extends BaseDialog {
     LinearLayout llFeature;
     @BindView(R.id.btn_add_to_cart)
     TextView btnAddToCart;
-    @BindView(R.id.stepperTouch)
-    StepperTouch stepperTouch;
+    @BindView(R.id.selector)
+    ValueSelector selector;
+//    @BindView(R.id.stepperTouch)
+//    StepperTouch stepperTouch;
 
     private DataProduct dataProduct;
 
@@ -86,11 +88,10 @@ public class DialogProductFragment extends BaseDialog {
 
     @Override
     protected void setUp(View view) {
-        stepperTouch.setCount(1);
-        stepperTouch.setMinValue(1);
-        stepperTouch.setMaxValue(10);
-        stepperTouch.setSideTapEnabled(true);
-        stepperTouch.addStepCallback((value, positive) -> tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value)));
+        selector.setMaxValue(10);
+        selector.setMinValue(1);
+        selector.setValue(1);
+        selector.setOnValueListener(value -> tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value)));
         Glide.with(getBaseActivity())
                 .load(dataProduct.getLinkImage())
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))

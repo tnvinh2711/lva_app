@@ -13,6 +13,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d56"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d16"
+                    android:layout_marginRight="@dimen/d16"
+                    android:hint="Nhập họ và tên">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:paddingTop="@dimen/d5"
+                        android:text="Trương Ngọc Vinh"
+                        android:textColor="@color/color_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d56"
+                android:gravity="center">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d16"
+                    android:layout_marginRight="@dimen/d16"
+                    android:hint="Nhập số điện thoại">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edt_phone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:inputType="number"
+                        android:paddingTop="@dimen/d5"
+                        android:text="0975477088"
+                        android:textColor="@color/color_text" />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d16"
             android:background="@color/white"
             android:orientation="vertical">
@@ -33,6 +87,7 @@
                     android:textSize="@dimen/s14" />
 
                 <TextView
+                    android:id="@+id/tv_tinh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
@@ -41,7 +96,6 @@
                     android:drawableRight="@mipmap/ic_arrow_right"
                     android:drawablePadding="@dimen/d16"
                     android:ellipsize="end"
-                    android:id="@+id/tv_tinh"
                     android:gravity="end"
                     android:maxLines="2"
                     android:text="@string/input_tinh"

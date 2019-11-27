@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import com.google.android.material.textfield.TextInputEditText;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.location.LocationActivity;
@@ -39,6 +40,10 @@ public class AddressFragment extends BaseFragment {
     EditText edtAddress;
     @BindView(R.id.btn_next)
     TextView btnNext;
+    @BindView(R.id.edt_name)
+    TextInputEditText edtName;
+    @BindView(R.id.edt_phone)
+    TextInputEditText edtPhone;
 
     private Address cityObj, districtObj, communeObj;
 
@@ -91,7 +96,7 @@ public class AddressFragment extends BaseFragment {
                 break;
             case R.id.btn_next:
                 if (!TextUtils.isEmpty(edtAddress.getText().toString()))
-                    getFragmentChangedListener().OnAddressChange(edtAddress.getText().toString());
+                    getFragmentChangedListener().OnAddressChange(edtAddress.getText().toString(),edtName.getText().toString(),edtPhone.getText().toString());
                 getFragmentChangedListener().OnFragmentChangedListener(LocationActivity.UPDATE_ADDRESS);
                 break;
         }

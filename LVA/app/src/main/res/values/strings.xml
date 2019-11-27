@@ -60,4 +60,6 @@
     <string name="message_dialog_update_address">Bạn có chắc chắn muốn sử dụng địa chỉ:\n %s</string>
     <string name="feature">Công dụng</string>
     <string name="loadmore">xem thêm</string>
+    <string name="help">Hỗ trợ</string>
+    <string name="user_info">Thông tin cá nhân</string>
 </resources>

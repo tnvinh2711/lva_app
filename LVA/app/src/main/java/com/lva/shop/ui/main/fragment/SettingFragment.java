@@ -18,6 +18,8 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseFragment;
+import com.lva.shop.ui.detail.ProfileActivity;
+import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.login.LoginActivity;
 import com.lva.shop.ui.main.adapter.SettingAdapter;
 import com.lva.shop.ui.main.model.Setting;
@@ -91,11 +93,21 @@ public class SettingFragment extends BaseFragment {
         settingAdapter = new SettingAdapter(getBaseActivity(), (setting, position) -> {
             switch (setting.getId()) {
                 case 0:
+                    //TODO API
+                    Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
+                    startActivity(intentProfile);
                     break;
                 case 1:
                     break;
                 case 2:
                     break;
+                case 3:
+                    Intent intent = new Intent(getBaseActivity(), WebActivity.class);
+                    intent.putExtra(AppConstants.TITLE, getString(R.string.help));
+                    intent.putExtra(AppConstants.URL, "http://levananh.com/lien-he");
+                    startActivity(intent);
+                    break;
+
             }
         }, settingList);
         rcvFeature.setAdapter(settingAdapter);
@@ -104,9 +116,10 @@ public class SettingFragment extends BaseFragment {
 
     private void setData() {
         settingList.clear();
-        settingList.add(new Setting(0, R.mipmap.ic_profile_unselected, getString(R.string.account_info)));
-        settingList.add(new Setting(1, R.mipmap.ic_order_unselected, getString(R.string.history_ship)));
-        settingList.add(new Setting(2, R.mipmap.ic_lock, getString(R.string.policy)));
+        settingList.add(new Setting(0, R.mipmap.ic_user, getString(R.string.account_info)));
+        settingList.add(new Setting(1, R.mipmap.ic_history, getString(R.string.history_ship)));
+        settingList.add(new Setting(2, R.mipmap.ic_privacy, getString(R.string.policy)));
+        settingList.add(new Setting(3, R.mipmap.ic_contact, getString(R.string.help)));
         setUpRecyclerView();
     }
 
@@ -120,7 +133,9 @@ public class SettingFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                    //TODO go to Setting
+                    //TODO API
+                    Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
+                    startActivity(intentProfile);
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);

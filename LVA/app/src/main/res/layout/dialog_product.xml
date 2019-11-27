@@ -108,16 +108,12 @@
                     android:text="Thêm vào giỏ"
                     android:textColor="@color/white" />
 
-                <nl.dionsegijn.steppertouch.StepperTouch
-                    android:id="@+id/stepperTouch"
-                    android:layout_width="@dimen/d120"
-                    android:layout_height="@dimen/d40"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/d10"
-                    app:stepperAllowNegative="true"
-                    app:stepperAllowPositive="true"
-                    app:stepperBackgroundColor="@color/color_text_root"
-                    app:stepperTextColor="@color/color_text_root" />
+               <com.lva.shop.ui.customview.ValueSelector
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_centerVertical="true"
+                   android:id="@+id/selector"
+                   android:layout_marginLeft="@dimen/d8"/>
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
