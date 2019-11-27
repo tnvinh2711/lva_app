@@ -153,6 +153,9 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
             case UPDATE_ADDRESS:
                 if (cityObj != null && districtObj != null && communeObj != null && mAddress != null && mName != null && mPhone != null) {
                    showDialogConfirm();
+                   mAddress = null;
+                   mName = null;
+                   mPhone = null;
                 } else {
                     Toast.makeText(this, R.string.please_input_infomation, Toast.LENGTH_SHORT).show();
                 }

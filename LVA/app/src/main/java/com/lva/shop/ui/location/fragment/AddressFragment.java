@@ -66,6 +66,9 @@ public class AddressFragment extends BaseFragment {
 
     @Override
     protected void setUp(View view) {
+        edtName.setMaxLines(1);
+        edtPhone.setMaxLines(1);
+        edtAddress.setMaxLines(1);
         if (cityObj != null) {
             tvTinh.setText(cityObj.getName());
         }
@@ -95,8 +98,12 @@ public class AddressFragment extends BaseFragment {
                 getFragmentChangedListener().OnFragmentChangedListener(LocationActivity.SCREEN_GET_COMMUNE);
                 break;
             case R.id.btn_next:
-                if (!TextUtils.isEmpty(edtAddress.getText().toString()))
-                    getFragmentChangedListener().OnAddressChange(edtAddress.getText().toString(),edtName.getText().toString(),edtPhone.getText().toString());
+                if (!TextUtils.isEmpty(edtAddress.getText())
+                        && !TextUtils.isEmpty(edtName.getText())
+                        && !edtName.getText().toString().equals("")
+                        && !edtPhone.getText().toString().equals("")
+                        && !TextUtils.isEmpty(edtPhone.getText()))
+                    getFragmentChangedListener().OnAddressChange(edtAddress.getText().toString(), edtName.getText().toString(), edtPhone.getText().toString());
                 getFragmentChangedListener().OnFragmentChangedListener(LocationActivity.UPDATE_ADDRESS);
                 break;
         }
