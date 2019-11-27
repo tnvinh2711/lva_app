@@ -16,11 +16,16 @@
 package com.lva.shop.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.provider.Settings;
 
 import com.lva.shop.R;
+import com.lva.shop.ui.detail.ProfileActivity;
 import com.lva.shop.ui.location.model.AddressReqRes;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -117,5 +122,19 @@ public final class CommonUtils {
             nfe.printStackTrace();
         }
         return formattedString + currency;
+    }
+
+    public static String getPathFromURI(Uri contentUri, Activity activity) {
+        String res = null;
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = activity.getContentResolver().query(contentUri, proj, null, null, null);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                res = cursor.getString(column_index);
+            }
+            cursor.close();
+        }
+        return res;
     }
 }

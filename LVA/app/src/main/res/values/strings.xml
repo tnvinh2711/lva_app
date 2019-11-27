@@ -62,4 +62,10 @@
     <string name="loadmore">xem thêm</string>
     <string name="help">Hỗ trợ</string>
     <string name="user_info">Thông tin cá nhân</string>
+    <string name="input_name">Họ và tên</string>
+    <string name="input_phone">Số điện thoại</string>
+    <string name="input_birthday">Ngày sinh</string>
+    <string name="point">Điểm thưởng: %s</string>
+    <string name="update">Cập nhật</string>
+    <string name="select_picture">Chọn ảnh</string>
 </resources>

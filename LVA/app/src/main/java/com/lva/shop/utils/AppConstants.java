@@ -42,6 +42,11 @@ public final class AppConstants {
     public static final int DISTRICT = 1;
     public static final int COMMUNE = 2;
 
+    //profile
+    public static final int REQ_CODE_STORAGE_AVATAR = 1123;
+    public static final int REQ_CODE_STORAGE_BANNER = 1124;
+    public static final String URI_BANNER = "uri_banner";
+
 
     private AppConstants() {
         // This utility class is not publicly instantiable

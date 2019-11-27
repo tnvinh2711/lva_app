@@ -2,19 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d200"
-        android:background="@mipmap/banner">
-
+        android:layout_height="@dimen/d200">
         <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:id="@+id/iv_banner"
+            android:background="#F3f3f3"/>
+        <RelativeLayout
             android:layout_width="@dimen/d80"
             android:layout_height="@dimen/d80"
-            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/d20"
-            android:src="@drawable/ic_ava" />
+            android:layout_centerHorizontal="true">
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/d80"
+                android:layout_height="@dimen/d80"
+                app:riv_oval="true"
+                android:id="@+id/iv_ava"
+                android:src="@mipmap/ic_launcher_round" />
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:layout_width="@dimen/d16"
+                android:layout_height="@dimen/d16"
+                android:layout_margin="3dp"
+                android:background="@drawable/bg_edit"
+                app:riv_oval="true"
+                android:tint="@color/white"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:padding="3dp"
+                android:src="@drawable/ic_edit"/>
+        </RelativeLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,6 +51,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:id="@+id/tv_name"
                 android:text="Trương Ngọc Vinh"
                 android:textColor="@color/black"
                 android:textSize="@dimen/s25"
@@ -40,7 +64,8 @@
                 android:drawableRight="@mipmap/ic_star"
                 android:drawablePadding="2dp"
                 android:gravity="center"
-                android:text="Điểm thưởng: 0"
+                android:id="@+id/tv_point"
+                android:text="@string/point"
                 android:textColor="@color/black"
                 android:textSize="@dimen/s14" />
         </LinearLayout>
@@ -49,7 +74,9 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/d16"
+        android:paddingLeft="@dimen/d16"
+        android:paddingTop="@dimen/d10"
+        android:paddingBottom="@dimen/d10"
         android:text="@string/user_info"
         android:textColor="@color/color_text"
         android:textSize="@dimen/d16" />
@@ -70,13 +97,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/d16"
                 android:layout_marginRight="@dimen/d16"
-                android:hint="Họ và Tên">
+                android:hint="@string/input_name">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:paddingTop="@dimen/d5"
+                    android:id="@+id/edt_name"
                     android:text="Trương Ngọc Vinh"
                     android:textColor="@color/color_text" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -97,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/d16"
                 android:layout_marginRight="@dimen/d16"
-                android:hint="Ngày sinh">
+                android:hint="@string/input_birthday">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -105,6 +133,7 @@
                     android:background="@null"
                     android:paddingTop="@dimen/d5"
                     android:text="27/11/1993"
+                    android:id="@+id/edt_birthday"
                     android:textColor="@color/color_text" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
@@ -125,7 +154,7 @@
                 android:layout_marginLeft="@dimen/d16"
                 android:layout_marginRight="@dimen/d16"
 
-                android:hint="Số điện thoại">
+                android:hint="@string/input_phone">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
@@ -133,8 +162,23 @@
                     android:background="@null"
                     android:paddingTop="@dimen/d5"
                     android:text="0975477088"
+                    android:id="@+id/edt_phone"
                     android:textColor="@color/color_text" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
+    <TextView
+        android:id="@+id/tv_update"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d52"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginTop="@dimen/d16"
+        android:layout_marginRight="@dimen/d16"
+        android:layout_marginBottom="@dimen/d16"
+        android:text="@string/update"
+        android:textColor="@color/white"
+        android:textSize="@dimen/s20"
+        android:gravity="center"
+        android:background="@drawable/radius_all_primary">
+    </TextView>
 </LinearLayout>

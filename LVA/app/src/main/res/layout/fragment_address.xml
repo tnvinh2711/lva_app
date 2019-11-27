@@ -26,7 +26,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d16"
                     android:layout_marginRight="@dimen/d16"
-                    android:hint="Nhập họ và tên">
+                    android:hint="@string/input_name">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_name"
@@ -49,7 +49,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/d16"
                     android:layout_marginRight="@dimen/d16"
-                    android:hint="Nhập số điện thoại">
+                    android:hint="@string/input_phone">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edt_phone"
