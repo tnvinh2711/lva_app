@@ -103,7 +103,7 @@ public class OrderFragment extends BaseFragment {
         try {
             if (zipRequest != null) {
                 productList = zipRequest.getResponseProduct().getData();
-                setUp(view);
+//                setUp(view);
             }
         } catch (Exception e) {
             e.printStackTrace();

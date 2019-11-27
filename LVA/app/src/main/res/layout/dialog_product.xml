@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d16"
+        android:background="@drawable/bg_white_border"
+        android:orientation="vertical"
+        app:cardCornerRadius="10dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/iv_img_product"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d200"
+                android:scaleType="centerCrop"
+                app:riv_corner_radius_top_left="10dp"
+                app:riv_corner_radius_top_right="10dp" />
+
+            <TextView
+                android:id="@+id/tv_title_product"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/d10"
+                android:layout_marginTop="@dimen/d10"
+                android:layout_marginRight="@dimen/d10"
+                android:gravity="center_vertical"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:textColor="@color/color_text"
+                android:textSize="@dimen/s16" />
+
+            <TextView
+                android:id="@+id/tv_money_product"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/d10"
+                android:text="100000đ"
+                android:textColor="@color/color_text_root"
+                android:textSize="@dimen/s16" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/bg_fragment"
+                android:padding="@dimen/d10"
+                android:layout_marginTop="@dimen/d10"
+                android:text="@string/feature"
+                android:textColor="@color/color_text"
+                android:textSize="@dimen/s16"></TextView>
+
+            <LinearLayout
+                android:id="@+id/ll_feature"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d70"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_des"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:layout_marginRight="@dimen/d10"
+                    android:layout_marginTop="@dimen/d10"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textSize="@dimen/s14" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:text="@string/loadmore"
+                    android:textColor="@color/color_text_root"
+                    android:textSize="@dimen/s14" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="@dimen/d10"
+                android:background="@color/color_text_gray" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/btn_add_to_cart"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_margin="@dimen/d10"
+                    android:background="@drawable/bg_btn_login"
+                    android:gravity="center"
+                    android:maxLines="1"
+                    android:padding="@dimen/d10"
+                    android:text="Thêm vào giỏ"
+                    android:textColor="@color/white" />
+
+                <nl.dionsegijn.steppertouch.StepperTouch
+                    android:id="@+id/stepperTouch"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d40"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/d10"
+                    app:stepperAllowNegative="true"
+                    app:stepperAllowPositive="true"
+                    app:stepperBackgroundColor="@color/color_text_root"
+                    app:stepperTextColor="@color/color_text_root" />
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

@@ -29,6 +29,7 @@ public class OrderContentFragment extends BaseFragment {
     RecyclerView rcvProduct;
     private List<DataProduct> productList = new ArrayList<>();
     private ProductAdapter productAdapter;
+    private DialogProductFragment dialogProductFragment;
 
 
     public static OrderContentFragment newInstance() {
@@ -49,8 +50,13 @@ public class OrderContentFragment extends BaseFragment {
 
     @Override
     protected void setUp(View view) {
+        dialogProductFragment = DialogProductFragment.newInstance();
         rcvProduct.setLayoutManager(new GridLayoutManager(getBaseActivity(), 2));
         productAdapter = new ProductAdapter(getBaseActivity(), productList);
+        productAdapter.setListener((product, position) -> {
+            dialogProductFragment.setData(product);
+            dialogProductFragment.show(getBaseActivity().getSupportFragmentManager());
+        });
         rcvProduct.setAdapter(productAdapter);
     }
 

@@ -6,7 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,7 +16,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lva.shop.R;
 import com.lva.shop.ui.main.model.DataProduct;
-import com.lva.shop.ui.main.model.Setting;
 import com.lva.shop.utils.CommonUtils;
 
 import java.util.List;
@@ -83,7 +81,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
         void bind(final DataProduct item, int position, final OnItemClickListener listener) {
             try {
                 tvTitle.setText(item.getName());
-                tvPrice.setText(CommonUtils.convertMoney(item.getPrice()));
+                tvPrice.setText(CommonUtils.convertMoney(item.getPrice(), 1));
                 Glide.with(activity)
                         .load(item.getLinkImage())
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))

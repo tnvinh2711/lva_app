@@ -101,9 +101,9 @@ public final class CommonUtils {
         return originHtml;
     }
 
-    public static String convertMoney(String price) {
+    public static String convertMoney(String price, int value) {
         String currency = "đ";
-        double priceD = Double.parseDouble(price);
+        double priceD = Double.parseDouble(price)*value;
         String formattedString = null;
         try {
             DecimalFormat formatter = (DecimalFormat) DecimalFormat.getInstance();

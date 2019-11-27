@@ -58,4 +58,6 @@
     <string name="please_choose_district">Vui lòng nhập Quận/Huyện</string>
     <string name="please_input_infomation">Vui lòng điền đầy đủ thông tin</string>
     <string name="message_dialog_update_address">Bạn có chắc chắn muốn sử dụng địa chỉ:\n %s</string>
+    <string name="feature">Công dụng</string>
+    <string name="loadmore">xem thêm</string>
 </resources>
