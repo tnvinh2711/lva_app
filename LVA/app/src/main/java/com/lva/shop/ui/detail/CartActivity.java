@@ -1,5 +1,6 @@
 package com.lva.shop.ui.detail;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -76,6 +77,7 @@ public class CartActivity extends BaseActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rcvProduct.setLayoutManager(layoutManager);
+        cartList.clear();
         if (Preference.getString(this, AppConstants.LIST_CART) != null) {
             String arrayListCart = Preference.getString(this, AppConstants.LIST_CART);
             Gson gson = new Gson();
@@ -99,6 +101,13 @@ public class CartActivity extends BaseActivity {
             totalPrice += price * quality;
         }
         tvSum.setText(getText(R.string.sum)+" "+ CommonUtils.convertMoney(String.valueOf(totalPrice),1));
+        if(cartList.size() == 0){
+            btnOrder.setEnabled(false);
+            btnOrder.setBackground(getResources().getDrawable(R.drawable.bg_btn_login_gray));
+        } else {
+            btnOrder.setEnabled(true);
+            btnOrder.setBackground(getResources().getDrawable(R.drawable.bg_btn_login));
+        }
     }
 
     @Override
@@ -108,7 +117,7 @@ public class CartActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        CartActivity.this.setResult(Activity.RESULT_OK);
         finish();
     }
 
@@ -136,7 +145,7 @@ public class CartActivity extends BaseActivity {
                         .setConfirmClickListener(sweetAlertDialog -> {
                             sweetAlertDialog.cancel();
                             Preference.remove(CartActivity.this, AppConstants.LIST_CART);
-                            setResult(AppConstants.CART_RESULT);
+                            CartActivity.this.setResult(Activity.RESULT_OK);
                             finish();
                         })
                         .show();

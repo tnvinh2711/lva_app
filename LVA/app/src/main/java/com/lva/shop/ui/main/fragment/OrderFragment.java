@@ -3,6 +3,7 @@ package com.lva.shop.ui.main.fragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -108,10 +109,10 @@ public class OrderFragment extends BaseFragment {
             }.getType();
             cartList = gson.fromJson(arrayListCart, cartType);
             fab.setVisibility(View.VISIBLE);
-            fab.setCount(cartList.size());
         } else {
             fab.setVisibility(View.GONE);
         }
+        fab.setCount(cartList.size());
     }
 
     @Override
@@ -122,15 +123,14 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        switch (resultCode){
-            case AppConstants.REQUEST_ADDRESS:
-                if (data != null) tvAddress.setText(data.getStringExtra(AppConstants.ADDRESS));
-                break;
-            case AppConstants.CART_RESULT:
-                setUpFab();
-                break;
+        if(requestCode == AppConstants.CART_REQ && resultCode == Activity.RESULT_OK){
+            setUpFab();
         }
 
+        if(requestCode == AppConstants.REQUEST_ADDRESS && resultCode == Activity.RESULT_OK){
+            //TODO api
+//            tvAddress.setText();
+        }
     }
 
     public void setData(ZipRequest zipRequest) {
@@ -174,11 +174,11 @@ public class OrderFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 Intent intentAddress = new Intent(getBaseActivity(), LocationActivity.class);
-                getBaseActivity().startActivityForResult(intentAddress, AppConstants.REQUEST_ADDRESS);
+                startActivityForResult(intentAddress, AppConstants.REQUEST_ADDRESS);
                 break;
             case R.id.fab:
                 Intent intentCart = new Intent(getBaseActivity(), CartActivity.class);
-                getBaseActivity().startActivityForResult(intentCart, AppConstants.CART_RESULT);
+                startActivityForResult(intentCart, AppConstants.CART_REQ);
                 break;
         }
     }

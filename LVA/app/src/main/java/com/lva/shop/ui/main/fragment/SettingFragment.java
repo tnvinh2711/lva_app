@@ -2,6 +2,7 @@ package com.lva.shop.ui.main.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,6 +193,7 @@ public class SettingFragment extends BaseFragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == AppConstants.REQ_LOGIN_FROM_PROFILE && resultCode == AppConstants.LOGIN_RESULT){
+            Log.e(TAG, "onActivityResult: "+ 1 );
             setUpAppBar();
             setData();
         }

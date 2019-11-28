@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -52,7 +53,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         try {
             DataProduct data = productList.get(position);
-            viewHolder.bind(data, listener);
+            viewHolder.bind(data,position, listener);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -75,6 +76,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         ImageView ivHeader;
         TextView tvPrice;
         ValueSelectorMini selector;
+        RelativeLayout rlRemove;
 
 
         ViewHolder(View itemView) {
@@ -83,9 +85,10 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
             tvPrice = itemView.findViewById(R.id.tv_price_product);
             ivHeader = itemView.findViewById(R.id.iv_product);
             selector = itemView.findViewById(R.id.selector);
+            rlRemove = itemView.findViewById(R.id.rl_remove);
         }
 
-        void bind(final DataProduct item, final OnItemClickListener listener) {
+        void bind(final DataProduct item,int pos, final OnItemClickListener listener) {
             try {
                 tvTitle.setText(item.getName());
                 tvPrice.setText(CommonUtils.convertMoney(item.getPrice(), 1));
@@ -98,9 +101,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
                 selector.setOnValueListener(value -> {
                     item.setQuality(value);
                     String json = new Gson().toJson(productList);
-                    Preference.save(activity, AppConstants.LIST_CART, json);
+                    if (json.equals("[]")) {
+                        Preference.remove(activity, AppConstants.LIST_CART);
+                    } else {
+                        Preference.save(activity, AppConstants.LIST_CART, json);
+                    }
                     if (listener != null)
                         listener.OnItemClick(item, value);
+                });
+                rlRemove.setOnClickListener(view -> {
+                    removeAt(pos);
+                    if (listener != null)
+                        listener.OnItemClick(item, 0);
                 });
             } catch (Resources.NotFoundException e) {
                 e.printStackTrace();
@@ -108,7 +120,18 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         }
     }
 
+    public void removeAt(int position) {
+        productList.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position, productList.size());
+        String json = new Gson().toJson(productList);
+        if (json.equals("[]")) {
+            Preference.remove(activity, AppConstants.LIST_CART);
+        } else {
+            Preference.save(activity, AppConstants.LIST_CART, json);
+        }
 
+    }
     public interface OnItemClickListener {
         void OnItemClick(DataProduct setting, int value);
     }

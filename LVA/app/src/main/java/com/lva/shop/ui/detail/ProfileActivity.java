@@ -1,15 +1,17 @@
 package com.lva.shop.ui.detail;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
+import android.view.View.OnFocusChangeListener;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.utils.AppConstants;
@@ -25,6 +28,9 @@ import com.lva.shop.utils.Preference;
 import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -55,6 +61,8 @@ public class ProfileActivity extends BaseActivity {
     @BindView(R.id.iv_banner)
     ImageView ivBanner;
     private String TAG = ProfileActivity.class.getSimpleName();
+    private Calendar myCalendar = Calendar.getInstance();
+    private DatePickerDialog.OnDateSetListener date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +93,24 @@ public class ProfileActivity extends BaseActivity {
                 ivBanner.setImageDrawable(getResources().getDrawable(R.mipmap.banner));
             }
         }, 50);
+        date = (view, year, monthOfYear, dayOfMonth) -> {
+            myCalendar.set(Calendar.YEAR, year);
+            myCalendar.set(Calendar.MONTH, monthOfYear);
+            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            String myFormat = "dd-MM-yyyy"; //In which you need put here
+            SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.US);
+            String birthday = sdf.format(myCalendar.getTime());
+            edtBirthday.setText(birthday);
+        };
+        edtBirthday.setInputType(InputType.TYPE_NULL);
+        edtBirthday.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                edtBirthday.clearFocus();
+                new DatePickerDialog(ProfileActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
     }
 

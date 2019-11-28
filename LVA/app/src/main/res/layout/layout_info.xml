@@ -132,6 +132,7 @@
                     android:layout_height="wrap_content"
                     android:background="@null"
                     android:paddingTop="@dimen/d5"
+                    android:selectAllOnFocus="true"
                     android:text="27/11/1993"
                     android:id="@+id/edt_birthday"
                     android:textColor="@color/color_text" />

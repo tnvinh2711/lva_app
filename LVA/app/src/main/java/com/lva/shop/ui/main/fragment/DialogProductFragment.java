@@ -18,6 +18,7 @@ package com.lva.shop.ui.main.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class DialogProductFragment extends BaseDialog {
 
     private DataProduct dataProduct;
     private List<DataProduct> cartList = new ArrayList<>();
+
     public static DialogProductFragment newInstance() {
         DialogProductFragment fragment = new DialogProductFragment();
         Bundle bundle = new Bundle();
@@ -94,9 +96,10 @@ public class DialogProductFragment extends BaseDialog {
 
     @Override
     protected void setUp(View view) {
-        selector.setMaxValue(10);
+        selector.setMaxValue(99);
         selector.setMinValue(1);
         selector.setValue(1);
+        dataProduct.setQuality(1);
         selector.setOnValueListener(value -> {
 //            tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value));
             dataProduct.setQuality(value);
@@ -146,11 +149,11 @@ public class DialogProductFragment extends BaseDialog {
             Type cartType = new TypeToken<ArrayList<DataProduct>>() {
             }.getType();
             cartList = gson.fromJson(arrayListCart, cartType);
-            for (DataProduct product : cartList) {
-                if (dataProduct.getId().equals(product.getId())) {
-                    product.setQuality(product.getQuality() + dataProduct.getQuality());
+            for (int i = 0; i < cartList.size(); i++) {
+                if (cartList.get(i).getId().equals(dataProduct.getId())) {
+                    int oldQuality = cartList.get(i).getQuality();
+                    cartList.get(i).setQuality(dataProduct.getQuality() + oldQuality);
                     isAdd = false;
-                    break;
                 }
             }
             if (isAdd) {
@@ -162,7 +165,13 @@ public class DialogProductFragment extends BaseDialog {
             EventBus.getDefault().post(true);
         }
         String json = new Gson().toJson(cartList);
-        Preference.save(getBaseActivity(), AppConstants.LIST_CART, json);
+        if (json.equals("[]")) {
+            Preference.remove(getBaseActivity(), AppConstants.LIST_CART);
+        } else {
+            Preference.save(getBaseActivity(), AppConstants.LIST_CART, json);
+        }
+        cartList.clear();
+        Log.e(TAG, "handleListCart: " + json);
     }
 
     public void setData(DataProduct product) {

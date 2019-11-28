@@ -16,6 +16,7 @@ import android.webkit.WebViewClient;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.lva.shop.R;
@@ -33,6 +34,8 @@ public class WebActivity extends BaseActivity {
     AppBarLayout appbarLayout;
     @BindView(R.id.webview)
     WebView webview;
+    @BindView(R.id.swipeRefresh)
+    SwipeRefreshLayout swipeRefresh;
     private String TAG = WebActivity.class.getSimpleName();
     private String title, url;
 
@@ -49,7 +52,7 @@ public class WebActivity extends BaseActivity {
         if (getIntent() != null) {
             title = getIntent().getStringExtra(AppConstants.TITLE);
             url = getIntent().getStringExtra(AppConstants.URL);
-            Log.e(TAG, "getDataIntent: "+ url );
+            Log.e(TAG, "getDataIntent: " + url);
         }
     }
 
@@ -64,6 +67,12 @@ public class WebActivity extends BaseActivity {
         }
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
         setUpWebview(url);
+        swipeRefresh.setOnRefreshListener(() -> {
+            swipeRefresh.setRefreshing(false);
+            webview.reload();
+            showLoading();
+                }
+        );
     }
 
     private void setUpWebview(String url) {

@@ -52,6 +52,7 @@ public final class AppConstants {
     public static final int REQ_LOGIN_FROM_ORDER = 9991;
     public static final int REQ_LOGIN_FROM_PROFILE = 9992;
     public static final int CART_RESULT = 9993;
+    public static final int CART_REQ = 9995;
 
 
     private AppConstants() {

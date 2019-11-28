@@ -50,7 +50,7 @@ public final class CommonUtils {
     public static SweetAlertDialog showLoadingDialog(Context context) {
         SweetAlertDialog dialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
         dialog.setTitleText(context.getString(R.string.loading));
-        dialog.setCancelable(false);
+        dialog.setCancelable(true);
         dialog.show();
         return dialog;
     }
