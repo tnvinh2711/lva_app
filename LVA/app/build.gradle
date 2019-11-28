@@ -33,6 +33,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+
     implementation 'com.makeramen:roundedimageview:2.3.0'
     implementation 'com.jaeger.statusbarutil:library:1.5.1'
     //TODO RxJava & RxAndroid
@@ -71,7 +72,7 @@ dependencies {
     //databases
     implementation 'com.readystatesoftware.sqliteasset:sqliteassethelper:+'
 
-    implementation 'com.github.DanielMartinus:Stepper-Touch:1.0.1'
-
-
+    //fab
+    implementation 'com.github.andremion:counterfab:1.2.2'
+    implementation 'org.greenrobot:eventbus:3.1.1'
 }

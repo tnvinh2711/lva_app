@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -37,9 +38,10 @@ import butterknife.OnClick;
 public class SettingFragment extends BaseFragment {
 
     public static final String TAG = SettingFragment.class.getSimpleName();
+    private static final int TYPE_LOGOUT = 0;
     List<Setting> settingList = new ArrayList<>();
-    @BindView(R.id.imageView)
-    ImageView imageView;
+    @BindView(R.id.iv_ava)
+    ImageView ivAva;
     @BindView(R.id.tv_login)
     TextView tvLogin;
     @BindView(R.id.appBarLayout)
@@ -94,10 +96,20 @@ public class SettingFragment extends BaseFragment {
             switch (setting.getId()) {
                 case 0:
                     //TODO API
-                    Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
-                    startActivity(intentProfile);
+                    if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                        Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
+                        startActivity(intentProfile);
+                    } else {
+                        showDialogError(getString(R.string.you_need_login), 1);
+                    }
                     break;
                 case 1:
+                    if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                        //TODO API
+                        Toast.makeText(getBaseActivity(), "history", Toast.LENGTH_SHORT).show();
+                    } else {
+                        showDialogError(getString(R.string.you_need_login), 1);
+                    }
                     break;
                 case 2:
                     break;
@@ -139,17 +151,16 @@ public class SettingFragment extends BaseFragment {
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivity(intentLogin);
-                    getBaseActivity().finish();
+                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_PROFILE);
                 }
                 break;
             case R.id.tv_logout:
-                showDialogError(getString(R.string.logout_text));
+                showDialogError(getString(R.string.logout_text), TYPE_LOGOUT);
                 break;
         }
     }
 
-    private void showDialogError(String string) {
+    private void showDialogError(String string, int type) {
         new SweetAlertDialog(getBaseActivity(), SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getString(R.string.attention))
                 .setContentText(string)
@@ -158,12 +169,31 @@ public class SettingFragment extends BaseFragment {
                 .showCancelButton(true)
                 .setCancelClickListener(SweetAlertDialog::cancel)
                 .setConfirmClickListener(sweetAlertDialog -> {
-                    sweetAlertDialog.cancel();
-                    FirebaseAuth.getInstance().signOut();
-                    LoginManager.getInstance().logOut();
-                    Preference.remove(getBaseActivity(), AppConstants.ACCESS_TOKEN);
-                    setUpAppBar();
+                    if(type == TYPE_LOGOUT){
+                        sweetAlertDialog.cancel();
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        Preference.remove(getBaseActivity(), AppConstants.ACCESS_TOKEN);
+                        Preference.remove(getBaseActivity(), AppConstants.URI_BANNER);
+                        Preference.remove(getBaseActivity(), AppConstants.LIST_CART);
+                        setUpAppBar();
+                    } else {
+                        sweetAlertDialog.cancel();
+                        Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
+                        intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
+                        startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_PROFILE);
+                    }
+
                 })
                 .show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AppConstants.REQ_LOGIN_FROM_PROFILE && resultCode == AppConstants.LOGIN_RESULT){
+            setUpAppBar();
+            setData();
+        }
     }
 }

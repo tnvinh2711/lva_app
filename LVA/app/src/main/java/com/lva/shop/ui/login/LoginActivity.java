@@ -346,7 +346,11 @@ public class LoginActivity extends BaseActivity {
 
     private void requestToServer(String uid) {
         Preference.save(this, AppConstants.ACCESS_TOKEN, uid);
-        startActivity(new Intent(this, MainActivity.class));
+        if (!launchApp) {
+            setResult(AppConstants.LOGIN_RESULT);
+        } else {
+            startActivity(new Intent(this, MainActivity.class));
+        }
         finish();
     }
 
@@ -369,7 +373,9 @@ public class LoginActivity extends BaseActivity {
                 hideLayoutOtp();
                 break;
             case R.id.tv_skip:
-                startActivity(new Intent(this, MainActivity.class));
+                if (launchApp) {
+                    startActivity(new Intent(this, MainActivity.class));
+                }
                 finish();
                 break;
             case R.id.btn_next:

@@ -24,6 +24,8 @@ import com.lva.shop.ui.main.model.DataProduct;
 import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.utils.AppConstants;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -32,8 +34,6 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     FrameLayout frameContainer;
     @BindView(R.id.navigation)
     BottomNavigationView navigationBottomView;
-    @BindView(R.id.container)
-    CoordinatorLayout container;
     private String TAG = MainActivity.class.getSimpleName();
 
     public static final int SCREEN_SHOP = 1;
@@ -170,4 +170,5 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
     public void onCancelClick(String type) {
 
     }
+
 }

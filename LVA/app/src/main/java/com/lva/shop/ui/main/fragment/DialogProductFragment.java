@@ -29,6 +29,8 @@ import androidx.fragment.app.FragmentManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseDialog;
 import com.lva.shop.ui.customview.ValueSelector;
@@ -36,7 +38,14 @@ import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.main.model.DataProduct;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.CommonUtils;
+import com.lva.shop.utils.Preference;
 import com.makeramen.roundedimageview.RoundedImageView;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,11 +69,9 @@ public class DialogProductFragment extends BaseDialog {
     TextView btnAddToCart;
     @BindView(R.id.selector)
     ValueSelector selector;
-//    @BindView(R.id.stepperTouch)
-//    StepperTouch stepperTouch;
 
     private DataProduct dataProduct;
-
+    private List<DataProduct> cartList = new ArrayList<>();
     public static DialogProductFragment newInstance() {
         DialogProductFragment fragment = new DialogProductFragment();
         Bundle bundle = new Bundle();
@@ -81,17 +88,19 @@ public class DialogProductFragment extends BaseDialog {
         return view;
     }
 
-    public void show(FragmentManager fragmentManager) {
+    void show(FragmentManager fragmentManager) {
         super.show(fragmentManager, TAG);
     }
-
 
     @Override
     protected void setUp(View view) {
         selector.setMaxValue(10);
         selector.setMinValue(1);
         selector.setValue(1);
-        selector.setOnValueListener(value -> tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value)));
+        selector.setOnValueListener(value -> {
+//            tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value));
+            dataProduct.setQuality(value);
+        });
         Glide.with(getBaseActivity())
                 .load(dataProduct.getLinkImage())
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
@@ -123,8 +132,37 @@ public class DialogProductFragment extends BaseDialog {
                 }
                 break;
             case R.id.btn_add_to_cart:
+                dismissDialog();
+                handleListCart();
                 break;
         }
+    }
+
+    private void handleListCart() {
+        boolean isAdd = true;
+        if (Preference.getString(getBaseActivity(), AppConstants.LIST_CART) != null) {
+            String arrayListCart = Preference.getString(getBaseActivity(), AppConstants.LIST_CART);
+            Gson gson = new Gson();
+            Type cartType = new TypeToken<ArrayList<DataProduct>>() {
+            }.getType();
+            cartList = gson.fromJson(arrayListCart, cartType);
+            for (DataProduct product : cartList) {
+                if (dataProduct.getId().equals(product.getId())) {
+                    product.setQuality(product.getQuality() + dataProduct.getQuality());
+                    isAdd = false;
+                    break;
+                }
+            }
+            if (isAdd) {
+                cartList.add(dataProduct);
+            }
+            EventBus.getDefault().post(isAdd);
+        } else {
+            cartList.add(dataProduct);
+            EventBus.getDefault().post(true);
+        }
+        String json = new Gson().toJson(cartList);
+        Preference.save(getBaseActivity(), AppConstants.LIST_CART, json);
     }
 
     public void setData(DataProduct product) {

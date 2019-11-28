@@ -46,6 +46,12 @@ public final class AppConstants {
     public static final int REQ_CODE_STORAGE_AVATAR = 1123;
     public static final int REQ_CODE_STORAGE_BANNER = 1124;
     public static final String URI_BANNER = "uri_banner";
+    public static final String LIST_CART = "list_cart";
+    public static final int LOGIN_RESULT = 8898;
+    public static final int REQ_LOGIN_FROM_HOME = 9990;
+    public static final int REQ_LOGIN_FROM_ORDER = 9991;
+    public static final int REQ_LOGIN_FROM_PROFILE = 9992;
+    public static final int CART_RESULT = 9993;
 
 
     private AppConstants() {

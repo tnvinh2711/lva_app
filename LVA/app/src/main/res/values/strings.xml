@@ -68,4 +68,12 @@
     <string name="point">Điểm thưởng: %s</string>
     <string name="update">Cập nhật</string>
     <string name="select_picture">Chọn ảnh</string>
+    <string name="you_need_login">Bạn cần đăng nhập để thực hiện chức năng này</string>
+    <string name="info_ship">Thông tin nhận hàng</string>
+    <string name="address">Địa chỉ</string>
+    <string name="info_product">Thông tin đơn hàng</string>
+    <string name="sum">Tổng cộng: </string>
+    <string name="quality">Số lượng:</string>
+    <string name="order_success">Đặt hàng thành công</string>
+    <string name="order_success_text">Đơn hàng của bạn đã dượcđặt thành công, chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất!!</string>
 </resources>

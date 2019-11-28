@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.lva.shop.R;
 
-public class ValueSelector extends LinearLayout {
+public class ValueSelectorMini extends LinearLayout {
 
     private int minValue = Integer.MIN_VALUE;
     private int maxValue = Integer.MAX_VALUE;
@@ -27,17 +27,17 @@ public class ValueSelector extends LinearLayout {
     SetOnValueListener setOnValueListener;
     Handler handler = new Handler();
 
-    public ValueSelector(Context context) {
+    public ValueSelectorMini(Context context) {
         super(context);
         init(context);
     }
 
-    public ValueSelector(Context context, AttributeSet attrs) {
+    public ValueSelectorMini(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
     }
 
-    public ValueSelector(Context context, AttributeSet attrs, int defStyle) {
+    public ValueSelectorMini(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(context);
     }
@@ -111,11 +111,12 @@ public class ValueSelector extends LinearLayout {
             minusButton.setColorFilter(getContext().getResources().getColor(R.color.color_text_root));
             plusButton.setColorFilter(getContext().getResources().getColor(R.color.color_text_root));
         }
+
         valueTextView.setText(String.format("%02d", value));
     }
 
     private void init(Context context) {
-        rootView = inflate(context, R.layout.value_selector, this);
+        rootView = inflate(context, R.layout.value_selector_mini, this);
         valueTextView = rootView.findViewById(R.id.valueTextView);
 
         minusButton = rootView.findViewById(R.id.minusButton);

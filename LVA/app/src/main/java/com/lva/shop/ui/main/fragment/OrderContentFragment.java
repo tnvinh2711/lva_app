@@ -2,6 +2,7 @@ package com.lva.shop.ui.main.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +11,25 @@ import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.andremion.counterfab.CounterFab;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.main.adapter.ProductAdapter;
 import com.lva.shop.ui.main.model.DataProduct;
 import com.lva.shop.ui.main.model.Product;
+import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.Preference;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class OrderContentFragment extends BaseFragment {
 
@@ -28,6 +37,7 @@ public class OrderContentFragment extends BaseFragment {
     @BindView(R.id.rcv_product)
     RecyclerView rcvProduct;
     private List<DataProduct> productList = new ArrayList<>();
+    private List<DataProduct> cartList = new ArrayList<>();
     private ProductAdapter productAdapter;
     private DialogProductFragment dialogProductFragment;
 
@@ -50,6 +60,7 @@ public class OrderContentFragment extends BaseFragment {
 
     @Override
     protected void setUp(View view) {
+        Log.e(TAG, "setUp: " );
         dialogProductFragment = DialogProductFragment.newInstance();
         rcvProduct.setLayoutManager(new GridLayoutManager(getBaseActivity(), 2));
         productAdapter = new ProductAdapter(getBaseActivity(), productList);

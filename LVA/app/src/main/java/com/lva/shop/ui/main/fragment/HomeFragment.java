@@ -66,6 +66,7 @@ public class HomeFragment extends BaseFragment {
     private HomeImageKnowledgeAdapter homeImageKnowledgeAdapter;
     private HomeImageNewsAdapter homeImageNewsAdapter;
     private HomeImageTutorialAdapter homeImageTutorialAdapter;
+    private View view;
 
 
     public static HomeFragment newInstance() {
@@ -79,7 +80,7 @@ public class HomeFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        view = inflater.inflate(R.layout.fragment_home, container, false);
         setUnBinder(ButterKnife.bind(this, view));
         return view;
     }
@@ -157,8 +158,7 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivity(intentLogin);
-                    getBaseActivity().finish();
+                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_HOME);
                 }
                 break;
             case R.id.ll_history:
@@ -168,6 +168,14 @@ public class HomeFragment extends BaseFragment {
                 break;
             case R.id.ll_facebook:
                 break;
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == AppConstants.REQ_LOGIN_FROM_HOME && resultCode == AppConstants.LOGIN_RESULT){
+            setUp(view);
         }
     }
 }

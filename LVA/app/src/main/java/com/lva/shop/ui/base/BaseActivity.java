@@ -35,6 +35,8 @@ import com.lva.shop.utils.NetworkUtils;
 import com.lva.shop.utils.NoConnectException;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
+import org.greenrobot.eventbus.EventBus;
+
 import butterknife.Unbinder;
 
 public abstract class BaseActivity extends AppCompatActivity implements ActivityInterface, BaseFragment.Callback {

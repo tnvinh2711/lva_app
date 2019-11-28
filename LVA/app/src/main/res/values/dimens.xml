@@ -28,4 +28,5 @@
     <dimen name="s25">25sp</dimen>
     <dimen name="d30">30dp</dimen>
     <dimen name="d52">52dp</dimen>
+    <dimen name="d32">32dp</dimen>
 </resources>

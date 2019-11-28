@@ -5,6 +5,7 @@ import com.google.gson.annotations.SerializedName;
 import com.lva.shop.utils.CommonUtils;
 
 public class DataProduct {
+    private int quality;
     @SerializedName("id")
     @Expose
     private String id;
@@ -127,4 +128,11 @@ public class DataProduct {
         this.imagePath = imagePath;
     }
 
+    public int getQuality() {
+        return quality;
+    }
+
+    public void setQuality(int quality) {
+        this.quality = quality;
+    }
 }

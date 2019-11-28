@@ -9,7 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d70"
+        android:layout_height="@dimen/d56"
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -20,15 +20,15 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="@dimen/d50"
-            android:layout_height="@dimen/d50"
+            android:id="@+id/iv_ava"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/d16"
             android:layout_marginLeft="@dimen/d16"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_ava" />
+            app:srcCompat="@mipmap/ic_profile_unselected" />
 
         <TextView
             android:id="@+id/tv_login"
@@ -42,10 +42,10 @@
             android:text="@string/login"
             android:textColor="@color/color_text_root"
             android:textSize="@dimen/s20"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_ava"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView" />
+            app:layout_constraintStart_toEndOf="@+id/iv_ava"
+            app:layout_constraintTop_toTopOf="@+id/iv_ava" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
