@@ -77,4 +77,7 @@
     <string name="order_success">Đặt hàng thành công</string>
     <string name="order_success_text">Đơn hàng của bạn đã dượcđặt thành công, chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất!!</string>
     <string name="total">Thành tiền:</string>
+    <string name="info_pay">Thông tin thanh toán</string>
+    <string name="type_pay">Hình thức thanh toán: %s</string>
+    <string name="number_product">Số lượng sản phẩm: %s</string>
 </resources>
