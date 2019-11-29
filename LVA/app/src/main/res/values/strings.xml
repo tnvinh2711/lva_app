@@ -76,4 +76,5 @@
     <string name="quality">Số lượng:</string>
     <string name="order_success">Đặt hàng thành công</string>
     <string name="order_success_text">Đơn hàng của bạn đã dượcđặt thành công, chúng tôi sẽ liên lạc với bạn trong thời gian sớm nhất!!</string>
+    <string name="total">Thành tiền:</string>
 </resources>

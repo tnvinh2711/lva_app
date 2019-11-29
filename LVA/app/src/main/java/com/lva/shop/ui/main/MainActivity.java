@@ -69,8 +69,12 @@ public class MainActivity extends BaseActivity implements FragmentChangedListene
             @Override
             public void onGetZipSuccess(ZipRequest zipRequest) {
                 hideLoading();
-                homeFragment.setData(zipRequest);
-                orderFragment.setData(zipRequest);
+                try {
+                    homeFragment.setData(zipRequest);
+                    orderFragment.setData(zipRequest);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

@@ -14,4 +14,5 @@
     <color name="color_text_root">#FF42A2</color>
     <color name="black">#000000</color>
     <color name="blue">#0093E4</color>
+    <color name="divider">#BDBDBD</color>
 </resources>
