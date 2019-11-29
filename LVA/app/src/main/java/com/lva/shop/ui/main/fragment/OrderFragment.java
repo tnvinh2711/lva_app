@@ -102,6 +102,7 @@ public class OrderFragment extends BaseFragment {
     }
 
     private void setUpFab() {
+        cartList.clear();
         if (Preference.getString(getBaseActivity(), AppConstants.LIST_CART) != null) {
             String arrayListCart = Preference.getString(getBaseActivity(), AppConstants.LIST_CART);
             Gson gson = new Gson();
