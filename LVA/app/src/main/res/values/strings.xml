@@ -80,4 +80,6 @@
     <string name="info_pay">Thông tin thanh toán</string>
     <string name="type_pay">Hình thức thanh toán: %s</string>
     <string name="number_product">Số lượng sản phẩm: %s</string>
+    <string name="history_order">Lịch sử đặt hàng</string>
+    <string name="discount">Giảm giá: %s</string>
 </resources>

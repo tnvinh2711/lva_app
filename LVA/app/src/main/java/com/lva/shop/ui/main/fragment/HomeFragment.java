@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
+import com.lva.shop.ui.detail.HistoryActivity;
 import com.lva.shop.ui.detail.ProfileActivity;
 import com.lva.shop.ui.login.LoginActivity;
 import com.lva.shop.ui.main.MainActivity;
@@ -30,6 +33,7 @@ import com.lva.shop.ui.main.model.Tutorial;
 import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.Preference;
+import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -162,6 +166,13 @@ public class HomeFragment extends BaseFragment {
                 }
                 break;
             case R.id.ll_history:
+                if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+                    //TODO API
+                    Intent intentHistory = new Intent(getBaseActivity(), HistoryActivity.class);
+                    startActivity(intentHistory);
+                } else {
+                    showDialogError(getString(R.string.you_need_login), 1);
+                }
                 break;
             case R.id.ll_order:
                 getFragmentChangedListener().OnFragmentChangedListener(MainActivity.SCREEN_ORDER);
@@ -169,6 +180,24 @@ public class HomeFragment extends BaseFragment {
             case R.id.ll_facebook:
                 break;
         }
+    }
+
+    private void showDialogError(String string, int type) {
+        new SweetAlertDialog(getBaseActivity(), SweetAlertDialog.WARNING_TYPE)
+                .setTitleText(getString(R.string.attention))
+                .setContentText(string)
+                .setCancelText(getString(R.string.skip))
+                .setConfirmText(getString(R.string.ok))
+                .showCancelButton(true)
+                .setCancelClickListener(SweetAlertDialog::cancel)
+                .setConfirmClickListener(sweetAlertDialog -> {
+                    sweetAlertDialog.cancel();
+                    Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
+                    intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
+                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_HOME);
+
+                })
+                .show();
     }
 
     @Override

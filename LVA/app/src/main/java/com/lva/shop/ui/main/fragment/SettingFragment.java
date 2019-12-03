@@ -20,6 +20,7 @@ import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseFragment;
+import com.lva.shop.ui.detail.HistoryActivity;
 import com.lva.shop.ui.detail.ProfileActivity;
 import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.login.LoginActivity;
@@ -107,7 +108,8 @@ public class SettingFragment extends BaseFragment {
                 case 1:
                     if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
                         //TODO API
-                        Toast.makeText(getBaseActivity(), "history", Toast.LENGTH_SHORT).show();
+                        Intent intentHistory = new Intent(getBaseActivity(), HistoryActivity.class);
+                        startActivity(intentHistory);
                     } else {
                         showDialogError(getString(R.string.you_need_login), 1);
                     }

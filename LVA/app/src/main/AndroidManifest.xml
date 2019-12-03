@@ -47,6 +47,9 @@
         <activity
             android:name=".ui.detail.CartActivity"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".ui.detail.HistoryActivity"
+            android:screenOrientation="portrait"></activity>
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />

@@ -43,7 +43,10 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.lva.shop.R;
+import com.lva.shop.api.RestfulManager;
+import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseActivity;
+import com.lva.shop.ui.login.model.ModelFacebook;
 import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.CommonUtils;
@@ -58,6 +61,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
 
 public class LoginActivity extends BaseActivity {
     @BindView(R.id.iv_logo)
@@ -255,7 +259,7 @@ public class LoginActivity extends BaseActivity {
             if (task.isSuccessful()) {
                 try {
                     FirebaseUser user = task.getResult().getUser();
-                    if (user != null) requestToServer(user.getUid());
+                    if (user != null) requestToServer(user);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -344,14 +348,26 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    private void requestToServer(String uid) {
-        Preference.save(this, AppConstants.ACCESS_TOKEN, uid);
-        if (!launchApp) {
-            setResult(AppConstants.LOGIN_RESULT);
-        } else {
-            startActivity(new Intent(this, MainActivity.class));
-        }
-        finish();
+    private void requestToServer(FirebaseUser user) {
+        ModelFacebook modelFacebook = new ModelFacebook(user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
+        RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), user.getUid(), modelFacebook, new RestfulManager.OnLoginListener() {
+            @Override
+            public void onLoginSuccess(ResponseBody responseBody) {
+                Log.e(TAG, "onLoginSuccess: "+responseBody.toString());
+                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, user.getUid());
+                if (!launchApp) {
+                    setResult(AppConstants.LOGIN_RESULT);
+                } else {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onLoginFail: "+e.getMessage());
+            }
+        });
     }
 
     @Override

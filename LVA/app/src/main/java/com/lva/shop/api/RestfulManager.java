@@ -1,7 +1,11 @@
 package com.lva.shop.api;
 
 import android.app.Activity;
+import android.util.Log;
 
+import com.google.gson.Gson;
+import com.lva.shop.ui.detail.model.History;
+import com.lva.shop.ui.login.model.ModelFacebook;
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Product;
@@ -16,11 +20,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.ResponseBody;
 
 public class RestfulManager {
     public static final String TAG = RestfulManager.class.getSimpleName();
     private RestfulApi.PlfRestService plfRestService;
     private static RestfulManager INSTANCE;
+    private static RestfulManager INSTANCE2;
     private static Activity mActivity;
 
     public static RestfulManager getInstance(Activity activity) {
@@ -31,41 +37,85 @@ public class RestfulManager {
         return INSTANCE;
     }
 
+    public static RestfulManager getInstance(Activity activity, int base) {
+        mActivity = activity;
+        if (INSTANCE2 == null) {
+            INSTANCE2 = new RestfulManager(base);
+        }
+        return INSTANCE2;
+    }
+
     private RestfulManager() {
         RestfulApi restfulApi = RestfulApi.getInstance(mActivity);
         plfRestService = restfulApi.getRestService();
     }
 
-//    public void getOrder(OnChangeListener onChangeListener) {
-//        try {
-//            Observable<Order> responseUserInfoObservable = plfRestService.getOrder();
-//            responseUserInfoObservable.subscribeOn(Schedulers.newThread())
-//                    .observeOn(AndroidSchedulers.mainThread())
-//                    .subscribe(new DisposableObserver<Order>() {
-//                        Order resOrder;
-//
-//                        @Override
-//                        public void onNext(Order responseOrder) {
-//                            resOrder = responseOrder;
-//                        }
-//
-//                        @Override
-//                        public void onError(Throwable e) {
-//                            if (onChangeListener != null) onChangeListener.onError(e);
-//                        }
-//
-//                        @Override
-//                        public void onComplete() {
-//                            if (resOrder != null) {
-//                                if (onChangeListener != null)
-//                                    onChangeListener.onGetOrderSuccess(resOrder);
-//                            }
-//                        }
-//                    });
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private RestfulManager(int base) {
+        RestfulApi restfulApi = RestfulApi.getInstance(mActivity, base);
+        plfRestService = restfulApi.getRestService();
+    }
+
+    public void getHistory(String phone, OnHistoryListener onHistoryListener) {
+        try {
+            Observable<History> responseHistoryObservable = plfRestService.getHistory(phone);
+            responseHistoryObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<History>() {
+                        History history;
+
+                        @Override
+                        public void onNext(History resHistory) {
+                            history = resHistory;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onHistoryListener != null) onHistoryListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (history != null) {
+                                if (onHistoryListener != null)
+                                    onHistoryListener.onGetHistorySuccess(history);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postLogin(String phone, String uid, ModelFacebook modelFacebook, OnLoginListener onLoginListener) {
+        try {
+            Observable<ResponseBody> responseLoginObservable = plfRestService.postLogin(phone, uid, modelFacebook.getDisplay_name(), modelFacebook.getPhoto_url(), modelFacebook.getEmail());
+            responseLoginObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<ResponseBody>() {
+                        ResponseBody resLogin;
+
+                        @Override
+                        public void onNext(ResponseBody res) {
+                            resLogin = res;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onLoginListener != null) onLoginListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (resLogin != null) {
+                                if (onLoginListener != null)
+                                    onLoginListener.onLoginSuccess(resLogin);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void getHome(OnChangeListener onChangeListener) {
         Observable<ZipRequest> zipObservable = Observable.zip(createListObservable(), objects -> new ZipRequest((Knowledge) objects[0], (Tutorial) objects[1], (News) objects[2], (Product) objects[3]));
@@ -127,6 +177,19 @@ public class RestfulManager {
 
         void onError(Throwable e);
 
-//        void onGetOrderSuccess(Order resOrder);
+    }
+
+    public interface OnLoginListener {
+        void onLoginSuccess(ResponseBody responseBody);
+
+        void onError(Throwable e);
+
+    }
+
+    public interface OnHistoryListener {
+        void onGetHistorySuccess(History history);
+
+        void onError(Throwable e);
+
     }
 }
