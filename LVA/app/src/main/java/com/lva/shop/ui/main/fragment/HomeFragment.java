@@ -3,9 +3,11 @@ package com.lva.shop.ui.main.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -15,14 +17,18 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.facebook.login.LoginManager;
-import com.google.firebase.auth.FirebaseAuth;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.gson.Gson;
 import com.lva.shop.R;
 import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.detail.HistoryActivity;
 import com.lva.shop.ui.detail.ProfileActivity;
+import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.login.LoginActivity;
+import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.ui.main.adapter.HomeImageKnowledgeAdapter;
 import com.lva.shop.ui.main.adapter.HomeImageNewsAdapter;
@@ -30,7 +36,6 @@ import com.lva.shop.ui.main.adapter.HomeImageTutorialAdapter;
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Tutorial;
-import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.Preference;
 import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
@@ -63,6 +68,24 @@ public class HomeFragment extends BaseFragment {
     TextView tvLogin;
     @BindView(R.id.swipeRefresh)
     SwipeRefreshLayout swipeRefresh;
+    @BindView(R.id.iv_ava)
+    ImageView ivAva;
+    @BindView(R.id.iv_history)
+    ImageView ivHistory;
+    @BindView(R.id.tv_history)
+    TextView tvHistory;
+    @BindView(R.id.iv_order)
+    ImageView ivOrder;
+    @BindView(R.id.tv_order)
+    TextView tvOrder;
+    @BindView(R.id.iv_facebook)
+    ImageView ivFacebook;
+    @BindView(R.id.tv_facebook)
+    TextView tvFacebook;
+    @BindView(R.id.tv_title_knowledge)
+    TextView tvTitleKnowledge;
+    @BindView(R.id.tv_title_1)
+    TextView tvTitle1;
 
     private List<News.Data> newsList = new ArrayList<>();
     private List<Tutorial.Data> tutorialList = new ArrayList<>();
@@ -71,6 +94,7 @@ public class HomeFragment extends BaseFragment {
     private HomeImageNewsAdapter homeImageNewsAdapter;
     private HomeImageTutorialAdapter homeImageTutorialAdapter;
     private View view;
+    private UserInfo userInfo;
 
 
     public static HomeFragment newInstance() {
@@ -115,9 +139,26 @@ public class HomeFragment extends BaseFragment {
             homeImageKnowledgeAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
             homeImageNewsAdapter.setListener((item, position) -> goToWebActivity(item.getNewsTitle(), item.getLinkDetail()));
             if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                tvLogin.setText("Logged in");
+                String jsonUser = Preference.getString(getBaseActivity(), AppConstants.USER_INFO);
+                Log.e(TAG, "setUp: " + jsonUser);
+                Gson gson = new Gson();
+                userInfo = gson.fromJson(jsonUser, UserInfo.class);
+                if (userInfo.getName() != null && !userInfo.getName().equals("")) {
+                    tvLogin.setText(userInfo.getName());
+                } else {
+                    tvLogin.setText(getString(R.string.hello));
+                }
+                if (userInfo.getUrlAvatar() != null) {
+                    Glide.with(this)
+                            .load(userInfo.getUrlAvatar())
+                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
+                            .into(ivAva);
+                } else {
+                    ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
+                }
             } else {
-                tvLogin.setText("Login");
+                tvLogin.setText(getString(R.string.login));
+                ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -162,7 +203,7 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_HOME);
+                    startActivityForResult(intentLogin, AppConstants.REQ_LOGIN_FROM_HOME);
                 }
                 break;
             case R.id.ll_history:
@@ -194,7 +235,7 @@ public class HomeFragment extends BaseFragment {
                     sweetAlertDialog.cancel();
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_HOME);
+                    startActivityForResult(intentLogin, AppConstants.REQ_LOGIN_FROM_HOME);
 
                 })
                 .show();
@@ -203,8 +244,6 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppConstants.REQ_LOGIN_FROM_HOME && resultCode == AppConstants.LOGIN_RESULT){
-            setUp(view);
-        }
+        setUp(view);
     }
 }

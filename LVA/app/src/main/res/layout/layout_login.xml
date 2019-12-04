@@ -56,18 +56,4 @@
             android:textColor="@color/white" />
 
     </LinearLayout>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/or"
-        android:gravity="center"
-        android:layout_marginBottom="@dimen/d16"
-        app:layout_constraintBottom_toTopOf="@+id/btn_facebook" />
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/btn_facebook"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/d16"
-        android:paddingBottom="@dimen/d16"
-        app:layout_constraintBottom_toBottomOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

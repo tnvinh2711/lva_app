@@ -46,6 +46,7 @@ public class AddressFragment extends BaseFragment {
     TextInputEditText edtPhone;
 
     private Address cityObj, districtObj, communeObj;
+    private String name, phone, address;
 
     public static AddressFragment newInstance() {
         Bundle args = new Bundle();
@@ -69,6 +70,15 @@ public class AddressFragment extends BaseFragment {
         edtName.setMaxLines(1);
         edtPhone.setMaxLines(1);
         edtAddress.setMaxLines(1);
+        if (name != null) {
+            edtName.setText(name);
+        }
+        if (phone != null) {
+            edtPhone.setText(phone);
+        }
+        if (address != null) {
+            edtAddress.setText(address);
+        }
         if (cityObj != null) {
             tvTinh.setText(cityObj.getName());
         }
@@ -109,9 +119,12 @@ public class AddressFragment extends BaseFragment {
         }
     }
 
-    public void setData(Address tinh, Address huyen, Address xa) {
+    public void setData(String mAddress, String mName, String mPhone, Address tinh, Address huyen, Address xa) {
+        address = mAddress;
         cityObj = tinh;
         districtObj = huyen;
         communeObj = xa;
+        name = mName;
+        phone = mPhone;
     }
 }

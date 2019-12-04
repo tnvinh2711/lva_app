@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/iv_ava"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/d24"
+            android:layout_height="@dimen/d24"
             android:layout_marginStart="@dimen/d16"
             android:layout_marginLeft="@dimen/d16"
             app:layout_constraintBottom_toBottomOf="parent"

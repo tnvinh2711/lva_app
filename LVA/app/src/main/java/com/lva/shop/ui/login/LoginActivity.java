@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,26 +28,22 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
-import com.facebook.login.LoginResult;
-import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.FirebaseException;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.gson.Gson;
 import com.lva.shop.R;
 import com.lva.shop.api.RestfulManager;
-import com.lva.shop.api.ZipRequest;
+import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.ui.base.BaseActivity;
-import com.lva.shop.ui.login.model.ModelFacebook;
+import com.lva.shop.ui.detail.CartActivity;
+import com.lva.shop.ui.login.model.Login;
+import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.CommonUtils;
@@ -56,6 +53,7 @@ import com.lva.shop.utils.ScreenUtils;
 import com.lva.shop.utils.ViewUtils;
 import com.mukesh.OtpView;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -63,7 +61,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.ResponseBody;
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends BaseActivity implements ButtonAlertDialogListener {
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
     @BindView(R.id.tv_logo)
@@ -80,8 +78,6 @@ public class LoginActivity extends BaseActivity {
     TextView btnNext;
     @BindView(R.id.ll_login_phone)
     LinearLayout llLoginPhone;
-    @BindView(R.id.btn_facebook)
-    LoginButton btnFacebook;
     @BindView(R.id.btn_back)
     ImageView btnBack;
     @BindView(R.id.layout_login)
@@ -99,12 +95,13 @@ public class LoginActivity extends BaseActivity {
 
     private String hash;
     private String OTP;
-    private CallbackManager callbackManager;
     private PhoneAuthProvider.ForceResendingToken resendToken;
     private String TAG = LoginActivity.class.getSimpleName();
     private int DELAY_TIME = 2000;
     boolean launchApp;
     private CountDownTimer timer;
+    private String token;
+    private String phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +109,6 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         setUnBinder(ButterKnife.bind(this));
         setUpView();
-        setupFacebook();
         checkLaunchApp();
     }
 
@@ -123,8 +119,8 @@ public class LoginActivity extends BaseActivity {
             DELAY_TIME = launchApp ? 2000 : 0;
             new Handler().postDelayed(() -> {
                 if (Preference.getString(LoginActivity.this, AppConstants.ACCESS_TOKEN) != null && launchApp) {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    finish();
+                    phone = Preference.getString(LoginActivity.this, AppConstants.PHONE);
+                    getUserInfo(Preference.getString(LoginActivity.this, AppConstants.ACCESS_TOKEN), phone);
                 } else {
                     animationLogo();
                 }
@@ -224,36 +220,6 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    private void setupFacebook() {
-        try {
-            callbackManager = CallbackManager.Factory.create();
-            btnFacebook.setPermissions("email", "public_profile");
-            btnFacebook.registerCallback(callbackManager,
-                    new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-                            AuthCredential credential = FacebookAuthProvider.getCredential(loginResult.getAccessToken().getToken());
-                            FirebaseAuth.getInstance().signInWithCredential(credential)
-                                    .addOnCompleteListener(LoginActivity.this, mCompleteListener());
-                        }
-
-                        @Override
-                        public void onCancel() {
-                            Log.d(TAG, "LoginManager onCancel: ");
-                        }
-
-                        @Override
-                        public void onError(FacebookException exception) {
-                            Log.d(TAG, "LoginManager onError: " + exception.toString());
-                            Toast.makeText(LoginActivity.this, getString(R.string.something_when_wrong), Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private OnCompleteListener<AuthResult> mCompleteListener() {
         return task -> {
             if (task.isSuccessful()) {
@@ -349,14 +315,67 @@ public class LoginActivity extends BaseActivity {
     }
 
     private void requestToServer(FirebaseUser user) {
-        ModelFacebook modelFacebook = new ModelFacebook(user.getDisplayName(), user.getEmail(), user.getPhotoUrl().toString());
-        RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), user.getUid(), modelFacebook, new RestfulManager.OnLoginListener() {
+        RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), user.getUid(), new RestfulManager.OnLoginListener() {
             @Override
-            public void onLoginSuccess(ResponseBody responseBody) {
-                Log.e(TAG, "onLoginSuccess: "+responseBody.toString());
-                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, user.getUid());
+            public void onLoginSuccess(Login login) {
+                token = login.getToken();
+                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, login.getToken());
+                Preference.save(LoginActivity.this, AppConstants.PHONE, edtPhone.getText().toString());
+                phone = edtPhone.getText().toString();
+                getUserInfo(login.getToken(), phone);
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onLoginFail: " + e.getMessage());
+            }
+        });
+    }
+
+    private void requestToServer(String uid) {
+        RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), uid, new RestfulManager.OnLoginListener() {
+            @Override
+            public void onLoginSuccess(Login login) {
+                token = login.getToken();
+                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, login.getToken());
+                Preference.save(LoginActivity.this, AppConstants.PHONE, edtPhone.getText().toString());
+                phone = edtPhone.getText().toString();
+                getUserInfo(login.getToken(), phone);
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.e(TAG, "onLoginFail: " + e.getMessage());
+            }
+        });
+    }
+
+    public static String random() {
+        Random generator = new Random();
+        StringBuilder randomStringBuilder = new StringBuilder();
+        int randomLength = generator.nextInt(12);
+        char tempChar;
+        for (int i = 0; i < randomLength; i++) {
+            tempChar = (char) (generator.nextInt(96) + 32);
+            randomStringBuilder.append(tempChar);
+        }
+        return randomStringBuilder.toString();
+    }
+
+    private void getUserInfo(String token, String phone) {
+        showLoading();
+        RestfulManager.getInstance(LoginActivity.this, 1).getUserInfo(phone, token, new RestfulManager.OnGetUserListener() {
+            @Override
+            public void onGetUserSuccess(ResponseUser responseUser) {
+                Gson gson = new Gson();
+                String jsonUser = gson.toJson(responseUser.getUserInfo());
+                Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
+//                Log.e(TAG, "onGetUserSuccess: " + Preference.getString(LoginActivity.this, AppConstants.USER_INFO));
+                hideLoading();
+                Log.e(TAG, "onGetUserSuccess: " + launchApp);
                 if (!launchApp) {
-                    setResult(AppConstants.LOGIN_RESULT);
+                    LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
                 } else {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
@@ -365,7 +384,8 @@ public class LoginActivity extends BaseActivity {
 
             @Override
             public void onError(Throwable e) {
-                Log.e(TAG, "onLoginFail: "+e.getMessage());
+                hideLoading();
+                LoginActivity.this.onError(e, AppConstants.LOAD_DATA_LOGIN_FAIL);
             }
         });
     }
@@ -379,10 +399,9 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
-    @OnClick({R.id.btn_back, R.id.tv_skip, R.id.btn_next, R.id.btn_facebook, R.id.tv_resend, R.id.btn_next_otp})
+    @OnClick({R.id.btn_back, R.id.tv_skip, R.id.btn_next, R.id.tv_resend, R.id.btn_next_otp})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_back:
@@ -395,7 +414,13 @@ public class LoginActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_next:
-                sendOTP();
+                if (!edtPhone.getText().toString().equals("")) {
+                    //TODO check sdt
+                    /* sendOTP();*/
+                    requestToServer(random());
+                } else {
+                    Toast.makeText(this, R.string.input_phone_to_continues, Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.tv_resend:
                 resendOTP();
@@ -413,4 +438,17 @@ public class LoginActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onConfirmClick(String type) {
+        switch (type) {
+            case AppConstants.LOAD_DATA_LOGIN_FAIL:
+                getUserInfo(token, phone);
+                break;
+        }
+    }
+
+    @Override
+    public void onCancelClick(String type) {
+
+    }
 }

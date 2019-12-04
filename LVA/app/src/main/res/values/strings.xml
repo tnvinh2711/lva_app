@@ -26,7 +26,7 @@
     <string name="skip">Bỏ qua</string>
     <string name="retry">Thử lại</string>
     <string name="loading">Loading...</string>
-    <string name="hello">Chào bạn,</string>
+    <string name="hello">Chào bạn</string>
     <string name="text_input_number_to_continous">Nhập số điện thoại để tiếp tục</string>
     <string name="phone">Số điện thoại</string>
     <string name="continous">Tiếp tục</string>
@@ -82,4 +82,5 @@
     <string name="number_product">Số lượng sản phẩm: %s</string>
     <string name="history_order">Lịch sử đặt hàng</string>
     <string name="discount">Giảm giá: %s</string>
+    <string name="input_phone_to_continues">Điền số điện thoại để tiếp tục</string>
 </resources>

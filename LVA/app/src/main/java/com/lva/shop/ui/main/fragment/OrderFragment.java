@@ -27,11 +27,14 @@ import com.lva.shop.api.ZipRequest;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.detail.CartActivity;
 import com.lva.shop.ui.location.LocationActivity;
+import com.lva.shop.ui.location.model.AddressReqRes;
+import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.ui.main.MainActivity;
 import com.lva.shop.ui.main.adapter.ViewPagerAdapter;
 import com.lva.shop.ui.main.model.DataProduct;
 import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.CommonUtils;
 import com.lva.shop.utils.Preference;
 
 import org.greenrobot.eventbus.EventBus;
@@ -70,6 +73,7 @@ public class OrderFragment extends BaseFragment {
     private List<Product.Data> productList = new ArrayList<>();
     List<DataProduct> cartList = new ArrayList<>();
     private View view;
+    private UserInfo userInfo;
 
     public static OrderFragment newInstance() {
         Bundle args = new Bundle();
@@ -84,7 +88,6 @@ public class OrderFragment extends BaseFragment {
                              @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_order, container, false);
         setUnBinder(ButterKnife.bind(this, view));
-
         return view;
     }
 
@@ -117,6 +120,28 @@ public class OrderFragment extends BaseFragment {
     }
 
     @Override
+    public void setUpToolbar() {
+        super.setUpToolbar();
+        String jsonUser = Preference.getString(getBaseActivity(), AppConstants.USER_INFO);
+        Gson gson = new Gson();
+        userInfo = gson.fromJson(jsonUser, UserInfo.class);
+        if (userInfo!= null) {
+            if (userInfo.getAddress() == null || userInfo.getAddress().equals("")) {
+                tvAddress.setText(getString(R.string.none));
+            } else {
+                AddressReqRes addressReqRes = new AddressReqRes();
+                addressReqRes.setAddress(userInfo.getAddress());
+                addressReqRes.setCity(userInfo.getProvince());
+                addressReqRes.setDistrict(userInfo.getDistrict());
+                addressReqRes.setWard(userInfo.getWard());
+                tvAddress.setText(CommonUtils.convertAddress(addressReqRes));
+            }
+        } else {
+            tvAddress.setText(getString(R.string.none));
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
     }
@@ -124,11 +149,11 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppConstants.CART_REQ && resultCode == Activity.RESULT_OK){
+        if (requestCode == AppConstants.CART_REQ && resultCode == Activity.RESULT_OK) {
             setUpFab();
         }
 
-        if(requestCode == AppConstants.REQUEST_ADDRESS && resultCode == Activity.RESULT_OK){
+        if (requestCode == AppConstants.REQUEST_ADDRESS && resultCode == Activity.RESULT_OK) {
             //TODO api
 //            tvAddress.setText();
         }
@@ -156,6 +181,12 @@ public class OrderFragment extends BaseFragment {
                     }
                 })
                 .playOn(fab);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUpToolbar();
     }
 
     @Override

@@ -9,21 +9,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.facebook.login.LoginManager;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.Gson;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseFragment;
 import com.lva.shop.ui.detail.HistoryActivity;
 import com.lva.shop.ui.detail.ProfileActivity;
 import com.lva.shop.ui.detail.WebActivity;
 import com.lva.shop.ui.login.LoginActivity;
+import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.ui.main.adapter.SettingAdapter;
 import com.lva.shop.ui.main.model.Setting;
 import com.lva.shop.utils.AppConstants;
@@ -55,6 +58,7 @@ public class SettingFragment extends BaseFragment {
     @BindView(R.id.tv_logout)
     TextView tvLogout;
 
+    private UserInfo userInfo;
     private SettingAdapter settingAdapter;
 
     public static SettingFragment newInstance() {
@@ -82,10 +86,27 @@ public class SettingFragment extends BaseFragment {
 
     private void setUpAppBar() {
         if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-            tvLogin.setText("Logged in");
             tvLogout.setVisibility(View.VISIBLE);
+            String jsonUser = Preference.getString(getBaseActivity(), AppConstants.USER_INFO);
+            Log.e(TAG, "setUp: " + jsonUser);
+            Gson gson = new Gson();
+            userInfo = gson.fromJson(jsonUser, UserInfo.class);
+            if (userInfo.getName() != null && !userInfo.getName().equals("")) {
+                tvLogin.setText(userInfo.getName());
+            } else {
+                tvLogin.setText(getString(R.string.hello));
+            }
+            if (userInfo.getUrlAvatar() != null) {
+                Glide.with(this)
+                        .load(userInfo.getUrlAvatar())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
+                        .into(ivAva);
+            } else {
+                ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
+            }
         } else {
-            tvLogin.setText("Login");
+            tvLogin.setText(getString(R.string.login));
+            ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
             tvLogout.setVisibility(View.GONE);
         }
     }
@@ -154,7 +175,7 @@ public class SettingFragment extends BaseFragment {
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                    startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_PROFILE);
+                    startActivityForResult(intentLogin, AppConstants.REQ_LOGIN_FROM_PROFILE);
                 }
                 break;
             case R.id.tv_logout:
@@ -172,19 +193,20 @@ public class SettingFragment extends BaseFragment {
                 .showCancelButton(true)
                 .setCancelClickListener(SweetAlertDialog::cancel)
                 .setConfirmClickListener(sweetAlertDialog -> {
-                    if(type == TYPE_LOGOUT){
+                    if (type == TYPE_LOGOUT) {
                         sweetAlertDialog.cancel();
                         FirebaseAuth.getInstance().signOut();
-                        LoginManager.getInstance().logOut();
                         Preference.remove(getBaseActivity(), AppConstants.ACCESS_TOKEN);
                         Preference.remove(getBaseActivity(), AppConstants.URI_BANNER);
                         Preference.remove(getBaseActivity(), AppConstants.LIST_CART);
+                        Preference.remove(getBaseActivity(), AppConstants.USER_INFO);
+                        Preference.remove(getBaseActivity(), AppConstants.PHONE);
                         setUpAppBar();
                     } else {
                         sweetAlertDialog.cancel();
                         Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                         intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
-                        startActivityForResult(intentLogin,AppConstants.REQ_LOGIN_FROM_PROFILE);
+                        startActivityForResult(intentLogin, AppConstants.REQ_LOGIN_FROM_PROFILE);
                     }
 
                 })
@@ -194,8 +216,8 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == AppConstants.REQ_LOGIN_FROM_PROFILE && resultCode == AppConstants.LOGIN_RESULT){
-            Log.e(TAG, "onActivityResult: "+ 1 );
+        if (requestCode == AppConstants.REQ_LOGIN_FROM_PROFILE && resultCode == AppConstants.LOGIN_RESULT) {
+            Log.e(TAG, "onActivityResult: " + 1);
             setUpAppBar();
             setData();
         }

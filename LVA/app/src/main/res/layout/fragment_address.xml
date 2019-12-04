@@ -34,7 +34,6 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:paddingTop="@dimen/d5"
-                        android:text="Trương Ngọc Vinh"
                         android:textColor="@color/color_text" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -58,7 +57,6 @@
                         android:background="@null"
                         android:inputType="number"
                         android:paddingTop="@dimen/d5"
-                        android:text="0975477088"
                         android:textColor="@color/color_text" />
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>

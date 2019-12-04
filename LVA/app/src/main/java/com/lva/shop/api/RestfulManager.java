@@ -1,15 +1,16 @@
 package com.lva.shop.api;
 
 import android.app.Activity;
-import android.util.Log;
 
-import com.google.gson.Gson;
 import com.lva.shop.ui.detail.model.History;
-import com.lva.shop.ui.login.model.ModelFacebook;
+import com.lva.shop.ui.login.model.Login;
+import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.main.model.Knowledge;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Product;
 import com.lva.shop.ui.main.model.Tutorial;
+import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 
 public class RestfulManager {
@@ -27,6 +29,7 @@ public class RestfulManager {
     private RestfulApi.PlfRestService plfRestService;
     private static RestfulManager INSTANCE;
     private static RestfulManager INSTANCE2;
+    private static RestfulManager INSTANCE3;
     private static Activity mActivity;
 
     public static RestfulManager getInstance(Activity activity) {
@@ -45,8 +48,21 @@ public class RestfulManager {
         return INSTANCE2;
     }
 
+    public static RestfulManager getInstance(Activity activity, boolean isMultiPart) {
+        mActivity = activity;
+        if (INSTANCE3 == null) {
+            INSTANCE3 = new RestfulManager(isMultiPart);
+        }
+        return INSTANCE3;
+    }
+
     private RestfulManager() {
         RestfulApi restfulApi = RestfulApi.getInstance(mActivity);
+        plfRestService = restfulApi.getRestService();
+    }
+
+    private RestfulManager(boolean multipart) {
+        RestfulApi restfulApi = RestfulApi.getInstance(mActivity, multipart);
         plfRestService = restfulApi.getRestService();
     }
 
@@ -86,16 +102,80 @@ public class RestfulManager {
         }
     }
 
-    public void postLogin(String phone, String uid, ModelFacebook modelFacebook, OnLoginListener onLoginListener) {
+    public void getUserInfo(String phone, String token, OnGetUserListener onGetUserListener) {
         try {
-            Observable<ResponseBody> responseLoginObservable = plfRestService.postLogin(phone, uid, modelFacebook.getDisplay_name(), modelFacebook.getPhoto_url(), modelFacebook.getEmail());
-            responseLoginObservable.subscribeOn(Schedulers.newThread())
+            Observable<ResponseUser> responseUserObservable = plfRestService.getUserInfo(phone, token);
+            responseUserObservable.subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new DisposableObserver<ResponseBody>() {
-                        ResponseBody resLogin;
+                    .subscribe(new DisposableObserver<ResponseUser>() {
+                        ResponseUser responseUser;
 
                         @Override
-                        public void onNext(ResponseBody res) {
+                        public void onNext(ResponseUser responseUser) {
+                            this.responseUser = responseUser;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onGetUserListener != null) onGetUserListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (responseUser != null) {
+                                if (onGetUserListener != null)
+                                    onGetUserListener.onGetUserSuccess(responseUser);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postUpdateUser(String name_delivery, String phone_delivery, String address, String province, String district, String ward, String name, Integer dob_d, Integer dob_m, Integer dob_y, RequestBody file, OnGetUserListener onGetUserListener) {
+        try {
+            String phone = Preference.getString(mActivity, AppConstants.PHONE);
+            String token = Preference.getString(mActivity, AppConstants.ACCESS_TOKEN);
+            Observable<ResponseUser> responseUserObservable = plfRestService.updateUserInfo(phone, token, name_delivery, phone_delivery, address, province, district, ward, name, dob_d, dob_m, dob_y, file);
+            responseUserObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<ResponseUser>() {
+                        ResponseUser responseUser;
+
+                        @Override
+                        public void onNext(ResponseUser responseUser) {
+                            this.responseUser = responseUser;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onGetUserListener != null) onGetUserListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (responseUser != null) {
+                                if (onGetUserListener != null)
+                                    onGetUserListener.onGetUserSuccess(responseUser);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postLogin(String phone, String uid, OnLoginListener onLoginListener) {
+        try {
+            Observable<Login> responseLoginObservable = plfRestService.postLogin(phone, uid);
+            responseLoginObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<Login>() {
+                        Login resLogin;
+
+                        @Override
+                        public void onNext(Login res) {
                             resLogin = res;
                         }
 
@@ -180,7 +260,7 @@ public class RestfulManager {
     }
 
     public interface OnLoginListener {
-        void onLoginSuccess(ResponseBody responseBody);
+        void onLoginSuccess(Login responseBody);
 
         void onError(Throwable e);
 
@@ -188,6 +268,13 @@ public class RestfulManager {
 
     public interface OnHistoryListener {
         void onGetHistorySuccess(History history);
+
+        void onError(Throwable e);
+
+    }
+
+    public interface OnGetUserListener {
+        void onGetUserSuccess(ResponseUser responseUser);
 
         void onError(Throwable e);
 

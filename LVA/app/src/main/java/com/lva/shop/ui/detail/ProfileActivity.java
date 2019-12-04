@@ -10,18 +10,21 @@ import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnFocusChangeListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 import com.lva.shop.R;
 import com.lva.shop.ui.base.BaseActivity;
+import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.CommonUtils;
 import com.lva.shop.utils.Preference;
@@ -63,6 +66,7 @@ public class ProfileActivity extends BaseActivity {
     private String TAG = ProfileActivity.class.getSimpleName();
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
+    private UserInfo userInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +115,33 @@ public class ProfileActivity extends BaseActivity {
                         myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        edtPhone.setInputType(InputType.TYPE_NULL);
+        edtPhone.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                edtPhone.clearFocus();
+            }
+        });
+        if (Preference.getString(this, AppConstants.ACCESS_TOKEN) != null) {
+            String jsonUser = Preference.getString(this, AppConstants.USER_INFO);
+            Gson gson = new Gson();
+            userInfo = gson.fromJson(jsonUser, UserInfo.class);
+            if (userInfo.getName() != null && !userInfo.getName().equals("")) {
+                tvName.setText(userInfo.getName());
+                edtName.setText(userInfo.getName());
+            } else {
+                edtName.setText("");
+                tvName.setText(getString(R.string.input_name));
+            }
+            tvPoint.setText(getString(R.string.point, String.valueOf(userInfo.getPoint())));
+            edtPhone.setText(Preference.getString(this, AppConstants.PHONE));
+            edtBirthday.setText(userInfo.getDobD() != null ? userInfo.getDobD() + "-" + userInfo.getDobM() + "-" + userInfo.getDobY() : "");
+            if (userInfo.getUrlAvatar() != null) {
+                Glide.with(this)
+                        .load(userInfo.getUrlAvatar())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
+                        .into(ivAva);
+            }
+        }
 
     }
 

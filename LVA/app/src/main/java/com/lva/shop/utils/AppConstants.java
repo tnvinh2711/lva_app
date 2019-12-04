@@ -28,7 +28,8 @@ public final class AppConstants {
 
 
     //type error
-    public static final String LOAD_DATA_HOME_FAIL = "load data home dail";
+    public static final String LOAD_DATA_LOGIN_FAIL = "load data login fail";
+    public static final String LOAD_DATA_HOME_FAIL = "load data home fail";
     public static final String NETWORK_ERROR = "network_error";
 
 
@@ -53,6 +54,8 @@ public final class AppConstants {
     public static final int REQ_LOGIN_FROM_PROFILE = 9992;
     public static final int CART_RESULT = 9993;
     public static final int CART_REQ = 9995;
+    public static final String USER_INFO = "userInfo";
+    public static final String PHONE = "phone";
 
 
     private AppConstants() {
