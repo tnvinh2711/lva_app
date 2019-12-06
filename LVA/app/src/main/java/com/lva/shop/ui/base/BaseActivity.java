@@ -83,7 +83,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
         }
     }
 
-    public void showDialogError(String message, String type) {
+    public void showDialogError(String message, String type, ButtonAlertDialogListener buttonAlertDialogListener) {
         new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getString(R.string.attention))
                 .setContentText(message)
@@ -93,7 +93,8 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
                 .setCancelClickListener(SweetAlertDialog::cancel)
                 .setConfirmClickListener(sweetAlertDialog -> {
                     sweetAlertDialog.cancel();
-                    buttonAlertDialogListener.onConfirmClick(type);
+                    if (buttonAlertDialogListener != null)
+                        buttonAlertDialogListener.onConfirmClick(type);
                 })
                 .show();
     }
@@ -116,9 +117,9 @@ public abstract class BaseActivity extends AppCompatActivity implements Activity
     @Override
     public void onError(Throwable e, String type) {
         if (e instanceof NoConnectException) {
-            showDialogError(getString(R.string.network_error), type);
+            showDialogError(getString(R.string.network_error), type, buttonAlertDialogListener);
         } else {
-            showDialogError(getString(R.string.something_when_wrong), type);
+            showDialogError(getString(R.string.something_when_wrong), type, buttonAlertDialogListener);
         }
     }
 

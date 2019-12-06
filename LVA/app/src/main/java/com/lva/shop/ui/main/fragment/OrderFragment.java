@@ -122,22 +122,32 @@ public class OrderFragment extends BaseFragment {
     @Override
     public void setUpToolbar() {
         super.setUpToolbar();
-        String jsonUser = Preference.getString(getBaseActivity(), AppConstants.USER_INFO);
-        Gson gson = new Gson();
-        userInfo = gson.fromJson(jsonUser, UserInfo.class);
-        if (userInfo!= null) {
-            if (userInfo.getAddress() == null || userInfo.getAddress().equals("")) {
-                tvAddress.setText(getString(R.string.none));
+        if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
+            String jsonUser = Preference.getString(getBaseActivity(), AppConstants.USER_INFO);
+            Gson gson = new Gson();
+            userInfo = gson.fromJson(jsonUser, UserInfo.class);
+            if (userInfo != null) {
+                if (userInfo.getAddress() == null || userInfo.getAddress().equals("")) {
+                    tvAddress.setText(getString(R.string.none));
+                } else {
+                    AddressReqRes addressReqRes = new AddressReqRes();
+                    addressReqRes.setAddress(userInfo.getAddress());
+                    addressReqRes.setCity(userInfo.getProvince());
+                    addressReqRes.setDistrict(userInfo.getDistrict());
+                    addressReqRes.setWard(userInfo.getWard());
+                    tvAddress.setText(CommonUtils.convertAddress(addressReqRes));
+                }
             } else {
-                AddressReqRes addressReqRes = new AddressReqRes();
-                addressReqRes.setAddress(userInfo.getAddress());
-                addressReqRes.setCity(userInfo.getProvince());
-                addressReqRes.setDistrict(userInfo.getDistrict());
-                addressReqRes.setWard(userInfo.getWard());
-                tvAddress.setText(CommonUtils.convertAddress(addressReqRes));
+                tvAddress.setText(getString(R.string.none));
             }
         } else {
-            tvAddress.setText(getString(R.string.none));
+            if (Preference.getString(getBaseActivity(), AppConstants.ADDRESS_LOCAL) != null) {
+                Gson gson = new Gson();
+                AddressReqRes addressReqRes = gson.fromJson(Preference.getString(getBaseActivity(), AppConstants.ADDRESS_LOCAL), AddressReqRes.class);
+                tvAddress.setText(CommonUtils.convertAddress(addressReqRes));
+            } else {
+                tvAddress.setText(getString(R.string.none));
+            }
         }
     }
 

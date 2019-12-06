@@ -3,6 +3,7 @@ package com.lva.shop.api;
 import android.content.Context;
 
 import com.lva.shop.ui.detail.model.History;
+import com.lva.shop.ui.detail.model.ProductOrder;
 import com.lva.shop.ui.login.model.Login;
 import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.main.model.Knowledge;
@@ -27,6 +28,8 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
+import retrofit2.http.Body;
+import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Multipart;
@@ -63,14 +66,6 @@ public class RestfulApi {
         return INSTANCE2;
     }
 
-    public static RestfulApi getInstance(Context context, boolean isMultiPart) {
-        mContext = context;
-        if (INSTANCE3 == null) {
-            INSTANCE3 = new RestfulApi(isMultiPart);
-        }
-        return INSTANCE3;
-    }
-
     private RestfulApi() {
         try {
             OkHttpClient httpClient = getCommonClient();
@@ -92,21 +87,6 @@ public class RestfulApi {
             retrofit = new Retrofit.Builder()
                     .baseUrl(API_BASE_URL_2)
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                    .client(httpClient)
-                    .build();
-            restService = retrofit.create(PlfRestService.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private RestfulApi(boolean isMultiPart) {
-        try {
-            OkHttpClient httpClient = getCommonClient();
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(API_BASE_URL_2)
-                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .client(httpClient)
                     .build();
@@ -161,23 +141,37 @@ public class RestfulApi {
                 @Query("token") String token
         );
 
+        @FormUrlEncoded
+        @POST("updateUserInfo")
+        Observable<ResponseUser> updateUserInfo(
+                @Query("phone") String phone,
+                @Query("token") String token,
+                @Field("name_delivery") String name_delivery,
+                @Field("phone_delivery") String phone_delivery,
+                @Field("address") String address,
+                @Field("province") String province,
+                @Field("district") String district,
+                @Field("ward") String ward
+        );
+
+        @FormUrlEncoded
+        @POST("updateUserInfo")
+        Observable<ResponseUser> updateUserInfo(
+                @Query("phone") String phone,
+                @Query("token") String token,
+                @Field("name") String name,
+                @Field("dob_d") Integer dob_d,
+                @Field("dob_m") Integer dob_m,
+                @Field("dob_y") Integer dob_y
+        );
+
         @Multipart
         @POST("updateUserInfo")
         Observable<ResponseUser> updateUserInfo(
                 @Query("phone") String phone,
                 @Query("token") String token,
-                @Part("name_delivery") String name_delivery,
-                @Part("phone_delivery") String phone_delivery,
-                @Part("address") String address,
-                @Part("province") String province,
-                @Part("district") String district,
-                @Part("ward") String ward,
-                @Part("name") String name,
-                @Part("dob_d") Integer dob_d,
-                @Part("dob_m") Integer dob_m,
-                @Part("dob_y") Integer dob_y,
-                @Part("image\"; filename=\"pp.png\" ") RequestBody file
-                );
+                @Part("avatar\"; filename=\"pp.png\" ") RequestBody file
+        );
 
         @GET("history")
         Observable<History> getHistory(
@@ -188,6 +182,13 @@ public class RestfulApi {
         Observable<Login> postLogin(
                 @Query("phone") String phone,
                 @Query("uid") String uid
+        );
+
+        @POST("order")
+        Observable<ResponseBody> postOrder(
+                @Query("phone") String phone,
+                @Query("token") String uid,
+                @Body List<ProductOrder> products
         );
 
     }

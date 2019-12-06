@@ -119,7 +119,7 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="@dimen/d50"
+            android:layout_width="0dp"
             android:id="@+id/rl_remove"
             android:layout_height="0dp"
             app:layout_constraintRight_toRightOf="parent"

@@ -75,4 +75,5 @@ dependencies {
     implementation 'com.github.andremion:counterfab:1.2.2'
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
+    implementation 'id.zelory:compressor:2.1.0'
 }

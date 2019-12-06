@@ -60,17 +60,17 @@ public class UserInfo {
     @Expose
     private String refType;
 
-    public Integer getPoint() {
+    public Double getPoint() {
         return point;
     }
 
-    public void setPoint(Integer point) {
+    public void setPoint(Double point) {
         this.point = point;
     }
 
     @SerializedName("point")
     @Expose
-    private Integer point;
+    private Double point;
 
     public Integer getId() {
         return id;

@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.gson.Gson;
 import com.lva.shop.R;
 import com.lva.shop.api.RestfulManager;
 import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.detail.adapter.HistoryAdapter;
 import com.lva.shop.ui.detail.model.History;
+import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.Preference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +65,7 @@ public class HistoryActivity extends BaseActivity implements ButtonAlertDialogLi
     private void getData() {
         showLoading();
         //TODO fake phone
-        RestfulManager.getInstance(this, 1).getHistory("0986002032", new RestfulManager.OnHistoryListener() {
+        RestfulManager.getInstance(this, 1).getHistory(Preference.getString(this, AppConstants.PHONE), new RestfulManager.OnHistoryListener() {
             @Override
             public void onGetHistorySuccess(History history) {
                 hideLoading();
@@ -104,5 +107,10 @@ public class HistoryActivity extends BaseActivity implements ButtonAlertDialogLi
     @Override
     public void onCancelClick(String type) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 }

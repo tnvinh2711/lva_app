@@ -52,10 +52,12 @@ public final class AppConstants {
     public static final int REQ_LOGIN_FROM_HOME = 9990;
     public static final int REQ_LOGIN_FROM_ORDER = 9991;
     public static final int REQ_LOGIN_FROM_PROFILE = 9992;
+    public static final int REQ_LOGIN_FROM_CART = 9995;
     public static final int CART_RESULT = 9993;
     public static final int CART_REQ = 9995;
     public static final String USER_INFO = "userInfo";
     public static final String PHONE = "phone";
+    public static final String ADDRESS_LOCAL = "address_local";
 
 
     private AppConstants() {

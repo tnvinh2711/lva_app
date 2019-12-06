@@ -3,6 +3,7 @@ package com.lva.shop.api;
 import android.app.Activity;
 
 import com.lva.shop.ui.detail.model.History;
+import com.lva.shop.ui.detail.model.ProductOrder;
 import com.lva.shop.ui.login.model.Login;
 import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.main.model.Knowledge;
@@ -48,21 +49,8 @@ public class RestfulManager {
         return INSTANCE2;
     }
 
-    public static RestfulManager getInstance(Activity activity, boolean isMultiPart) {
-        mActivity = activity;
-        if (INSTANCE3 == null) {
-            INSTANCE3 = new RestfulManager(isMultiPart);
-        }
-        return INSTANCE3;
-    }
-
     private RestfulManager() {
         RestfulApi restfulApi = RestfulApi.getInstance(mActivity);
-        plfRestService = restfulApi.getRestService();
-    }
-
-    private RestfulManager(boolean multipart) {
-        RestfulApi restfulApi = RestfulApi.getInstance(mActivity, multipart);
         plfRestService = restfulApi.getRestService();
     }
 
@@ -133,11 +121,75 @@ public class RestfulManager {
         }
     }
 
-    public void postUpdateUser(String name_delivery, String phone_delivery, String address, String province, String district, String ward, String name, Integer dob_d, Integer dob_m, Integer dob_y, RequestBody file, OnGetUserListener onGetUserListener) {
+    public void postUpdateUser(String name_delivery, String phone_delivery, String address, String province, String district, String ward, OnGetUserListener onGetUserListener) {
         try {
             String phone = Preference.getString(mActivity, AppConstants.PHONE);
             String token = Preference.getString(mActivity, AppConstants.ACCESS_TOKEN);
-            Observable<ResponseUser> responseUserObservable = plfRestService.updateUserInfo(phone, token, name_delivery, phone_delivery, address, province, district, ward, name, dob_d, dob_m, dob_y, file);
+            Observable<ResponseUser> responseUserObservable = plfRestService.updateUserInfo(phone, token, name_delivery, phone_delivery, address, province, district, ward);
+            responseUserObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<ResponseUser>() {
+                        ResponseUser responseUser;
+
+                        @Override
+                        public void onNext(ResponseUser responseUser) {
+                            this.responseUser = responseUser;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onGetUserListener != null) onGetUserListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (responseUser != null) {
+                                if (onGetUserListener != null)
+                                    onGetUserListener.onGetUserSuccess(responseUser);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void postUpdateUser(String name, Integer dob_d, Integer dob_m, Integer dob_y, OnGetUserListener onGetUserListener) {
+        try {
+            String phone = Preference.getString(mActivity, AppConstants.PHONE);
+            String token = Preference.getString(mActivity, AppConstants.ACCESS_TOKEN);
+            Observable<ResponseUser> responseUserObservable = plfRestService.updateUserInfo(phone, token, name, dob_d, dob_m, dob_y);
+            responseUserObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<ResponseUser>() {
+                        ResponseUser responseUser;
+
+                        @Override
+                        public void onNext(ResponseUser responseUser) {
+                            this.responseUser = responseUser;
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onGetUserListener != null) onGetUserListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (responseUser != null) {
+                                if (onGetUserListener != null)
+                                    onGetUserListener.onGetUserSuccess(responseUser);
+                            }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    public void postUpdateUser(RequestBody file, OnGetUserListener onGetUserListener) {
+        try {
+            String phone = Preference.getString(mActivity, AppConstants.PHONE);
+            String token = Preference.getString(mActivity, AppConstants.ACCESS_TOKEN);
+            Observable<ResponseUser> responseUserObservable = plfRestService.updateUserInfo(phone, token, file);
             responseUserObservable.subscribeOn(Schedulers.newThread())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new DisposableObserver<ResponseUser>() {
@@ -190,6 +242,35 @@ public class RestfulManager {
                                 if (onLoginListener != null)
                                     onLoginListener.onLoginSuccess(resLogin);
                             }
+                        }
+                    });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void postOrder(List<ProductOrder> productList, OnPostOrderListener onPostOrderListener) {
+        try {
+            String phone = Preference.getString(mActivity, AppConstants.PHONE);
+            String token = Preference.getString(mActivity, AppConstants.ACCESS_TOKEN);
+            Observable<ResponseBody> responseLoginObservable = plfRestService.postOrder(phone, token, productList);
+            responseLoginObservable.subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new DisposableObserver<ResponseBody>() {
+
+                        @Override
+                        public void onNext(ResponseBody res) {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            if (onPostOrderListener != null) onPostOrderListener.onError(e);
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            if (onPostOrderListener != null)
+                                onPostOrderListener.onPostOrderSuccess();
                         }
                     });
         } catch (Exception e) {
@@ -275,6 +356,13 @@ public class RestfulManager {
 
     public interface OnGetUserListener {
         void onGetUserSuccess(ResponseUser responseUser);
+
+        void onError(Throwable e);
+
+    }
+
+    public interface OnPostOrderListener {
+        void onPostOrderSuccess();
 
         void onError(Throwable e);
 

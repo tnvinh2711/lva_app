@@ -89,6 +89,17 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
             cityObj.setName(userInfo.getProvince() != null ? userInfo.getProvince() : "");
             districtObj.setName(userInfo.getDistrict() != null ? userInfo.getDistrict() : "");
             communeObj.setName(userInfo.getWard() != null ? userInfo.getWard() : "");
+        } else {
+            if (Preference.getString(this, AppConstants.ADDRESS_LOCAL) != null) {
+                Gson gson = new Gson();
+                AddressReqRes addressReqRes = gson.fromJson(Preference.getString(this, AppConstants.ADDRESS_LOCAL), AddressReqRes.class);
+                mName = addressReqRes.getName();
+                mPhone = addressReqRes.getPhone();
+                mAddress = addressReqRes.getAddress() != null ? addressReqRes.getAddress() : "";
+                cityObj.setName(addressReqRes.getCity() != null ? addressReqRes.getCity() : "");
+                districtObj.setName(addressReqRes.getDistrict() != null ? addressReqRes.getDistrict() : "");
+                communeObj.setName(addressReqRes.getWard() != null ? addressReqRes.getWard() : "");
+            }
         }
         setUpToolbar();
         initFragments();
@@ -182,10 +193,31 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
             case UPDATE_ADDRESS:
                 if (cityObj.getName() != null && districtObj.getName() != null && communeObj.getName() != null && mAddress != null && mName != null && mPhone != null
                         && !cityObj.getName().equals("") && !districtObj.getName().equals("") && !communeObj.getName().equals("") && !mAddress.equals("") && !mName.equals("") && !mPhone.equals("")) {
-                    showDialogConfirm();
-                    mAddress = null;
-                    mName = null;
-                    mPhone = null;
+                    AddressReqRes addressReqRes = new AddressReqRes();
+                    addressReqRes.setAddress(mAddress);
+                    addressReqRes.setCity(cityObj.getName());
+                    addressReqRes.setDistrict(districtObj.getName());
+                    addressReqRes.setWard(communeObj.getName());
+                    addressReqRes.setName(mName);
+                    addressReqRes.setPhone(mPhone);
+                    if (Preference.getString(this, AppConstants.ACCESS_TOKEN) != null) {
+                        showDialogConfirm(addressReqRes);
+                    } else {
+                        Gson gson = new Gson();
+                        String jsonUser = gson.toJson(addressReqRes);
+                        Preference.save(this, AppConstants.ADDRESS_LOCAL, jsonUser);
+                        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+                                .setTitleText(getString(R.string.update_address))
+                                .setContentText(getString(R.string.update_address_done, CommonUtils.convertAddress(addressReqRes)))
+                                .setConfirmText(getString(R.string.ok))
+                                .setConfirmClickListener(sweetAlertDialog -> {
+                                    sweetAlertDialog.cancel();
+                                    mAddress = null;
+                                    mName = null;
+                                    mPhone = null;
+                                })
+                                .show();
+                    }
                 } else {
                     Toast.makeText(this, R.string.please_input_infomation, Toast.LENGTH_SHORT).show();
                 }
@@ -193,13 +225,8 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
         }
     }
 
-    private void showDialogConfirm() {
-        AddressReqRes addressReqRes = new AddressReqRes();
-        addressReqRes.setAddress(mAddress);
-        addressReqRes.setCity(cityObj.getName());
-        addressReqRes.setDistrict(districtObj.getName());
-        addressReqRes.setWard(communeObj.getName());
-        new SweetAlertDialog(this, SweetAlertDialog.SUCCESS_TYPE)
+    private void showDialogConfirm(AddressReqRes addressReqRes) {
+        new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
                 .setTitleText(getString(R.string.update_address))
                 .setContentText(getString(R.string.message_dialog_update_address, CommonUtils.convertAddress(addressReqRes)))
                 .setCancelText(getString(R.string.skip))
@@ -215,13 +242,16 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
 
     private void postUserInfo() {
         showLoading();
-        RestfulManager.getInstance(LocationActivity.this, 1).postUpdateUser(mName, mPhone, mAddress, cityObj.getName(), districtObj.getName(), communeObj.getName(), null, null, null, null, null, new RestfulManager.OnGetUserListener() {
+        RestfulManager.getInstance(LocationActivity.this, 1).postUpdateUser(mName, mPhone, mAddress, cityObj.getName(), districtObj.getName(), communeObj.getName(), new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
                 Gson gson = new Gson();
                 String jsonUser = gson.toJson(responseUser.getUserInfo());
                 Preference.save(LocationActivity.this, AppConstants.USER_INFO, jsonUser);
                 setUpView();
+                mAddress = null;
+                mName = null;
+                mPhone = null;
                 hideLoading();
             }
 

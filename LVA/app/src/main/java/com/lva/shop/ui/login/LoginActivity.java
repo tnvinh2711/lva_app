@@ -42,6 +42,8 @@ import com.lva.shop.api.RestfulManager;
 import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.ui.base.BaseActivity;
 import com.lva.shop.ui.detail.CartActivity;
+import com.lva.shop.ui.location.LocationActivity;
+import com.lva.shop.ui.location.model.AddressReqRes;
 import com.lva.shop.ui.login.model.Login;
 import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.main.MainActivity;
@@ -102,6 +104,7 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
     private CountDownTimer timer;
     private String token;
     private String phone;
+    private final String TYPE_ERROR_LOCATION = "location_error";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,7 +278,7 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
                     this,               // Activity (for callback binding)
                     mSendOTPCallBack());
         } else {
-            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR);
+            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR, this);
         }
     }
 
@@ -289,7 +292,7 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
                     this,               // Activity (for callback binding)
                     mSendOTPCallBack(), resendToken);
         } else {
-            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR);
+            showDialogError(getString(R.string.network_error), AppConstants.NETWORK_ERROR, this);
         }
     }
 
@@ -364,15 +367,51 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
     }
 
     private void getUserInfo(String token, String phone) {
-        showLoading();
         RestfulManager.getInstance(LoginActivity.this, 1).getUserInfo(phone, token, new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
                 Gson gson = new Gson();
                 String jsonUser = gson.toJson(responseUser.getUserInfo());
                 Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
-//                Log.e(TAG, "onGetUserSuccess: " + Preference.getString(LoginActivity.this, AppConstants.USER_INFO));
-                hideLoading();
+                if (Preference.getString(LoginActivity.this, AppConstants.ADDRESS_LOCAL) != null) {
+                    if (responseUser.getUserInfo().getPhoneDelivery() == null
+                            && responseUser.getUserInfo().getNameDelivery() == null
+                            && responseUser.getUserInfo().getProvince() == null
+                            && responseUser.getUserInfo().getAddress() == null
+                            && responseUser.getUserInfo().getDistrict() == null
+                            && responseUser.getUserInfo().getWard() == null) {
+                        postUserInfo();
+                    } else {
+                        Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
+                    }
+
+                }
+                if (!launchApp) {
+                    LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
+                } else {
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                }
+                finish();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                LoginActivity.this.onError(e, AppConstants.LOAD_DATA_LOGIN_FAIL);
+            }
+        });
+    }
+
+    private void postUserInfo() {
+        Gson gson = new Gson();
+        AddressReqRes addressReqRes = gson.fromJson(Preference.getString(this, AppConstants.ADDRESS_LOCAL), AddressReqRes.class);
+
+        RestfulManager.getInstance(this, 1).postUpdateUser(addressReqRes.getName(), addressReqRes.getPhone(), addressReqRes.getAddress(), addressReqRes.getCity(), addressReqRes.getDistrict(), addressReqRes.getWard(), new RestfulManager.OnGetUserListener() {
+            @Override
+            public void onGetUserSuccess(ResponseUser responseUser) {
+                Gson gson = new Gson();
+                String jsonUser = gson.toJson(responseUser.getUserInfo());
+                Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
+                Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
                 Log.e(TAG, "onGetUserSuccess: " + launchApp);
                 if (!launchApp) {
                     LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
@@ -384,8 +423,7 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
 
             @Override
             public void onError(Throwable e) {
-                hideLoading();
-                LoginActivity.this.onError(e, AppConstants.LOAD_DATA_LOGIN_FAIL);
+                LoginActivity.this.onError(e, TYPE_ERROR_LOCATION);
             }
         });
     }
@@ -443,6 +481,9 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
         switch (type) {
             case AppConstants.LOAD_DATA_LOGIN_FAIL:
                 getUserInfo(token, phone);
+                break;
+            case TYPE_ERROR_LOCATION:
+                postUserInfo();
                 break;
         }
     }

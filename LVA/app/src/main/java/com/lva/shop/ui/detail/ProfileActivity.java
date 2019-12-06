@@ -23,7 +23,11 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 import com.lva.shop.R;
+import com.lva.shop.api.RestfulManager;
+import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.ui.base.BaseActivity;
+import com.lva.shop.ui.location.LocationActivity;
+import com.lva.shop.ui.login.model.ResponseUser;
 import com.lva.shop.ui.login.model.UserInfo;
 import com.lva.shop.utils.AppConstants;
 import com.lva.shop.utils.CommonUtils;
@@ -38,8 +42,11 @@ import java.util.Locale;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import id.zelory.compressor.Compressor;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity implements ButtonAlertDialogListener {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -67,6 +74,8 @@ public class ProfileActivity extends BaseActivity {
     private Calendar myCalendar = Calendar.getInstance();
     private DatePickerDialog.OnDateSetListener date;
     private UserInfo userInfo;
+    private Integer mm, yy, dd;
+    private RequestBody requestBody;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,27 @@ public class ProfileActivity extends BaseActivity {
             e.printStackTrace();
         }
         toolbar.setNavigationOnClickListener(v -> onBackPressed());
+        if (Preference.getString(this, AppConstants.ACCESS_TOKEN) != null) {
+            String jsonUser = Preference.getString(this, AppConstants.USER_INFO);
+            Gson gson = new Gson();
+            userInfo = gson.fromJson(jsonUser, UserInfo.class);
+            if (userInfo.getName() != null && !userInfo.getName().equals("")) {
+                tvName.setText(userInfo.getName());
+                edtName.setText(userInfo.getName());
+            } else {
+                edtName.setText("");
+                tvName.setText(getString(R.string.input_name));
+            }
+            tvPoint.setText(getString(R.string.point, String.valueOf(userInfo.getPoint())));
+            edtPhone.setText(Preference.getString(this, AppConstants.PHONE));
+            edtBirthday.setText(userInfo.getDobD() != null ? userInfo.getDobD() + "-" + userInfo.getDobM() + "-" + userInfo.getDobY() : "");
+            if (userInfo.getUrlAvatar() != null) {
+                Glide.with(this)
+                        .load(userInfo.getUrlAvatar())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
+                        .into(ivAva);
+            }
+        }
         new Handler().postDelayed(() -> {
             if (Preference.getString(ProfileActivity.this, AppConstants.URI_BANNER) != null) {
                 try {
@@ -96,8 +126,11 @@ public class ProfileActivity extends BaseActivity {
             } else {
                 ivBanner.setImageDrawable(getResources().getDrawable(R.mipmap.banner));
             }
-        }, 50);
+        }, 150);
         date = (view, year, monthOfYear, dayOfMonth) -> {
+            mm = monthOfYear;
+            dd = dayOfMonth;
+            yy = year;
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -121,27 +154,6 @@ public class ProfileActivity extends BaseActivity {
                 edtPhone.clearFocus();
             }
         });
-        if (Preference.getString(this, AppConstants.ACCESS_TOKEN) != null) {
-            String jsonUser = Preference.getString(this, AppConstants.USER_INFO);
-            Gson gson = new Gson();
-            userInfo = gson.fromJson(jsonUser, UserInfo.class);
-            if (userInfo.getName() != null && !userInfo.getName().equals("")) {
-                tvName.setText(userInfo.getName());
-                edtName.setText(userInfo.getName());
-            } else {
-                edtName.setText("");
-                tvName.setText(getString(R.string.input_name));
-            }
-            tvPoint.setText(getString(R.string.point, String.valueOf(userInfo.getPoint())));
-            edtPhone.setText(Preference.getString(this, AppConstants.PHONE));
-            edtBirthday.setText(userInfo.getDobD() != null ? userInfo.getDobD() + "-" + userInfo.getDobM() + "-" + userInfo.getDobY() : "");
-            if (userInfo.getUrlAvatar() != null) {
-                Glide.with(this)
-                        .load(userInfo.getUrlAvatar())
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
-                        .into(ivAva);
-            }
-        }
 
     }
 
@@ -166,8 +178,49 @@ public class ProfileActivity extends BaseActivity {
                 getImage(AppConstants.REQ_CODE_STORAGE_AVATAR);
                 break;
             case R.id.tv_update:
+                postUserInfo();
                 break;
         }
+    }
+
+    private void postUserInfo() {
+        showLoading();
+        RestfulManager.getInstance(ProfileActivity.this, 1).postUpdateUser(edtName.getText().toString(), dd, mm, yy, new RestfulManager.OnGetUserListener() {
+            @Override
+            public void onGetUserSuccess(ResponseUser responseUser) {
+                Gson gson = new Gson();
+                String jsonUser = gson.toJson(responseUser.getUserInfo());
+                Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
+                setUpView();
+                hideLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                hideLoading();
+                ProfileActivity.this.onError(e, "1");
+            }
+        });
+    }
+
+    private void postUserInfoAvatar() {
+        showLoading();
+        RestfulManager.getInstance(ProfileActivity.this, 1).postUpdateUser(requestBody, new RestfulManager.OnGetUserListener() {
+            @Override
+            public void onGetUserSuccess(ResponseUser responseUser) {
+                Gson gson = new Gson();
+                String jsonUser = gson.toJson(responseUser.getUserInfo());
+                Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
+                setUpView();
+                hideLoading();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                hideLoading();
+                ProfileActivity.this.onError(e, "2");
+            }
+        });
     }
 
     @Override
@@ -208,6 +261,10 @@ public class ProfileActivity extends BaseActivity {
                         switch (requestCode - 999) {
                             case AppConstants.REQ_CODE_STORAGE_AVATAR:
                                 Log.d(TAG, "onActivityResult: ");
+                                File compressFile = new Compressor(ProfileActivity.this).compressToFile(f);
+//                                ivAva.setImageURI(Uri.fromFile(compressFile));
+                                requestBody = RequestBody.create(MediaType.parse("image/jpeg"), compressFile);
+                                postUserInfoAvatar();
                                 break;
                             case AppConstants.REQ_CODE_STORAGE_BANNER:
                                 try {
@@ -225,5 +282,22 @@ public class ProfileActivity extends BaseActivity {
         } catch (Exception e) {
             Log.e("FileSelectorActivity", "File select error", e);
         }
+    }
+
+    @Override
+    public void onConfirmClick(String type) {
+        switch (type) {
+            case "1":
+                postUserInfo();
+                break;
+            case "2":
+                postUserInfoAvatar();
+                break;
+        }
+    }
+
+    @Override
+    public void onCancelClick(String type) {
+
     }
 }
