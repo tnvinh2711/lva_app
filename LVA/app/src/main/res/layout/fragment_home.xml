@@ -13,23 +13,6 @@
         android:background="@color/white"
         app:layout_constraintTop_toTopOf="parent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#ACACAC"
-            app:layout_constraintBottom_toBottomOf="parent" />
-
-        <ImageView
-            android:id="@+id/iv_ava"
-            android:layout_width="@dimen/d24"
-            android:layout_height="@dimen/d24"
-            android:layout_marginStart="@dimen/d16"
-            android:layout_marginLeft="@dimen/d16"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_profile_unselected" />
-
         <TextView
             android:id="@+id/tv_login"
             android:layout_width="0dp"
@@ -46,6 +29,24 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_ava"
             app:layout_constraintTop_toTopOf="@+id/iv_ava" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ACACAC"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/iv_ava"
+            android:layout_width="@dimen/d35"
+            android:layout_height="@dimen/d35"
+            android:layout_marginStart="@dimen/d16"
+            android:layout_marginLeft="@dimen/d16"
+            android:src="@mipmap/ic_profile_unselected"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:riv_oval="true" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

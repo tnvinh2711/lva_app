@@ -96,17 +96,16 @@ public class SettingFragment extends BaseFragment {
             } else {
                 tvLogin.setText(getString(R.string.hello));
             }
-            if (userInfo.getUrlAvatar() != null) {
-                Glide.with(this)
-                        .load(userInfo.getUrlAvatar())
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
-                        .into(ivAva);
-            } else {
-                ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
-            }
+            Glide.with(this)
+                    .load(userInfo.getUrlAvatar())
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))
+                    .into(ivAva);
         } else {
             tvLogin.setText(getString(R.string.login));
-            ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
+            Glide.with(this)
+                    .load(getResources().getDrawable(R.mipmap.ic_profile_unselected))
+                    .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))
+                    .into(ivAva);
             tvLogout.setVisibility(View.GONE);
         }
     }
@@ -121,7 +120,7 @@ public class SettingFragment extends BaseFragment {
                     //TODO API
                     if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
                         Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
-                        startActivity(intentProfile);
+                        startActivityForResult(intentProfile, AppConstants.REQ_LOGIN_FROM_PROFILE);
                     } else {
                         showDialogError(getString(R.string.you_need_login), 1);
                     }
@@ -171,7 +170,7 @@ public class SettingFragment extends BaseFragment {
                 if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
                     //TODO API
                     Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
-                    startActivity(intentProfile);
+                    startActivityForResult(intentProfile, AppConstants.REQ_LOGIN_FROM_PROFILE);
                 } else {
                     Intent intentLogin = new Intent(getBaseActivity(), LoginActivity.class);
                     intentLogin.putExtra(AppConstants.LAUNCH_APP, false);
@@ -216,10 +215,8 @@ public class SettingFragment extends BaseFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == AppConstants.REQ_LOGIN_FROM_PROFILE && resultCode == AppConstants.LOGIN_RESULT) {
-            Log.e(TAG, "onActivityResult: " + 1);
-            setUpAppBar();
-            setData();
-        }
+        Log.e(TAG, "onActivityResult: " + 1);
+        setUpAppBar();
+        setData();
     }
 }

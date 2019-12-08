@@ -16,6 +16,7 @@
 package com.lva.shop.ui.main.fragment;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -61,7 +62,7 @@ public class DialogProductFragment extends BaseDialog {
     @BindView(R.id.tv_title_product)
     TextView tvTitleProduct;
     @BindView(R.id.tv_money_product)
-    TextView tvMoneyProduct;
+    TextView tvPrice;
     @BindView(R.id.tv_des)
     TextView tvDes;
     @BindView(R.id.ll_feature)
@@ -70,6 +71,8 @@ public class DialogProductFragment extends BaseDialog {
     TextView btnAddToCart;
     @BindView(R.id.selector)
     ValueSelector selector;
+    @BindView(R.id.tv_discount_product)
+    TextView tvDiscount;
 
     private DataProduct dataProduct;
     private List<DataProduct> cartList = new ArrayList<>();
@@ -101,7 +104,6 @@ public class DialogProductFragment extends BaseDialog {
         selector.setValue(1);
         dataProduct.setQuality(1);
         selector.setOnValueListener(value -> {
-//            tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), value));
             dataProduct.setQuality(value);
         });
         Glide.with(getBaseActivity())
@@ -109,7 +111,15 @@ public class DialogProductFragment extends BaseDialog {
                 .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(ivImgProduct);
         tvDes.setText(dataProduct.getProductSortdesc());
-        tvMoneyProduct.setText(CommonUtils.convertMoney(dataProduct.getPrice(), 1));
+        if (dataProduct.getPriceDiscount() == null || dataProduct.getPriceDiscount().equals("0.00")) {
+            tvPrice.setVisibility(View.GONE);
+            tvDiscount.setText(CommonUtils.convertMoney(dataProduct.getPrice(), 1));
+        } else {
+            tvPrice.setVisibility(View.VISIBLE);
+            tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+            tvPrice.setText(CommonUtils.convertMoney(dataProduct.getPrice(), 1));
+            tvDiscount.setText(CommonUtils.convertMoney(dataProduct.getPriceDiscount(), 1));
+        }
         tvTitleProduct.setText(dataProduct.getName());
     }
 

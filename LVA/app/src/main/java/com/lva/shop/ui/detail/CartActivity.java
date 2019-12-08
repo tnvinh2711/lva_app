@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.lva.shop.R;
@@ -35,8 +34,6 @@ import com.ontbee.legacyforks.cn.pedant.SweetAlert.SweetAlertDialog;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.xml.transform.Result;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -142,7 +139,12 @@ public class CartActivity extends BaseActivity {
     private void calculatorSum() {
         int totalPrice = 0;
         for (int i = 0; i < cartList.size(); i++) {
-            int price = (int) Double.parseDouble(cartList.get(i).getPrice());
+            int price;
+            if (cartList.get(i).getPriceDiscount() == null || cartList.get(i).getPriceDiscount().equals("0.00")) {
+                price = (int) Double.parseDouble(cartList.get(i).getPrice());
+            } else {
+                price = (int) Double.parseDouble(cartList.get(i).getPriceDiscount());
+            }
             int quality = cartList.get(i).getQuality();
             totalPrice += price * quality;
         }

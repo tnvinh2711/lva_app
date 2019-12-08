@@ -1,6 +1,7 @@
 package com.lva.shop.ui.detail;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -111,7 +112,7 @@ public class ProfileActivity extends BaseActivity implements ButtonAlertDialogLi
             if (userInfo.getUrlAvatar() != null) {
                 Glide.with(this)
                         .load(userInfo.getUrlAvatar())
-                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_launcher)))
                         .into(ivAva);
             }
         }
@@ -165,6 +166,7 @@ public class ProfileActivity extends BaseActivity implements ButtonAlertDialogLi
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        setResult(Activity.RESULT_OK);
         finish();
     }
 

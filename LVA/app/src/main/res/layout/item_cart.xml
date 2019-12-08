@@ -5,6 +5,11 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d10"
+        android:background="@color/bg_fragment" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,14 +42,28 @@
                 android:maxLines="1"
                 android:textColor="@color/text_color"
                 android:textSize="@dimen/s14" />
-
-            <TextView
-                android:id="@+id/tv_price_product"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/d5"
-                android:textColor="@color/color_text_root"
-                android:textSize="@dimen/s14" />
+                android:layout_centerVertical="true"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_money_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/color_text"
+                    android:textSize="@dimen/s12" />
+
+                <TextView
+                    android:id="@+id/tv_discount_product"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_money_product"
+                    android:textColor="@color/color_text_root"
+                    android:textSize="@dimen/s14" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,22 +88,18 @@
         </LinearLayout>
 
         <RelativeLayout
-            android:layout_width="@dimen/d50"
             android:id="@+id/rl_remove"
+            android:layout_width="@dimen/d50"
             android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_remove"
-                android:padding="@dimen/d12"/>
+                android:padding="@dimen/d12"
+                android:src="@drawable/ic_remove" />
         </RelativeLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/d10"
-        android:background="@color/bg_fragment" />
 </LinearLayout>

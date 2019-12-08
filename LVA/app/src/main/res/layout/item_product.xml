@@ -41,7 +41,7 @@
                 android:background="@color/color_text_gray" />
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d40">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="@dimen/d20"
@@ -50,16 +50,32 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/d10"
                     android:src="@drawable/ic_add" />
-
-                <TextView
-                    android:id="@+id/tv_money_product"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/d10"
-                    android:text="100000đ"
-                    android:textColor="@color/color_text"
-                    android:textSize="@dimen/s16" />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="@dimen/d45"
+                   android:gravity="center_vertical"
+                   android:orientation="vertical"
+                   android:layout_marginTop="@dimen/d5"
+                   android:layout_marginBottom="@dimen/d5"
+                   android:layout_centerVertical="true">
+                   <TextView
+                       android:id="@+id/tv_money_product"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_marginLeft="@dimen/d10"
+                       android:text="100000đ"
+                       android:textColor="@color/color_text"
+                       android:textSize="@dimen/s12" />
+                   <TextView
+                       android:id="@+id/tv_discount_product"
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:layout_below="@id/tv_money_product"
+                       android:layout_marginLeft="@dimen/d10"
+                       android:text="100000đ"
+                       android:textColor="@color/color_text"
+                       android:textSize="@dimen/s16" />
+               </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

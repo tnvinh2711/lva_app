@@ -2,6 +2,7 @@ package com.lva.shop.ui.detail.adapter;
 
 import android.app.Activity;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,7 +75,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         ImageView ivHeader;
-        TextView tvPrice;
+        TextView tvPrice, tvDiscount;
         ValueSelectorMini selector;
         RelativeLayout rlRemove;
 
@@ -82,7 +83,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         ViewHolder(View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tv_name_product);
-            tvPrice = itemView.findViewById(R.id.tv_price_product);
+            tvPrice = itemView.findViewById(R.id.tv_money_product);
+            tvDiscount = itemView.findViewById(R.id.tv_discount_product);
             ivHeader = itemView.findViewById(R.id.iv_product);
             selector = itemView.findViewById(R.id.selector);
             rlRemove = itemView.findViewById(R.id.rl_remove);
@@ -91,7 +93,15 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder> {
         void bind(final DataProduct item,int pos, final OnItemClickListener listener) {
             try {
                 tvTitle.setText(item.getName());
-                tvPrice.setText(CommonUtils.convertMoney(item.getPrice(), 1));
+                if (item.getPriceDiscount() == null || item.getPriceDiscount().equals("0.00")) {
+                    tvPrice.setVisibility(View.GONE);
+                    tvDiscount.setText(CommonUtils.convertMoney(item.getPrice(), 1));
+                } else {
+                    tvPrice.setVisibility(View.VISIBLE);
+                    tvPrice.setPaintFlags(tvPrice.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+                    tvPrice.setText(CommonUtils.convertMoney(item.getPrice(), 1));
+                    tvDiscount.setText(CommonUtils.convertMoney(item.getPriceDiscount(), 1));
+                }
                 Glide.with(activity)
                         .load(item.getLinkImage())
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL))

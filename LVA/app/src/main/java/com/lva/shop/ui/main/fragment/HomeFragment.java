@@ -148,17 +148,16 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     tvLogin.setText(getString(R.string.hello));
                 }
-                if (userInfo.getUrlAvatar() != null) {
-                    Glide.with(this)
-                            .load(userInfo.getUrlAvatar())
-                            .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop())
-                            .into(ivAva);
-                } else {
-                    ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
-                }
+                Glide.with(this)
+                        .load(userInfo.getUrlAvatar())
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))
+                        .into(ivAva);
             } else {
                 tvLogin.setText(getString(R.string.login));
-                ivAva.setImageDrawable(getResources().getDrawable(R.mipmap.ic_profile_unselected));
+                Glide.with(this)
+                        .load(getResources().getDrawable(R.mipmap.ic_profile_unselected))
+                        .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))
+                        .into(ivAva);
             }
         } catch (Exception e) {
             e.printStackTrace();

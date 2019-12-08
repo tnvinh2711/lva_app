@@ -19,16 +19,18 @@
             android:background="#ACACAC"
             app:layout_constraintBottom_toBottomOf="parent" />
 
-        <ImageView
+        <com.makeramen.roundedimageview.RoundedImageView
             android:id="@+id/iv_ava"
-            android:layout_width="@dimen/d24"
-            android:layout_height="@dimen/d24"
+            android:layout_width="@dimen/d35"
+            android:layout_height="@dimen/d35"
             android:layout_marginStart="@dimen/d16"
             android:layout_marginLeft="@dimen/d16"
+            android:src="@mipmap/ic_profile_unselected"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/ic_profile_unselected" />
+            app:riv_oval="true" />
+
 
         <TextView
             android:id="@+id/tv_login"
