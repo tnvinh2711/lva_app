@@ -1,3 +1,13 @@
+
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2/'}
+    }
+    dependencies {
+        classpath 'gradle.plugin.com.onesignal:onesignal-gradle-plugin:[0.12.4, 0.99.99]'
+    }
+}
+apply plugin: 'com.onesignal.androidsdk.onesignal-gradle-plugin'
 apply plugin: 'com.android.application'
 apply plugin: 'com.jakewharton.butterknife'
 apply plugin: 'com.google.gms.google-services'
@@ -16,6 +26,11 @@ android {
             sourceCompatibility JavaVersion.VERSION_1_8
             targetCompatibility JavaVersion.VERSION_1_8
         }
+        manifestPlaceholders = [
+                onesignal_app_id: '49f5c796-b0c1-4a64-8beb-cfdae0e8db77',
+                // Project number pulled from dashboard, local value is ignored.
+                onesignal_google_project_number: 'REMOTE'
+        ]
     }
     buildTypes {
         release {
@@ -76,4 +91,5 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
     implementation 'id.zelory:compressor:2.1.0'
+    implementation 'com.onesignal:OneSignal:[3.11.2, 3.99.99]'
 }

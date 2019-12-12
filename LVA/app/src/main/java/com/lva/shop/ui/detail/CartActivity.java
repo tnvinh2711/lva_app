@@ -186,19 +186,23 @@ public class CartActivity extends BaseActivity {
                     RestfulManager.getInstance(this, 1).postOrder(productOrders, new RestfulManager.OnPostOrderListener() {
                         @Override
                         public void onPostOrderSuccess() {
-                            hideLoading();
-                            new SweetAlertDialog(CartActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                                    .setTitleText(getString(R.string.order_success))
-                                    .setContentText(getString(R.string.order_success_text))
-                                    .setConfirmText(getString(R.string.ok))
-                                    .showCancelButton(false)
-                                    .setConfirmClickListener(sweetAlertDialog -> {
-                                        sweetAlertDialog.cancel();
-                                        CartActivity.this.setResult(Activity.RESULT_OK);
-                                        finish();
-                                    })
-                                    .show();
-                            Preference.remove(CartActivity.this, AppConstants.LIST_CART);
+                            try {
+                                hideLoading();
+                                new SweetAlertDialog(CartActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                                        .setTitleText(getString(R.string.order_success))
+                                        .setContentText(getString(R.string.order_success_text))
+                                        .setConfirmText(getString(R.string.ok))
+                                        .showCancelButton(false)
+                                        .setConfirmClickListener(sweetAlertDialog -> {
+                                            sweetAlertDialog.cancel();
+                                            CartActivity.this.setResult(Activity.RESULT_OK);
+                                            finish();
+                                        })
+                                        .show();
+                                Preference.remove(CartActivity.this, AppConstants.LIST_CART);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
 
                         @Override

@@ -245,14 +245,18 @@ public class LocationActivity extends BaseActivity implements FragmentChangedLis
         RestfulManager.getInstance(LocationActivity.this, 1).postUpdateUser(mName, mPhone, mAddress, cityObj.getName(), districtObj.getName(), communeObj.getName(), new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
-                Gson gson = new Gson();
-                String jsonUser = gson.toJson(responseUser.getUserInfo());
-                Preference.save(LocationActivity.this, AppConstants.USER_INFO, jsonUser);
-                setUpView();
-                mAddress = null;
-                mName = null;
-                mPhone = null;
-                hideLoading();
+                try {
+                    Gson gson = new Gson();
+                    String jsonUser = gson.toJson(responseUser.getUserInfo());
+                    Preference.save(LocationActivity.this, AppConstants.USER_INFO, jsonUser);
+                    setUpView();
+                    mAddress = null;
+                    mName = null;
+                    mPhone = null;
+                    hideLoading();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

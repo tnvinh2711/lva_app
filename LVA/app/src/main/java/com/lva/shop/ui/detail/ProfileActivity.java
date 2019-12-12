@@ -190,11 +190,15 @@ public class ProfileActivity extends BaseActivity implements ButtonAlertDialogLi
         RestfulManager.getInstance(ProfileActivity.this, 1).postUpdateUser(edtName.getText().toString(), dd, mm, yy, new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
-                Gson gson = new Gson();
-                String jsonUser = gson.toJson(responseUser.getUserInfo());
-                Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
-                setUpView();
-                hideLoading();
+                try {
+                    Gson gson = new Gson();
+                    String jsonUser = gson.toJson(responseUser.getUserInfo());
+                    Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
+                    setUpView();
+                    hideLoading();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -210,11 +214,15 @@ public class ProfileActivity extends BaseActivity implements ButtonAlertDialogLi
         RestfulManager.getInstance(ProfileActivity.this, 1).postUpdateUser(requestBody, new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
-                Gson gson = new Gson();
-                String jsonUser = gson.toJson(responseUser.getUserInfo());
-                Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
-                setUpView();
-                hideLoading();
+                try {
+                    Gson gson = new Gson();
+                    String jsonUser = gson.toJson(responseUser.getUserInfo());
+                    Preference.save(ProfileActivity.this, AppConstants.USER_INFO, jsonUser);
+                    setUpView();
+                    hideLoading();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

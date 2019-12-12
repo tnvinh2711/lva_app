@@ -52,7 +52,7 @@ public class Knowledge {
         @SerializedName("news_title")
         @Expose
         private String newsTitle;
-        @SerializedName("news_desc")
+        @SerializedName("news_sortdesc")
         @Expose
         private String newsSortdesc;
         @SerializedName("link_image")

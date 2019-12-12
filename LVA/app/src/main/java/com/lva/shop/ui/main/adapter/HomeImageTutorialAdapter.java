@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.lva.shop.ui.detail.VideoActivity;
 import com.lva.shop.ui.main.model.News;
 import com.lva.shop.ui.main.model.Tutorial;
 import com.lva.shop.utils.AppConstants;
+import com.lva.shop.utils.ScreenUtils;
 import com.lva.shop.utils.ViewUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -73,7 +75,7 @@ public class HomeImageTutorialAdapter extends RecyclerView.Adapter<HomeImageTuto
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         RoundedImageView ivHeader;
-        LinearLayout llContent;
+        RelativeLayout llContent;
 
 
         ViewHolder(View itemView) {
@@ -85,6 +87,7 @@ public class HomeImageTutorialAdapter extends RecyclerView.Adapter<HomeImageTuto
 
         void bind(final Tutorial.Data item, int position, final OnItemClickListener listener) {
             try {
+                itemView.getLayoutParams().width = (ScreenUtils.getScreenWidth(activity) / 2 - ViewUtils.dpToPx(10));
                 if (tutorialList.size() > 0 && position == 0) {
                     ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
                     marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);

@@ -68,10 +68,18 @@ public class HistoryActivity extends BaseActivity implements ButtonAlertDialogLi
         RestfulManager.getInstance(this, 1).getHistory(Preference.getString(this, AppConstants.PHONE), new RestfulManager.OnHistoryListener() {
             @Override
             public void onGetHistorySuccess(History history) {
-                hideLoading();
-                historyList.clear();
-                historyList.addAll(history.getData());
-                setUpView();
+                try {
+                    try {
+                        hideLoading();
+                        historyList.clear();
+                        historyList.addAll(history.getData());
+                        setUpView();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override

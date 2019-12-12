@@ -12,7 +12,7 @@
         android:layout_marginTop="@dimen/d20"
         android:layout_marginRight="@dimen/d16"
         android:maxLines="1"
-        android:text="@string/title_tutorial"
+        android:text="@string/title_knowledge"
         android:textColor="@color/color_text_root"
         android:textSize="@dimen/s16"
         android:textStyle="bold" />

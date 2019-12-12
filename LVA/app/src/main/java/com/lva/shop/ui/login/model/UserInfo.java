@@ -60,8 +60,8 @@ public class UserInfo {
     @Expose
     private String refType;
 
-    public Double getPoint() {
-        return point;
+    public Integer getPoint() {
+        return point.intValue();
     }
 
     public void setPoint(Double point) {

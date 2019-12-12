@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.lva.shop.R;
 import com.lva.shop.ui.main.model.Knowledge;
+import com.lva.shop.utils.ScreenUtils;
 import com.lva.shop.utils.ViewUtils;
 import com.makeramen.roundedimageview.RoundedImageView;
 
@@ -81,6 +82,7 @@ public class HomeImageKnowledgeAdapter extends RecyclerView.Adapter<HomeImageKno
 
         void bind(final Knowledge.Data item, int position, final OnItemClickListener listener) {
             try {
+                itemView.getLayoutParams().width = (ScreenUtils.getScreenWidth(activity) / 2 - ViewUtils.dpToPx(10));
                 if (knowledgeList.size() > 0 && position == 0) {
                     ViewGroup.MarginLayoutParams marginLayoutParams = new ViewGroup.MarginLayoutParams(itemView.getLayoutParams());
                     marginLayoutParams.setMargins(ViewUtils.dpToPx(6), 0, ViewUtils.dpToPx(6), 0);

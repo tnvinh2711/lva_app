@@ -86,6 +86,8 @@ public class HomeFragment extends BaseFragment {
     TextView tvTitleKnowledge;
     @BindView(R.id.tv_title_1)
     TextView tvTitle1;
+    @BindView(R.id.tv_point)
+    TextView tvPoint;
 
     private List<News.Data> newsList = new ArrayList<>();
     private List<Tutorial.Data> tutorialList = new ArrayList<>();
@@ -148,12 +150,15 @@ public class HomeFragment extends BaseFragment {
                 } else {
                     tvLogin.setText(getString(R.string.hello));
                 }
+                tvPoint.setVisibility(View.VISIBLE);
+                tvPoint.setText(getString(R.string.point_save, String.valueOf(userInfo.getPoint())));
                 Glide.with(this)
                         .load(userInfo.getUrlAvatar())
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))
                         .into(ivAva);
             } else {
                 tvLogin.setText(getString(R.string.login));
+                tvPoint.setVisibility(View.GONE);
                 Glide.with(this)
                         .load(getResources().getDrawable(R.mipmap.ic_profile_unselected))
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))

@@ -90,7 +90,7 @@ public final class CommonUtils {
     }
 
     public static String getConvertPhone(String phone) {
-        return "+84" + phone.substring(1);
+        return "+84" + phone;
     }
 
     public static String convertAddress(AddressReqRes addressReqRes) {

@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,8 +40,6 @@ import com.lva.shop.R;
 import com.lva.shop.api.RestfulManager;
 import com.lva.shop.callback.ButtonAlertDialogListener;
 import com.lva.shop.ui.base.BaseActivity;
-import com.lva.shop.ui.detail.CartActivity;
-import com.lva.shop.ui.location.LocationActivity;
 import com.lva.shop.ui.location.model.AddressReqRes;
 import com.lva.shop.ui.login.model.Login;
 import com.lva.shop.ui.login.model.ResponseUser;
@@ -55,13 +52,11 @@ import com.lva.shop.utils.ScreenUtils;
 import com.lva.shop.utils.ViewUtils;
 import com.mukesh.OtpView;
 
-import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.ResponseBody;
 
 public class LoginActivity extends BaseActivity implements ButtonAlertDialogListener {
     @BindView(R.id.iv_logo)
@@ -321,12 +316,16 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
         RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), user.getUid(), new RestfulManager.OnLoginListener() {
             @Override
             public void onLoginSuccess(Login login) {
-                token = login.getToken();
-                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, login.getToken());
-                Preference.save(LoginActivity.this, AppConstants.PHONE, edtPhone.getText().toString());
-                phone = edtPhone.getText().toString();
-                getUserInfo(login.getToken(), phone);
-                finish();
+                try {
+                    token = login.getToken();
+                    Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, login.getToken());
+                    Preference.save(LoginActivity.this, AppConstants.PHONE, "0" + edtPhone.getText().toString());
+                    phone = "0" + edtPhone.getText().toString();
+                    getUserInfo(login.getToken(), phone);
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -334,64 +333,38 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
                 Log.e(TAG, "onLoginFail: " + e.getMessage());
             }
         });
-    }
-
-    private void requestToServer(String uid) {
-        RestfulManager.getInstance(LoginActivity.this, 1).postLogin(edtPhone.getText().toString(), uid, new RestfulManager.OnLoginListener() {
-            @Override
-            public void onLoginSuccess(Login login) {
-                token = login.getToken();
-                Preference.save(LoginActivity.this, AppConstants.ACCESS_TOKEN, login.getToken());
-                Preference.save(LoginActivity.this, AppConstants.PHONE, edtPhone.getText().toString());
-                phone = edtPhone.getText().toString();
-                getUserInfo(login.getToken(), phone);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.e(TAG, "onLoginFail: " + e.getMessage());
-            }
-        });
-    }
-
-    public static String random() {
-        Random generator = new Random();
-        StringBuilder randomStringBuilder = new StringBuilder();
-        int randomLength = generator.nextInt(12);
-        char tempChar;
-        for (int i = 0; i < randomLength; i++) {
-            tempChar = (char) (generator.nextInt(96) + 32);
-            randomStringBuilder.append(tempChar);
-        }
-        return randomStringBuilder.toString();
     }
 
     private void getUserInfo(String token, String phone) {
         RestfulManager.getInstance(LoginActivity.this, 1).getUserInfo(phone, token, new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
-                Gson gson = new Gson();
-                String jsonUser = gson.toJson(responseUser.getUserInfo());
-                Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
-                if (Preference.getString(LoginActivity.this, AppConstants.ADDRESS_LOCAL) != null) {
-                    if (responseUser.getUserInfo().getPhoneDelivery() == null
-                            && responseUser.getUserInfo().getNameDelivery() == null
-                            && responseUser.getUserInfo().getProvince() == null
-                            && responseUser.getUserInfo().getAddress() == null
-                            && responseUser.getUserInfo().getDistrict() == null
-                            && responseUser.getUserInfo().getWard() == null) {
-                        postUserInfo();
-                    } else {
-                        Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
-                    }
+                try {
+                    Gson gson = new Gson();
+                    String jsonUser = gson.toJson(responseUser.getUserInfo());
+                    Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
+                    if (Preference.getString(LoginActivity.this, AppConstants.ADDRESS_LOCAL) != null) {
+                        if (responseUser.getUserInfo().getPhoneDelivery() == null
+                                && responseUser.getUserInfo().getNameDelivery() == null
+                                && responseUser.getUserInfo().getProvince() == null
+                                && responseUser.getUserInfo().getAddress() == null
+                                && responseUser.getUserInfo().getDistrict() == null
+                                && responseUser.getUserInfo().getWard() == null) {
+                            postUserInfo();
+                        } else {
+                            Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
+                        }
 
+                    }
+                    if (!launchApp) {
+                        LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (!launchApp) {
-                    LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
-                } else {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
-                finish();
             }
 
             @Override
@@ -408,17 +381,21 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
         RestfulManager.getInstance(this, 1).postUpdateUser(addressReqRes.getName(), addressReqRes.getPhone(), addressReqRes.getAddress(), addressReqRes.getCity(), addressReqRes.getDistrict(), addressReqRes.getWard(), new RestfulManager.OnGetUserListener() {
             @Override
             public void onGetUserSuccess(ResponseUser responseUser) {
-                Gson gson = new Gson();
-                String jsonUser = gson.toJson(responseUser.getUserInfo());
-                Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
-                Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
-                Log.e(TAG, "onGetUserSuccess: " + launchApp);
-                if (!launchApp) {
-                    LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
-                } else {
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                try {
+                    Gson gson = new Gson();
+                    String jsonUser = gson.toJson(responseUser.getUserInfo());
+                    Preference.save(LoginActivity.this, AppConstants.USER_INFO, jsonUser);
+                    Preference.remove(LoginActivity.this, AppConstants.ADDRESS_LOCAL);
+                    Log.e(TAG, "onGetUserSuccess: " + launchApp);
+                    if (!launchApp) {
+                        LoginActivity.this.setResult(AppConstants.LOGIN_RESULT);
+                    } else {
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    }
+                    finish();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                finish();
             }
 
             @Override
