@@ -12,6 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <meta-data android:name="com.onesignal.NotificationOpened.DEFAULT"  android:value="DISABLE" />
         <activity
             android:name="com.lva.shop.ui.login.LoginActivity"
             android:screenOrientation="portrait">
@@ -21,30 +22,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="com.lva.shop.ui.main.MainActivity"
-            android:screenOrientation="portrait"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-
-                <data
-                    android:host="download"
-                    android:scheme="hihi" />
-                <data android:host="event"
-                    android:scheme="hihi" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name="com.lva.shop.ui.detail.WebActivity"
             android:screenOrientation="portrait"></activity>
-
         <activity
             android:name=".ui.detail.VideoActivity"
             android:screenOrientation="landscape" />
+
         <activity
             android:name=".ui.location.LocationActivity"
             android:screenOrientation="portrait"
@@ -57,12 +46,17 @@
             android:name=".ui.detail.CartActivity"
             android:screenOrientation="portrait"></activity>
         <activity
+            android:name=".ui.detail.NotificationActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
             android:name=".ui.detail.HistoryActivity"
             android:screenOrientation="portrait"></activity>
+
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id" />
     </application>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />

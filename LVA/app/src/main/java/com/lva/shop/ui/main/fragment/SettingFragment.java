@@ -117,7 +117,6 @@ public class SettingFragment extends BaseFragment {
         settingAdapter = new SettingAdapter(getBaseActivity(), (setting, position) -> {
             switch (setting.getId()) {
                 case 0:
-                    //TODO API
                     if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
                         Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
                         startActivityForResult(intentProfile, AppConstants.REQ_LOGIN_FROM_PROFILE);
@@ -127,7 +126,6 @@ public class SettingFragment extends BaseFragment {
                     break;
                 case 1:
                     if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                        //TODO API
                         Intent intentHistory = new Intent(getBaseActivity(), HistoryActivity.class);
                         startActivity(intentHistory);
                     } else {
@@ -168,7 +166,6 @@ public class SettingFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.appBarLayout:
                 if (Preference.getString(getBaseActivity(), AppConstants.ACCESS_TOKEN) != null) {
-                    //TODO API
                     Intent intentProfile = new Intent(getBaseActivity(), ProfileActivity.class);
                     startActivityForResult(intentProfile, AppConstants.REQ_LOGIN_FROM_PROFILE);
                 } else {
@@ -200,6 +197,8 @@ public class SettingFragment extends BaseFragment {
                         Preference.remove(getBaseActivity(), AppConstants.LIST_CART);
                         Preference.remove(getBaseActivity(), AppConstants.USER_INFO);
                         Preference.remove(getBaseActivity(), AppConstants.PHONE);
+                        Preference.remove(getBaseActivity(), AppConstants.NOTI);
+                        Preference.remove(getBaseActivity(), AppConstants.ADDRESS_LOCAL);
                         setUpAppBar();
                     } else {
                         sweetAlertDialog.cancel();

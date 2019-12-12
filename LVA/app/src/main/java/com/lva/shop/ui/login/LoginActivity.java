@@ -430,9 +430,7 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
                 break;
             case R.id.btn_next:
                 if (!edtPhone.getText().toString().equals("")) {
-                    //TODO check sdt - thêm api01q2 AzC \
                     sendOTP();
-//                    requestToServer(random());
                 } else {
                     Toast.makeText(this, R.string.input_phone_to_continues, Toast.LENGTH_SHORT).show();
                 }

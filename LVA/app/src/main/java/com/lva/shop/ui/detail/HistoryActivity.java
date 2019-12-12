@@ -64,7 +64,6 @@ public class HistoryActivity extends BaseActivity implements ButtonAlertDialogLi
 
     private void getData() {
         showLoading();
-        //TODO fake phone
         RestfulManager.getInstance(this, 1).getHistory(Preference.getString(this, AppConstants.PHONE), new RestfulManager.OnHistoryListener() {
             @Override
             public void onGetHistorySuccess(History history) {

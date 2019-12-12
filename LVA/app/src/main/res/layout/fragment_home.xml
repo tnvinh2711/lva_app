@@ -22,7 +22,7 @@
             android:layout_marginRight="@dimen/d16"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@+id/iv_ava"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/rl_noti"
             app:layout_constraintStart_toEndOf="@+id/iv_ava"
             app:layout_constraintTop_toTopOf="@+id/iv_ava">
 
@@ -45,6 +45,36 @@
                 android:textSize="@dimen/s12"
                 android:visibility="visible" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="@dimen/d34"
+            android:layout_height="@dimen/d34"
+            android:id="@+id/rl_noti"
+            android:layout_marginRight="@dimen/d16"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/d5"
+                android:src="@drawable/ic_notification"
+                android:id="@+id/iv_noti"
+                android:tint="#454545"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+            <TextView
+                android:layout_width="@dimen/d15"
+                android:layout_height="@dimen/d15"
+                android:layout_alignParentRight="true"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:id="@+id/tv_count_noti"
+                android:textSize="@dimen/s10"
+                android:background="@drawable/bg_noti"/>
+        </RelativeLayout>
 
 
         <View

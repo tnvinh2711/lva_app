@@ -4,7 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detail.WebActivity">
+    tools:context=".ui.detail.WebActivity"
+    android:background="@color/bg_fragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rc_noti"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/d10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/appbar" />
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
@@ -22,8 +32,17 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
                 android:theme="@style/ToolbarColoredBackArrow"
-                app:title="Giỏ hàng"
+                app:title="@string/attention"
                 app:titleTextColor="@color/color_text_root" />
+            <ImageView
+                android:layout_width="@dimen/d34"
+                android:layout_height="@dimen/d34"
+                android:id="@+id/iv_read_all"
+                android:src="@drawable/ic_mark_readed"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/d16"
+                android:tint="@color/color_text_root"/>
         </RelativeLayout>
 
         <View
@@ -32,12 +51,5 @@
             android:background="#ACACAC"
             app:layout_constraintBottom_toBottomOf="parent" />
     </com.google.android.material.appbar.AppBarLayout>
-
-    <include
-        layout="@layout/layout_cart"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/appbar" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

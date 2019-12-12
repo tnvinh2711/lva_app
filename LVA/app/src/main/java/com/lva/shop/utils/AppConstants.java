@@ -58,6 +58,8 @@ public final class AppConstants {
     public static final String USER_INFO = "userInfo";
     public static final String PHONE = "phone";
     public static final String ADDRESS_LOCAL = "address_local";
+    public static final String NOTI = "noti";
+    public static final String INTENT_FILTER_FROM_NOTI = "broardcast_noti";
 
 
     private AppConstants() {

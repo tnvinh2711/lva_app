@@ -164,7 +164,6 @@ public class OrderFragment extends BaseFragment {
         }
 
         if (requestCode == AppConstants.REQUEST_ADDRESS && resultCode == Activity.RESULT_OK) {
-            //TODO api
 //            tvAddress.setText();
         }
     }

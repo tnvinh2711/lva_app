@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/white"
-                app:theme="@style/ToolbarColoredBackArrow"
+                android:theme="@style/ToolbarColoredBackArrow"
                 app:title="@string/history_order"
                 app:titleTextColor="@color/color_text_root" />
         </RelativeLayout>

@@ -32,4 +32,7 @@
     <dimen name="d12">12dp</dimen>
     <dimen name="d45">45dp</dimen>
     <dimen name="d14">14dp</dimen>
+    <dimen name="d34">34dp</dimen>
+    <dimen name="d15">15dp</dimen>
+    <dimen name="s10">10sp</dimen>
 </resources>

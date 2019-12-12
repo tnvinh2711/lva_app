@@ -18,6 +18,7 @@ package com.lva.shop.utils;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -97,6 +98,12 @@ public final class CommonUtils {
         return addressReqRes.getAddress() + ", " + addressReqRes.getWard() + ", " + addressReqRes.getDistrict() + ", " + addressReqRes.getCity();
     }
 
+    public static String getTimeFormat(long createdAt) {
+        String s = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH)
+                .format(new Date(createdAt * 1000L));
+        return s.replaceAll("\\s", " - ");
+    }
+
     public static String convertHtmlToString(String originHtml) {
         originHtml = originHtml.replaceAll("\n", ".");
         originHtml = originHtml.replaceAll("\r", "");
@@ -104,6 +111,21 @@ public final class CommonUtils {
         originHtml = originHtml.replaceAll("&nbsp;", "");
         originHtml = originHtml.replaceAll("&amp;", "");
         return originHtml;
+    }
+
+    public static void directToFacebook(Activity baseActivity, String facebookId) {
+        try {
+            baseActivity.getPackageManager().getPackageInfo(
+                    "com.facebook.katana", 0);
+            Intent intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("fb://page/" + facebookId));
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            baseActivity.startActivity(intent);
+        } catch (Exception e) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://m.facebook.com/profile.php?id=" + facebookId));
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            baseActivity.startActivity(intent);
+        }
     }
 
     public static String convertMoney(String price, int value) {
