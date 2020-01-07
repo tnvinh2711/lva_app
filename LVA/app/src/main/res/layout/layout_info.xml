@@ -57,14 +57,13 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tv_point"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:drawableRight="@mipmap/ic_star"
                 android:drawablePadding="2dp"
                 android:gravity="center"
-                android:id="@+id/tv_point"
-                android:text="@string/point"
                 android:textColor="@color/black"
                 android:textSize="@dimen/s14" />
         </LinearLayout>

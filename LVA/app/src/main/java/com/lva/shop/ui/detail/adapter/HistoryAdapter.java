@@ -87,9 +87,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
                 StringBuilder name = new StringBuilder();
                 for (int i = 0; i < item.getProductName().size(); i++) {
                    if(i < item.getProductName().size()-1){
-                       name.append(item.getProductName().get(i)).append(", ");
+                       name.append(item.getProductName().get(i).getProductName()).append(", ");
                    } else {
-                       name.append(item.getProductName().get(i));
+                       name.append(item.getProductName().get(i).getProductName());
                    }
                 }
                 tvname.setText(name);

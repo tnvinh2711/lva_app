@@ -66,7 +66,7 @@ public class History {
         private String dateCreated;
         @SerializedName("product_name")
         @Expose
-        private List<String> productName = null;
+        private List<ProductName> productName = null;
 
         public Integer getId() {
             return id;
@@ -124,11 +124,26 @@ public class History {
             this.dateCreated = dateCreated;
         }
 
-        public List<String> getProductName() {
+        public List<ProductName> getProductName() {
             return productName;
         }
 
-        public void setProductName(List<String> productName) {
+        public void setProductName(List<ProductName> productName) {
+            this.productName = productName;
+        }
+
+    }
+    public class ProductName {
+
+        @SerializedName("product_name")
+        @Expose
+        private String productName;
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public void setProductName(String productName) {
             this.productName = productName;
         }
 

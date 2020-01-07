@@ -165,7 +165,7 @@ public class HomeFragment extends BaseFragment {
                     tvLogin.setText(getString(R.string.hello));
                 }
                 tvPoint.setVisibility(View.VISIBLE);
-                tvPoint.setText(getString(R.string.point_save, String.valueOf(userInfo.getPoint()))+"|Hạng Thành Viên: Không có");
+                tvPoint.setText(userInfo.getRank()+" | "+ userInfo.getPoint());
                 Glide.with(this)
                         .load(userInfo.getUrlAvatar())
                         .apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL).circleCrop().placeholder(getResources().getDrawable(R.mipmap.ic_profile_unselected)))

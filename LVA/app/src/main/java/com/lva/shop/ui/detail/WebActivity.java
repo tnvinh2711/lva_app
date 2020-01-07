@@ -83,10 +83,23 @@ public class WebActivity extends BaseActivity {
             WebSettings webSettings = webview.getSettings();
             webSettings.setDomStorageEnabled(true);
             webSettings.setBuiltInZoomControls(false);
-
+            webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
             webSettings.setAllowFileAccess(true);
             webSettings.setDatabaseEnabled(true);
-
+            webSettings.setLoadsImagesAutomatically(true);
+            webSettings.setJavaScriptEnabled(true);
+            webSettings.setDatabaseEnabled(true);
+            webSettings.setDatabasePath("data/data/com.xxx/databases");
+            webSettings.setDomStorageEnabled(true);
+            webSettings.setRenderPriority(WebSettings.RenderPriority.HIGH);
+            webSettings.setSupportZoom(false);
+            webSettings.setUserAgentString( webSettings.getUserAgentString() + " (XY ClientApp)" );
+            webSettings.setAllowFileAccess(true);
+            webSettings.setSavePassword(false);
+            webSettings.setSupportMultipleWindows(false);
+            webSettings.setAppCacheEnabled(true);
+            webSettings.setAppCachePath("");
+            webSettings.setAppCacheMaxSize(5*1024*1024);
             webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
             webSettings.setLoadWithOverviewMode(true);
             webSettings.setUseWideViewPort(true);

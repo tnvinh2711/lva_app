@@ -106,7 +106,7 @@ public class ProfileActivity extends BaseActivity implements ButtonAlertDialogLi
                 edtName.setText("");
                 tvName.setText(getString(R.string.input_name));
             }
-            tvPoint.setText(getString(R.string.point, String.valueOf(userInfo.getPoint())));
+            tvPoint.setText(userInfo.getRank()+" | "+ userInfo.getPoint());
             edtPhone.setText(Preference.getString(this, AppConstants.PHONE));
             edtBirthday.setText(userInfo.getDobD() != null ? userInfo.getDobD() + "-" + userInfo.getDobM() + "-" + userInfo.getDobY() : "");
             if (userInfo.getUrlAvatar() != null) {

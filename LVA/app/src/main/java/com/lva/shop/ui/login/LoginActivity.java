@@ -322,7 +322,6 @@ public class LoginActivity extends BaseActivity implements ButtonAlertDialogList
                     Preference.save(LoginActivity.this, AppConstants.PHONE, "0" + edtPhone.getText().toString());
                     phone = "0" + edtPhone.getText().toString();
                     getUserInfo(login.getToken(), phone);
-                    finish();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

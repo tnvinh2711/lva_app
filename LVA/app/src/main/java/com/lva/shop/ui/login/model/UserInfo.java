@@ -56,6 +56,9 @@ public class UserInfo {
     @SerializedName("uuid")
     @Expose
     private String uuid;
+    @SerializedName("rank")
+    @Expose
+    private String rank;
     @SerializedName("ref_type")
     @Expose
     private String refType;
@@ -214,5 +217,13 @@ public class UserInfo {
 
     public void setRefType(String refType) {
         this.refType = refType;
+    }
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
     }
 }

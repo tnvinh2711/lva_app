@@ -133,6 +133,10 @@ public class SettingFragment extends BaseFragment {
                     }
                     break;
                 case 2:
+                    Intent intent2 = new Intent(getBaseActivity(), WebActivity.class);
+                    intent2.putExtra(AppConstants.TITLE, getString(R.string.policy));
+                    intent2.putExtra(AppConstants.URL, "http://levananh.com/chinh-sac-va-bao-mat-pde,5065");
+                    startActivity(intent2);
                     break;
                 case 3:
                     Intent intent = new Intent(getBaseActivity(), WebActivity.class);
